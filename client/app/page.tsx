@@ -1,4 +1,5 @@
-import MapContainer from "@/components /MapContainer";
+import MainDashboard from "@/components/dashboard/main-dashboard";
+import MapContainer from "@/components/MapContainer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
