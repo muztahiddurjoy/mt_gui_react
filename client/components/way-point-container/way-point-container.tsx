@@ -4,6 +4,7 @@ import { WayPoint } from '../MapContainer'
 import { Button } from '../ui/button'
 import { Trash2 } from 'lucide-react'
 import AddLatLonWaypoint from './add-latlon-waypoint/add-latlon-waypoint'
+import SelectedWaypoint from './selected-waypoint/selected-waypoint'
 
 interface WaypointContainerProps{
   waypoints:WayPoint[]
@@ -23,24 +24,11 @@ const WaypointContainer = (props:WaypointContainerProps) => {
 
 
 
-  //functions to do stuffs
-  const deleteWaypoint = (waypoint:WayPoint) => {
-    props.setWaypoints(props.waypoints.filter(wp=>wp.id!==waypoint.id))
-    props.setSelectedWaypoint(null)
-  }
+  
   return (
     <div className='mt-[7vh] grid grid-rows-3 fixed top-0 right-0 w-[15%] h-[100vh] gap-3 p-1'>
       <div>
-      {props.selectedWaypoint&&<Card className='p-2'>
-        <p className='text-xs font-semibold'>Selected Waypoint</p>
-        <div className="flex items-center gap-2 mt-1 justify-between">
-          <div className='flex items-center gap-2'>
-            <div className='h-[12px] w-[12px] bg-blue-500'></div>
-            <p className='text-xs'>WA {props.selectedWaypoint.id}</p>
-          </div>
-          <Button className='text-xs text-white' size="sm" onClick={()=> deleteWaypoint(props.selectedWaypoint!)}><Trash2 size={10}/></Button>
-        </div>
-      </Card>}
+      {props.selectedWaypoint&&<SelectedWaypoint selectedWaypoint={props.selectedWaypoint} setSelectedWaypoint={props.setSelectedWaypoint} setWaypoints={props.setWaypoints} waypoints={props.waypoints}/>}
       <AddLatLonWaypoint setWaypoints={props.setWaypoints} waypoints={props.waypoints} waypoint={waypoint} setWaypoint={setwaypoint}/>
       <Card className='p-2'>
         <p className='text-xs'>All Waypoint</p>
