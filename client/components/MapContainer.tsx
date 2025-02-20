@@ -9,6 +9,7 @@ import TopBar from './dashboard/top-bar/top-bar';
 import { Map } from 'lucide-react';
 import { Button } from './ui/button';
 import WaypointContainer from './way-point-container/way-point-container';
+import { toast } from 'sonner';
 
 export interface WayPoint{
   lat:number;
@@ -21,7 +22,7 @@ export interface WayPoint{
 const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([])
   const [selectedWaypoint, setselectedWaypoint] = useState<WayPoint|null>(null)
-
+ 
   const roverIcon = new L.Icon({
     iconUrl: '/marker/rover-marker.png',
     iconSize: [40, 40],
@@ -54,7 +55,6 @@ const MapContainer = () => {
       <Marker key={index} icon={roverIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
         setselectedWaypoint(waypoint)
       }}}>
-        
       </Marker>
     ))
   }
@@ -65,7 +65,7 @@ const MapContainer = () => {
     </Popup>
   </Marker>
 </Container>
-<WaypointContainer selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
+<WaypointContainer setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
     </div>
   )
 }
