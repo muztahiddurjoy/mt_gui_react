@@ -3,6 +3,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { toast } from '@/hooks/use-toast'
 import { Edit, Edit2, Trash2, X } from 'lucide-react'
 import React from 'react'
 
@@ -43,6 +44,26 @@ const SelectedWaypoint = (props:SelectedWaypointProps) => {
               <DialogHeader>
                 <DialogTitle className='text-primary'>Edit Waypoint</DialogTitle>
                 <DialogDescription>
+                    <div className="flex items-center gap-2 mb-2 justify-between">
+                        
+                        <p className='text-xs font-semibold'>Coordinates:
+
+                        <span className='text-xs'> {props.selectedWaypoint.lat}, {props.selectedWaypoint.lng}</span>
+                        </p>
+                        <Button 
+                            className='text-xs' 
+                            size='sm' 
+                            onClick={() => {
+                                navigator.clipboard.writeText(`${props.selectedWaypoint.lat}, ${props.selectedWaypoint.lng}`)
+                                toast({
+                                    title:'Copied',
+                                    description:'Coordinates copied to clipboard'
+                                })
+                            }}
+                        >
+                            Copy
+                        </Button>
+                    </div>
                     <div className="flex items-center gap-2">
                         <div>
                             <label className='text-xs font-semibold'>Latitude</label>
