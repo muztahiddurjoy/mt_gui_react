@@ -8,8 +8,7 @@ import TopBar from './dashboard/top-bar/top-bar';
 const MapContainer = () => {
   return (
     <div className='relative'>
-      <TopBar/>
-        <Container center={[23.772794613186193, 90.4253266921477]} style={{ height: '80vh',width:'70%',marginLeft:'15%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+        <Container center={[23.772794613186193, 90.4253266921477]} style={{ height: '93vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
