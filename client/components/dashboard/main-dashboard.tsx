@@ -7,8 +7,8 @@ const MainDashboard = ({children}:React.PropsWithChildren) => {
   return (
     <div className='h-[100vh]'>
      <TopBar/>
-        {children}
-      <div className=""></div>
+      {children}
+      
     </div>
   )
 }
