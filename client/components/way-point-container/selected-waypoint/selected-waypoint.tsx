@@ -35,7 +35,7 @@ const SelectedWaypoint = (props:SelectedWaypointProps) => {
         <div className="flex items-center gap-2 mt-1 justify-between">
           <div className='flex items-center gap-2'>
             <div className='h-[12px] w-[12px] bg-blue-500'></div>
-            <p className='text-xs'>WA {props.selectedWaypoint.id}</p>
+            <p className='text-xs'>WP {props.selectedWaypoint.id}</p>
           </div>
           <div className="flex justify-end gap-1">
           <Dialog>
