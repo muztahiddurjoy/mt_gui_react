@@ -6,12 +6,15 @@ import { Trash2 } from 'lucide-react'
 import AddLatLonWaypoint from './add-latlon-waypoint/add-latlon-waypoint'
 import SelectedWaypoint from './selected-waypoint/selected-waypoint'
 import { Colors } from './data/colors'
+import WaypointAdapter from './way-point-adapter/way-point-adapter'
 
 interface WaypointContainerProps{
   waypoints:WayPoint[]
   selectedWaypoint:WayPoint|null
+  selectedWaypoints:WayPoint[]
   setWaypoints:React.Dispatch<React.SetStateAction<WayPoint[]>>
   setSelectedWaypoint:React.Dispatch<React.SetStateAction<WayPoint|null>>
+  setSelectedWaypoints:React.Dispatch<React.SetStateAction<WayPoint[]>>
 }
 
 const WaypointContainer = (props:WaypointContainerProps) => {
@@ -20,7 +23,8 @@ const WaypointContainer = (props:WaypointContainerProps) => {
     id:props.waypoints.length,
     lat:0,
     lng:0,
-    color:Colors.blue
+    color:Colors.blue,
+    name:`WP${props.waypoints.length+1}`
   })
 
 
@@ -34,11 +38,8 @@ const WaypointContainer = (props:WaypointContainerProps) => {
       <Card className='p-2'>
         <p className='text-xs'>All Waypoint</p>
         {
-          props.waypoints.map(waypoint=>(
-            <div key={waypoint.id} className='flex items-center gap-2 mt-1'>
-              <div className={`h-[12px] w-[12px] ${waypoint.color}`}></div>
-              <p className='text-xs'>WA {waypoint.id}</p>
-            </div>
+          props.waypoints.sort((a,b)=>a.id-b.id).map(waypoint=>(
+            <WaypointAdapter index={props.waypoints.findIndex((v)=>v.lat==waypoint.lat&&v.lng==waypoint.lng)} waypoint={waypoint} key={waypoint.id} {...props}/>
           ))
         }
       </Card>

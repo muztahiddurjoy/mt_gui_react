@@ -18,6 +18,7 @@ export interface WayPoint{
   lng:number;
   id:number;
   color:string;
+  name:string;
 }
 
 
@@ -25,6 +26,7 @@ const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([])
   const [selectedWaypoint, setselectedWaypoint] = useState<WayPoint|null>(null)
  const [tempColor, settempColor] = useState(Colors.green)
+ const [selectedWaypoints, setselectedWaypoints] = useState<WayPoint[]>([])
   const roverIcon = new L.Icon({
     iconUrl: '/marker/rover-marker.png',
     iconSize: [40, 40],
@@ -38,7 +40,7 @@ const MapContainer = () => {
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
-        setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length,color:tempColor}])
+        setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length,color:tempColor,name:`WP${waypoints.length+1}`}])
       },
     });
     return null;
@@ -46,7 +48,7 @@ const MapContainer = () => {
   
   return (
     <div className='relative'>
-        <Container center={[23.772794613186193, 90.4253266921477]} style={{ position:'fixed',height: '93vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+        <Container center={[23.773543143713756, 90.42405371687714]} style={{ position:'fixed',height: '93vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
@@ -59,7 +61,7 @@ const MapContainer = () => {
       const waypointIcon = L.divIcon({
         html: `<div class="flex flex-col items-center">
         ${renderToString(<FlagIcon fill={waypoint.color} className={`stroke${waypoint.color.substring(2)}`} size={30}/>)}
-        <p class='text-xs text-center ${waypoint.color} p-0.5 rounded-md'>WA ${waypoint.id}</p>
+        <p class='text-xs text-center ${waypoint.color} p-0.5 rounded-md'>${waypoint.name}</p>
         </div>`,
         className: `w-20 h-20 `,
         iconSize: [40, 40],
@@ -73,14 +75,14 @@ const MapContainer = () => {
           </Marker>
     })
   }
-  <Marker icon={roverIcon} position={[23.772794613186193, 90.4253266921477]}>
+  <Marker icon={roverIcon} position={[23.773543143713756, 90.42405371687714]}>
     <Popup>
       <p className='text-red-500'>hi</p>
       A pretty CSS3 popup. <br /> Easily customizable.
     </Popup>
   </Marker>
 </Container>
-<WaypointContainer setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
+<WaypointContainer selectedWaypoints={selectedWaypoints} setSelectedWaypoints={setselectedWaypoints} setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
     </div>
   )
 }
