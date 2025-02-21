@@ -2,7 +2,8 @@ import { WayPoint } from '@/components/MapContainer'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import { ArrowDown, ArrowUp } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
+import { ArrowDown, ArrowUp, Copy } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 interface WaypointAdapterProps{
@@ -18,6 +19,7 @@ interface WaypointAdapterProps{
 
 const WaypointAdapter = (props:WaypointAdapterProps) => {
   const [pointSelected, setpointSelected] = useState<boolean>(false)
+  const [showLatlon, setshowLatlon] = useState<boolean>(false)
   const addWaypointToSelected = () => {
     if(props.selectedWaypoints.find(wp=>wp.id===props.waypoint.id)){
       props.setSelectedWaypoints(props.selectedWaypoints.filter(wp=>wp.id!==props.waypoint.id))
@@ -25,6 +27,17 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
     else{
       props.setSelectedWaypoints([...props.selectedWaypoints,props.waypoint])
     }
+  }
+
+  const copyLatLon = ()=>{
+    navigator.clipboard.writeText(`${props.waypoint.lat}, ${props.waypoint.lng}`)
+      .then(() => {
+      toast({title:'Copied',description:'Latitude and Longitude copied to clipboard'})
+      })
+      .catch(err => {
+        console.log(err)
+      toast({title:"Failed",description:'Failed to copy lat/lon'})
+      })
   }
 
   const bringUp = () => {
@@ -61,8 +74,9 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
     }
   }, [props.selectedWaypoints])
   
-  return (
-    <Card key={props.waypoint.id} className='flex items-center gap-2 mt-1 justify-between p-2'>
+  return (  
+    <Card onClick={()=> setshowLatlon(p=>!p)}>
+      <div className='flex items-center gap-2 mt-1 justify-between p-2'>
       <div className="flex items-center gap-2">
               <Checkbox id={`wp-${props.waypoint.id}`} onCheckedChange={addWaypointToSelected} checked={pointSelected}/>
               <div className={`h-[12px] w-[12px] ${props.waypoint.color}`}></div>
@@ -72,6 +86,15 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
         <Button variant="outline" className='w-[10px] h-[20px]' onClick={bringDown} size="sm"><ArrowDown size={10}/></Button>
         <Button variant="outline" className='w-[10px] h-[20px]' onClick={bringUp} size="sm"><ArrowUp size={10}/></Button>
       </div>
+      
+      </div>
+      {
+        showLatlon&& <div className='w-full px-1'>
+          <p className='text-xs'>Lat {props.waypoint.lat}</p>
+          <p className='text-xs'>Lon {props.waypoint.lng}</p>
+          <Button size="sm" className='w-full mt-1' onClick={copyLatLon}><Copy/> Copy</Button>
+        </div>
+      }
     </Card>
   )
 }

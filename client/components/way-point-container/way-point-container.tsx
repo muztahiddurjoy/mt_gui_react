@@ -9,6 +9,7 @@ import { Colors } from './data/colors'
 import WaypointAdapter from './way-point-adapter/way-point-adapter'
 import { Checkbox } from '../ui/checkbox'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
+import { ScrollArea } from '../ui/scroll-area'
 
 interface WaypointContainerProps{
   waypoints:WayPoint[]
@@ -38,8 +39,8 @@ const WaypointContainer = (props:WaypointContainerProps) => {
 
   
   return (
-    <div className='mt-[7vh] overflow-y-scroll grid grid-rows-3 fixed top-0 right-0 w-[15%] h-[100vh] gap-3 p-1'>
-      <div>
+    <div className='mt-[7vh] grid grid-rows-3 fixed top-0 right-0 w-[15%] h-[100vh] gap-3 p-1'>
+      <ScrollArea className='h-[100vh]'>
       {props.selectedWaypoint&&<SelectedWaypoint selectedWaypoint={props.selectedWaypoint} setSelectedWaypoint={props.setSelectedWaypoint} setWaypoints={props.setWaypoints} waypoints={props.waypoints}/>}
       <AddLatLonWaypoint setWaypoints={props.setWaypoints} waypoints={props.waypoints} waypoint={waypoint} setWaypoint={setwaypoint}/>
       <Card className='p-2'>
@@ -79,7 +80,7 @@ const WaypointContainer = (props:WaypointContainerProps) => {
           ))
         }
       </Card>
-      </div>
+      </ScrollArea>
     </div>
   )
 }
