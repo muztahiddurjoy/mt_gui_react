@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input'
 import { toast } from '@/hooks/use-toast'
 import { Edit, Edit2, Trash2, X } from 'lucide-react'
 import React from 'react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Colors } from '../data/colors'
 
 interface SelectedWaypointProps{
     selectedWaypoint:WayPoint
@@ -34,7 +36,7 @@ const SelectedWaypoint = (props:SelectedWaypointProps) => {
         </div>
         <div className="flex items-center gap-2 mt-1 justify-between">
           <div className='flex items-center gap-2'>
-            <div className='h-[12px] w-[12px] bg-blue-500'></div>
+            <div className={`h-[12px] w-[12px] ${props.selectedWaypoint.color}`}></div>
             <p className='text-xs'>WP {props.selectedWaypoint.id}</p>
           </div>
           <div className="flex justify-end gap-1">
@@ -65,6 +67,26 @@ const SelectedWaypoint = (props:SelectedWaypointProps) => {
                         </Button>
                     </div>
                     <div className="flex items-center gap-2">
+                      <div>
+                        <label className='text-xs font-semibold'>Label</label>
+                        <br/>
+                        <DropdownMenu >
+                                    <DropdownMenuTrigger>
+                                      <div className={`h-[30px] mt-1 w-[30px] rounded-sm ${props.selectedWaypoint.color}`}></div>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent  onChange={(e)=>console.log(e)}>
+                                      <DropdownMenuLabel className='text-xs font-semibold'>Waypoint Tag</DropdownMenuLabel>
+                                      <DropdownMenuSeparator />
+                                      <DropdownMenuRadioGroup onValueChange={(e)=> props.setSelectedWaypoint(p=>({...p,color:e}) as any)} className="grid grid-cols-4 gap-1">
+                                      {
+                                        Object.entries(Colors).map(([key,value])=>(
+                                          <DropdownMenuRadioItem value={value} key={key} className={`h-[20px] rounded-sm w-[20px] ${value}`}></DropdownMenuRadioItem>
+                                        ))
+                                      }
+                                      </DropdownMenuRadioGroup>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                      </div>
                         <div>
                             <label className='text-xs font-semibold'>Latitude</label>
                             <Input type='text' className='w-full mt-1 p-1 border border-gray-300' value={props.selectedWaypoint.lat} onChange={e=>{

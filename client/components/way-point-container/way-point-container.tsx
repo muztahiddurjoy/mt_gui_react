@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { Trash2 } from 'lucide-react'
 import AddLatLonWaypoint from './add-latlon-waypoint/add-latlon-waypoint'
 import SelectedWaypoint from './selected-waypoint/selected-waypoint'
+import { Colors } from './data/colors'
 
 interface WaypointContainerProps{
   waypoints:WayPoint[]
@@ -19,7 +20,7 @@ const WaypointContainer = (props:WaypointContainerProps) => {
     id:props.waypoints.length,
     lat:0,
     lng:0,
-    color:''
+    color:Colors.blue
   })
 
 
@@ -35,7 +36,7 @@ const WaypointContainer = (props:WaypointContainerProps) => {
         {
           props.waypoints.map(waypoint=>(
             <div key={waypoint.id} className='flex items-center gap-2 mt-1'>
-              <div className='h-[12px] w-[12px] bg-blue-500'></div>
+              <div className={`h-[12px] w-[12px] ${waypoint.color}`}></div>
               <p className='text-xs'>WA {waypoint.id}</p>
             </div>
           ))

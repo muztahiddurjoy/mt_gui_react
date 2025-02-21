@@ -24,7 +24,7 @@ const AddLatLonWaypoint = (props:AddLatLonWaypointProps) => {
     
       const addLatLon = () => {
         if(!Number.isNaN(Number(tempLat))&&!Number.isNaN(Number(tempLon))){
-          props.setWaypoints([...props.waypoints,{lat:parseFloat(tempLat as string),lng:parseFloat(tempLon as string),id:props.waypoints.length}
+          props.setWaypoints([...props.waypoints,{lat:parseFloat(tempLat as string),lng:parseFloat(tempLon as string),id:props.waypoints.length,color:tempColor}
           ])
           settempLat('')
           settempLon('')

@@ -6,23 +6,25 @@ import "leaflet/dist/leaflet.css";
 // import 'leaflet.offline';
 import 'leaflet/dist/leaflet.css';
 import TopBar from './dashboard/top-bar/top-bar';
-import { Map } from 'lucide-react';
+import { FlagIcon, Map } from 'lucide-react';
 import { Button } from './ui/button';
 import WaypointContainer from './way-point-container/way-point-container';
 import { toast } from 'sonner';
+import {renderToString} from 'react-dom/server'
+import { Colors } from './way-point-container/data/colors';
 
 export interface WayPoint{
   lat:number;
   lng:number;
   id:number;
-  color?:string;
+  color:string;
 }
 
 
 const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([])
   const [selectedWaypoint, setselectedWaypoint] = useState<WayPoint|null>(null)
- 
+ const [tempColor, settempColor] = useState(Colors.green)
   const roverIcon = new L.Icon({
     iconUrl: '/marker/rover-marker.png',
     iconSize: [40, 40],
@@ -31,10 +33,12 @@ const MapContainer = () => {
     shadowSize: [41, 41]
   });
 
+  
+
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
-        setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length}])
+        setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length,color:tempColor}])
       },
     });
     return null;
@@ -51,12 +55,23 @@ const MapContainer = () => {
   />
   <MapClickHandler/>
   {
-    waypoints.map((waypoint,index)=>(
-      <Marker key={index} icon={roverIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
-        setselectedWaypoint(waypoint)
-      }}}>
-      </Marker>
-    ))
+    waypoints.map((waypoint,index)=>{
+      const waypointIcon = L.divIcon({
+        html: `<div class="flex flex-col items-center">
+        ${renderToString(<FlagIcon fill={waypoint.color} className={`stroke${waypoint.color.substring(2)}`} size={30}/>)}
+        <p class='text-xs text-center ${waypoint.color} p-0.5 rounded-md'>WA ${waypoint.id}</p>
+        </div>`,
+        className: `w-20 h-20 `,
+        iconSize: [40, 40],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });  
+        return <Marker key={index} icon={waypointIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
+            setselectedWaypoint(waypoint)
+          }}}>
+          </Marker>
+    })
   }
   <Marker icon={roverIcon} position={[23.772794613186193, 90.4253266921477]}>
     <Popup>
