@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import {renderToString} from 'react-dom/server'
 import { Colors } from './way-point-container/data/colors';
 import MapMenubar from './map-menubar/map-menubar';
+import OrientationContainer from './orientation-container/orientation-container';
 
 export interface WayPoint{
   lat:number;
@@ -84,6 +85,7 @@ const MapContainer = () => {
   
   return (
     <div className='relative'>
+      <OrientationContainer waypoints={waypoints}/>
         <Container center={[23.773543143713756, 90.42405371687714]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}

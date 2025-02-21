@@ -75,11 +75,11 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
   }, [props.selectedWaypoints])
   
   return (  
-    <Card onClick={()=> setshowLatlon(p=>!p)}>
+    <Card>
       <div className='flex items-center gap-2 mt-1 justify-between p-2'>
       <div className="flex items-center gap-2">
               <Checkbox id={`wp-${props.waypoint.id}`} onCheckedChange={addWaypointToSelected} checked={pointSelected}/>
-              <div className={`h-[12px] w-[12px] ${props.waypoint.color}`}></div>
+              <div onClick={()=> setshowLatlon(p=>!p)} className={`h-[12px] w-[12px] ${props.waypoint.color}`}></div>
               <label className='text-xs' htmlFor={`wp-${props.waypoint.id}`}>{props.waypoint.name}</label>
       </div>
       <div className='flex items-center gap-1'>
