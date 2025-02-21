@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 // import 'leaflet.offline';
 import 'leaflet/dist/leaflet.css';
 import TopBar from './dashboard/top-bar/top-bar';
-import { FlagIcon, Map } from 'lucide-react';
+import { FlagIcon, FlagTriangleRight, Map } from 'lucide-react';
 import { Button } from './ui/button';
 import WaypointContainer from './way-point-container/way-point-container';
 import { toast } from 'sonner';
@@ -60,8 +60,13 @@ const MapContainer = () => {
     waypoints.map((waypoint,index)=>{
       const waypointIcon = L.divIcon({
         html: `<div class="flex flex-col items-center">
-        ${renderToString(<FlagIcon fill={waypoint.color} className={`stroke${waypoint.color.substring(2)}`} size={30}/>)}
-        <p class='text-xs text-center ${waypoint.color} p-0.5 rounded-md'>${waypoint.name}</p>
+        ${renderToString(
+          <div className='relative'>
+            <div className={`h-[40px] w-[2px] ${waypoint.color}`}></div>
+            <div className={`h-[20px] absolute top-0 left-0 w-[40px] ${waypoint.color} text-xs flex items-center justify-center text-white`}>{waypoint.name}</div>
+          </div>
+        )}
+       
         </div>`,
         className: `w-20 h-20 `,
         iconSize: [40, 40],

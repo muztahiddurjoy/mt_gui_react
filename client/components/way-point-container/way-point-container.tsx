@@ -38,7 +38,7 @@ const WaypointContainer = (props:WaypointContainerProps) => {
 
   
   return (
-    <div className='mt-[7vh] grid grid-rows-3 fixed top-0 right-0 w-[15%] h-[100vh] gap-3 p-1'>
+    <div className='mt-[7vh] overflow-y-scroll grid grid-rows-3 fixed top-0 right-0 w-[15%] h-[100vh] gap-3 p-1'>
       <div>
       {props.selectedWaypoint&&<SelectedWaypoint selectedWaypoint={props.selectedWaypoint} setSelectedWaypoint={props.setSelectedWaypoint} setWaypoints={props.setWaypoints} waypoints={props.waypoints}/>}
       <AddLatLonWaypoint setWaypoints={props.setWaypoints} waypoints={props.waypoints} waypoint={waypoint} setWaypoint={setwaypoint}/>
@@ -74,8 +74,8 @@ const WaypointContainer = (props:WaypointContainerProps) => {
 
         </div>
         {
-          props.waypoints.sort((a,b)=>a.id-b.id).map(waypoint=>(
-            <WaypointAdapter index={props.waypoints.findIndex((v)=>v.lat==waypoint.lat&&v.lng==waypoint.lng)} waypoint={waypoint} key={waypoint.id} {...props}/>
+          props.waypoints.sort((a,b)=>a.id-b.id).map((waypoint,index)=>(
+            <WaypointAdapter index={props.waypoints.findIndex((v)=>v.lat==waypoint.lat&&v.lng==waypoint.lng)} waypoint={waypoint} key={index} {...props}/>
           ))
         }
       </Card>
