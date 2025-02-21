@@ -7,6 +7,8 @@ import AddLatLonWaypoint from './add-latlon-waypoint/add-latlon-waypoint'
 import SelectedWaypoint from './selected-waypoint/selected-waypoint'
 import { Colors } from './data/colors'
 import WaypointAdapter from './way-point-adapter/way-point-adapter'
+import { Checkbox } from '../ui/checkbox'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 
 interface WaypointContainerProps{
   waypoints:WayPoint[]
@@ -28,6 +30,11 @@ const WaypointContainer = (props:WaypointContainerProps) => {
   })
 
 
+  const deleteAllWaypoints = () => {
+    props.setWaypoints([])
+  }
+
+
 
   
   return (
@@ -36,7 +43,36 @@ const WaypointContainer = (props:WaypointContainerProps) => {
       {props.selectedWaypoint&&<SelectedWaypoint selectedWaypoint={props.selectedWaypoint} setSelectedWaypoint={props.setSelectedWaypoint} setWaypoints={props.setWaypoints} waypoints={props.waypoints}/>}
       <AddLatLonWaypoint setWaypoints={props.setWaypoints} waypoints={props.waypoints} waypoint={waypoint} setWaypoint={setwaypoint}/>
       <Card className='p-2'>
-        <p className='text-xs'>All Waypoint</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+          <Checkbox id="checkAll" checked={props.selectedWaypoints.length==props.waypoints.length} onCheckedChange={e=>{
+            if(e){
+              props.setSelectedWaypoints(props.waypoints)
+            }
+            else{
+              props.setSelectedWaypoints([])
+            }
+          }} />
+          <label htmlFor='checkAll' className='text-xs'>All Waypoint</label>
+          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className='w-[10px] h-[25px]' disabled={props.selectedWaypoints.length==0} variant="destructive"><Trash2 size={10}/></Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  Are you sure that you want to delete all of the waypoints?
+                  <div className="flex justify-end mt-3">
+                    <Button size="sm" variant="destructive" onClick={deleteAllWaypoints}>Yes</Button>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
+        </div>
         {
           props.waypoints.sort((a,b)=>a.id-b.id).map(waypoint=>(
             <WaypointAdapter index={props.waypoints.findIndex((v)=>v.lat==waypoint.lat&&v.lng==waypoint.lng)} waypoint={waypoint} key={waypoint.id} {...props}/>
