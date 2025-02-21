@@ -1,7 +1,7 @@
 "use client"
 import { MapContainer as Container, Marker, Popup, TileLayer, useMap,useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "leaflet/dist/leaflet.css";
 // import 'leaflet.offline';
 import 'leaflet/dist/leaflet.css';
@@ -12,6 +12,7 @@ import WaypointContainer from './way-point-container/way-point-container';
 import { toast } from 'sonner';
 import {renderToString} from 'react-dom/server'
 import { Colors } from './way-point-container/data/colors';
+import MapMenubar from './map-menubar/map-menubar';
 
 export interface WayPoint{
   lat:number;
@@ -25,7 +26,8 @@ export interface WayPoint{
 const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([])
   const [selectedWaypoint, setselectedWaypoint] = useState<WayPoint|null>(null)
- const [tempColor, settempColor] = useState(Colors.green)
+ const [tempColor, settempColor] = useState<string>('auto')
+ const [mapActive, setmapActive] = useState<boolean>(false)
  const [selectedWaypoints, setselectedWaypoints] = useState<WayPoint[]>([])
   const roverIcon = new L.Icon({
     iconUrl: '/marker/rover-marker.png',
@@ -38,17 +40,51 @@ const MapContainer = () => {
   
 
   const MapClickHandler = () => {
-    useMapEvents({
-      click(e) {
-        setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length,color:tempColor,name:`WP${waypoints.length+1}`}])
-      },
-    });
+    if(mapActive){
+      useMapEvents({
+        click(e) {
+          setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length,color:tempColor=="auto"?Object.values(Colors)[Math.floor(Math.random() * Object.values(Colors).length)]:tempColor,name:`WP${waypoints.length+1}`}])
+        },
+      });
+    }
     return null;
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'M' || event.key === 'm') {
+        setmapActive(prevState => !prevState);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   if(tempColor=='auto'){
+  //     if(waypoints.length>0){
+  //     const colors = Object.values(Colors)
+  //     const lastColor = waypoints[waypoints.length-1].color
+  //     const index = colors.findIndex(color=>color===lastColor)
+  //     if(index==colors.length-1){
+  //       settempColor(colors[0])
+  //     }
+  //     else{
+  //       settempColor(colors[index+1])
+  //     }
+  //   }else{
+  //     settempColor(Colors.green)
+  //   }
+  //   }
+  // }, [tempColor])
+  
   
   return (
     <div className='relative'>
-        <Container center={[23.773543143713756, 90.42405371687714]} style={{ position:'fixed',height: '93vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+        <Container center={[23.773543143713756, 90.42405371687714]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
@@ -82,11 +118,14 @@ const MapContainer = () => {
   }
   <Marker icon={roverIcon} position={[23.773543143713756, 90.42405371687714]}>
     <Popup>
-      <p className='text-red-500'>hi</p>
-      A pretty CSS3 popup. <br /> Easily customizable.
+      Rover is currently here
     </Popup>
   </Marker>
 </Container>
+<div className='fixed bottom-0 ml-[20%] w-full'>
+  <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} settempColor={settempColor} tempColor={tempColor}/>
+</div>
+
 <WaypointContainer selectedWaypoints={selectedWaypoints} setSelectedWaypoints={setselectedWaypoints} setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
     </div>
   )
