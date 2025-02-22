@@ -1,7 +1,9 @@
 "use client"
 import { MapContainer as Container, Marker, Popup, TileLayer, useMap,useMapEvents } from 'react-leaflet'
+
 import L from 'leaflet'
-import React, { useEffect, useState } from 'react'
+import 'leaflet-rotatedmarker'
+import React, { useEffect, useRef, useState } from 'react'
 import "leaflet/dist/leaflet.css";
 // import 'leaflet.offline';
 import 'leaflet/dist/leaflet.css';
@@ -41,14 +43,27 @@ const MapContainer = () => {
  const [ros, setros] = useState<Ros | null>(null)
  const [isRosConnected, setisRosConnected] = useState<boolean>(false)
 
+ const roverMarker = useRef(null)
+  // const map = useMap();
+
+  useEffect(() => {
+    if (roverMarker.current) {
+      console.log('Setting rotation angle:', roverRotation * (180 / Math.PI));
+      (roverMarker.current as any).setRotationAngle(roverRotation * (180 / Math.PI));
+      (roverMarker.current as any).setRotationOrigin('center');
+    }
+  }, [roverRotation]);
+
+
 
  const [selectedWaypoints, setselectedWaypoints] = useState<WayPoint[]>([])
   const roverIcon = new L.Icon({
     iconUrl: '/marker/rover-marker.png',
+    className:'transition-transform duration-100 ease-in-out',
     iconSize: [35, 35],
-    iconAnchor: [12, 41],
+    iconAnchor: [17, 35],
     popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    // shadowSize: [41, 41]
   });
 
   
@@ -93,10 +108,12 @@ const MapContainer = () => {
   }, []);
 
   useEffect(() => {
-    setInterval(() => {
-      setroverRotation(prevState=>prevState+0.01)
-    }, 500);
-  }, [])
+    const interval = setInterval(() => {
+      setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
+    }, 200);
+  
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
   
 
   // useEffect(() => {
@@ -162,7 +179,7 @@ const MapContainer = () => {
           </Marker>
     })
   }
-  <Marker icon={roverIcon} position={[roverPosition.lat,roverPosition.lng]} >
+  <Marker ref={roverMarker} icon={roverIcon} position={[roverPosition.lat,roverPosition.lng]} >
     <Popup>
       Rover is currently here
     </Popup>
