@@ -1,9 +1,13 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono,Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import MainDashboard from "@/components/dashboard/main-dashboard";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { Provider } from "react-redux";
+import { store } from "@/redux /store";
+import ReduxWrapper from "@/redux /redux-wrapper/redux-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +39,7 @@ export default function RootLayout({
       <body
         className={`${sourceCode.className} antialiased`}
       >
+        <ReduxWrapper>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -43,10 +48,11 @@ export default function RootLayout({
           >
         <MainDashboard>
           {children}
+          <Toaster/>
         </MainDashboard>
-        <Toaster/>
+        
         </ThemeProvider>
-       
+       </ReduxWrapper>
       </body>
     </html>
   );

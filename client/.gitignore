@@ -9,7 +9,7 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+/mapproxy/cache_data
 # testing
 /coverage
 
