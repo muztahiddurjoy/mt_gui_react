@@ -1,5 +1,5 @@
 "use client"
-import { MapContainer as Container, Marker, Popup, TileLayer, useMap,useMapEvents } from 'react-leaflet'
+import { Circle, MapContainer as Container, Marker, Popup, TileLayer, useMap,useMapEvents } from 'react-leaflet'
 
 import L from 'leaflet'
 import 'leaflet-rotatedmarker'
@@ -173,10 +173,22 @@ const MapContainer = () => {
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });  
-        return <Marker key={index} icon={waypointIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
+        return <>
+         <Circle
+          center={[waypoint.lat, waypoint.lng]}
+          radius={1.5} // 3 meters
+          pathOptions={{
+            color: waypoint.color,    // Border color matches waypoint
+            fillColor: 'blue',// Fill color matches waypoint
+            fillOpacity: 0.2,         // Semi-transparent fill
+            weight: 1                 // Border thickness
+          }}
+        />
+        <Marker key={index} icon={waypointIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
             setselectedWaypoint(waypoint)
           }}}>
           </Marker>
+          </>
     })
   }
   <Marker ref={roverMarker} icon={roverIcon} position={[roverPosition.lat,roverPosition.lng]} >
