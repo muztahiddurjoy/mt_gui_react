@@ -18,6 +18,7 @@ import MapMenubar from './map-menubar/map-menubar';
 import OrientationContainer from './orientation-container/orientation-container';
 import { getROS } from '@/ros-functions/connect';
 import ROSLIB, { Ros } from 'roslib';
+import RoverFollower from './rover-follower'
 
 export interface WayPoint{
   lat:number;
@@ -108,9 +109,13 @@ const MapContainer = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
-    }, 200);
+    // const interval = setInterval(() => {
+    //   setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
+    //   setroverPosition((prevState) => ({
+    //     lat: prevState.lat + Math.sin(roverRotation) * 0.0001,
+    //     lng: prevState.lng + Math.cos(roverRotation) * 0.0001,
+    //   })); // Move rover in the direction of rotation
+    // }, 200);
   
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, []);
@@ -134,9 +139,8 @@ const MapContainer = () => {
   //   }
   // }, [tempColor])
 
-  useEffect(() => {
-    
-  },[roverPosition])
+  
+
   
   
   return (
@@ -154,6 +158,7 @@ const MapContainer = () => {
     // url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
     url='http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png'
   />
+  
   <MapClickHandler/>
   {
     waypoints.map((waypoint,index)=>{
@@ -196,8 +201,10 @@ const MapContainer = () => {
       Rover is currently here
     </Popup>
   </Marker>
+  
 </Container>
 <div className='fixed bottom-0 ml-[20%] w-full'>
+           
   <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} settempColor={settempColor} tempColor={tempColor}/>
 </div>
 

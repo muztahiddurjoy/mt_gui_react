@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Colors } from '../way-point-container/data/colors'
 import { WayPoint } from '../MapContainer'
+import RoverFollower from '../rover-follower'
 
 
 interface MapMenubarProps{
