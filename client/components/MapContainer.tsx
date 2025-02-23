@@ -150,7 +150,7 @@ const MapContainer = () => {
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
-    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution='&copy; <a href="#">Google</a>'
     // url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
     url='http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png'
   />
