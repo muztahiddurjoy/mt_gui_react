@@ -10,11 +10,15 @@ export interface Angle{
   yaw:number
 }
 
-const radianToDegree = (radian: number): number => {
-  return radian * (180 / Math.PI);
+export const radianToDegree = (radian: number): number => {
+  let degree = radian * (180 / Math.PI);
+  if (degree < 0) {
+    degree += 360;
+  }
+  return degree % 360;
 }
 
-const degreeToRadian = (degree: number): number => {
+export const degreeToRadian = (degree: number): number => {
   return degree * (Math.PI / 180);
 }
 
@@ -35,7 +39,7 @@ const AngleContainer = () => {
         messageType:'sbg_driver/SbgEkfEuler'
       })
       angleTopic.subscribe((msg:any)=>{
-        console.log(msg)
+        // console.log(msg)
         setangle({
           pitch: radianToDegree(msg.angle.x),
           roll:radianToDegree(msg.angle.y),
@@ -62,7 +66,7 @@ const AngleContainer = () => {
         }}
         ></div>
     </div>
-    <p className='text-xs ml-2'>Roll:{angle.roll} Pitch:{angle.pitch} Yaw:{angle.yaw}</p>
+    <p className='text-xs ml-2'>Roll:{angle.roll.toFixed(0)} Pitch:{angle.pitch.toFixed(0)} Yaw:{angle.yaw.toFixed(0)}</p>
     </>
   )
 }

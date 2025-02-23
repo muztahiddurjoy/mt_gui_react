@@ -89,7 +89,7 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
       
       </div>
       {
-        showLatlon&& <div className='w-full px-1'>
+        <div className='w-full px-1'>
           <p className='text-xs'>Lat {props.waypoint.lat}</p>
           <p className='text-xs'>Lon {props.waypoint.lng}</p>
           <Button size="sm" className='w-full mt-1' onClick={copyLatLon}><Copy/> Copy</Button>

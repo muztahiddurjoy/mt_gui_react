@@ -19,6 +19,7 @@ import OrientationContainer from './orientation-container/orientation-container'
 import { getROS } from '@/ros-functions/connect';
 import ROSLIB, { Ros } from 'roslib';
 import RoverFollower from './rover-follower'
+import { degreeToRadian, radianToDegree } from './orientation-container/angle-container/angle-container'
 
 export interface WayPoint{
   lat:number;
@@ -49,8 +50,8 @@ const MapContainer = () => {
 
   useEffect(() => {
     if (roverMarker.current) {
-      console.log('Setting rotation angle:', roverRotation * (180 / Math.PI));
-      (roverMarker.current as any).setRotationAngle(roverRotation * (180 / Math.PI));
+      // console.log('Setting rotation angle:', roverRotation);
+      (roverMarker.current as any).setRotationAngle(roverRotation);
       (roverMarker.current as any).setRotationOrigin('center');
     }
   }, [roverRotation]);
@@ -108,17 +109,54 @@ const MapContainer = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // const interval = setInterval(() => {
-    //   setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
-    //   setroverPosition((prevState) => ({
-    //     lat: prevState.lat + Math.sin(roverRotation) * 0.0001,
-    //     lng: prevState.lng + Math.cos(roverRotation) * 0.0001,
-    //   })); // Move rover in the direction of rotation
-    // }, 200);
+  // useEffect(() => {
+  //   // const interval = setInterval(() => {
+  //   //   setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
+  //   //   setroverPosition((prevState) => ({
+  //   //     lat: prevState.lat + Math.sin(roverRotation) * 0.0001,
+  //   //     lng: prevState.lng + Math.cos(roverRotation) * 0.0001,
+  //   //   })); // Move rover in the direction of rotation
+  //   // }, 200);
   
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);
+  //   return () => clearInterval(interval); // Cleanup interval on unmount
+  // }, []);
+
+
+  useEffect(() => {
+      getROS().then((ros)=>{
+        if(ros.isConnected){
+        const angleTopic = new ROSLIB.Topic({
+          ros:ros,
+          name:'/sbg/ekf_euler',
+          messageType:'sbg_driver/SbgEkfEuler'
+        })
+        const gpsTopic = new ROSLIB.Topic({
+          ros:ros,
+          name:'/sbg/gps_pos',
+          messageType:'sbg_driver/SbgGpsPos'
+        })
+
+        angleTopic.subscribe((msg:any)=>{
+          // console.log(msg)
+          setroverRotation(radianToDegree(msg.angle.z))
+        })
+
+        gpsTopic.subscribe((msg:any)=>{
+          setroverPosition({
+            lat:msg.latitude,
+            lng:msg.longitude
+          })
+          console.log(msg.latitude,msg.longitude)
+        })
+        
+        console.log('subscribed to',angleTopic.name)
+      }
+      else{
+        toast.error('Cannot subscribe to angle topic. ROS not connected')
+      }
+      })
+      
+    }, [])
   
 
   // useEffect(() => {
@@ -150,7 +188,7 @@ const MapContainer = () => {
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] left-[20%] font-bold absolute z-50 bg-purple-500/50">W</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] right-[15%] font-bold absolute z-50 bg-red-500/50">E</div>
       <OrientationContainer waypoints={waypoints}/>
-        <Container center={[roverPosition.lat, roverPosition.lng]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+        <Container  center={[roverPosition.lat, roverPosition.lng]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
