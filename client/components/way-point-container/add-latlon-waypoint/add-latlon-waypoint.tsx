@@ -1,4 +1,4 @@
-import { WayPoint } from '@/components/MapContainer'
+import { getColor, getInitial, WayPoint, WayPointType } from '@/components/MapContainer'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -18,13 +18,13 @@ export interface AddLatLonWaypointProps {
 const AddLatLonWaypoint = (props:AddLatLonWaypointProps) => {
      const [tempLat, settempLat] = useState<number|string>('')
       const [tempLon, settempLon] = useState<number|string>('')
-      const [tempColor, settempColor] = useState(Colors.blue)
+      const [tempType, settempType] = useState<WayPointType>(WayPointType.GNSS)
 
       const {toast} = useToast()
     
       const addLatLon = () => {
         if(!Number.isNaN(Number(tempLat))&&!Number.isNaN(Number(tempLon))){
-          props.setWaypoints([...props.waypoints,{lat:parseFloat(tempLat as string),lng:parseFloat(tempLon as string),id:props.waypoints.length,color:tempColor,name:`WP${props.waypoints.length+1}`}
+          props.setWaypoints([...props.waypoints,{lat:parseFloat(tempLat as string),lng:parseFloat(tempLon as string),id:props.waypoints.length,type:tempType,name:`${getInitial(tempType)}${props.waypoints.filter((v)=>v.type==tempType).length+1}`}
           ])
           settempLat('')
           settempLon('')
@@ -57,18 +57,18 @@ const AddLatLonWaypoint = (props:AddLatLonWaypointProps) => {
 
         <div className="flex items-items gap-1">
           <DropdownMenu >
-            <DropdownMenuTrigger>
-              <div className={`h-[30px] mt-1 w-[30px] rounded-sm ${tempColor}`}></div>
+            <DropdownMenuTrigger className={`text-xs ${getColor(tempType)} w-[40px] mt-1`}>
+              {getInitial(tempType)}
             </DropdownMenuTrigger>
             <DropdownMenuContent  onChange={(e)=>console.log(e)}>
               <DropdownMenuLabel className='text-xs font-semibold'>Waypoint Tag</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup onValueChange={(e)=> props.setWaypoint(p=>({...p,color:e}))} className="grid grid-cols-4 gap-1">
-              {
-                Object.entries(Colors).map(([key,value])=>(
-                  <DropdownMenuRadioItem value={value} key={key} className={`h-[20px] rounded-sm w-[20px] ${value}`} onClick={()=>settempColor(value)}></DropdownMenuRadioItem>
-                ))
-              }
+              <DropdownMenuRadioGroup>
+              <DropdownMenuRadioItem value={WayPointType.GNSS.toString()} onClick={()=> settempType(WayPointType.GNSS)}>GNSS</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value={WayPointType.ARUCO.toString()} onClick={()=> settempType(WayPointType.ARUCO)}>Aruco</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value={WayPointType.MALLETE.toString()} onClick={()=> settempType(WayPointType.MALLETE)}>Mallete</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value={WayPointType.BOTTLE.toString()} onClick={()=> settempType(WayPointType.BOTTLE)}>Bottle</DropdownMenuRadioItem>
+
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>

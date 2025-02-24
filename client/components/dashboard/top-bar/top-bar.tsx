@@ -18,7 +18,7 @@ const TopBar = () => {
   const [connectingRos, setconnectingRos] = useState<boolean>(false)
   const [malette, setmalette] = useState<boolean>(false)
   const [bottle, setbottle] = useState<boolean>(false)
-  const [aruco, setaruco] = useState<boolean>(!false)
+  const [aruco, setaruco] = useState<boolean>(false)
   const [lightStatus, setlightStatus] = useState('red')
 
   const connectRos = ()=>{
