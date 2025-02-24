@@ -20,6 +20,7 @@ import { getROS } from '@/ros-functions/connect';
 import ROSLIB, { Ros } from 'roslib';
 import RoverFollower from './rover-follower'
 import { degreeToRadian, radianToDegree } from './orientation-container/angle-container/angle-container'
+import { calculateDistance } from './orientation-container/distance-calculator/functions/calculate-distance'
 
 export interface WayPoint{
   lat:number;
@@ -73,6 +74,7 @@ const MapContainer = () => {
  const [mapActive, setmapActive] = useState<boolean>(false)
  const [roverPosition, setroverPosition] = useState<Coordinate>({lat:23.7683770084366, lng:90.45138097558959})
  const [roverRotation, setroverRotation] = useState(Math.PI)
+ const [roverPositions, setroverPositions] = useState<Coordinate[]>([])
  const [ros, setros] = useState<Ros | null>(null)
  const [isRosConnected, setisRosConnected] = useState<boolean>(false)
 
@@ -135,16 +137,35 @@ const MapContainer = () => {
   }, []);
 
   // useEffect(() => {
-  //   // const interval = setInterval(() => {
-  //   //   setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
-  //   //   setroverPosition((prevState) => ({
-  //   //     lat: prevState.lat + Math.sin(roverRotation) * 0.0001,
-  //   //     lng: prevState.lng + Math.cos(roverRotation) * 0.0001,
-  //   //   })); // Move rover in the direction of rotation
-  //   // }, 200);
+  //   const interval = setInterval(() => {
+  //     setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
+  //     setroverPosition((prevState) => ({
+  //       lat: prevState.lat + Math.random()/1000000,
+  //       lng: prevState.lng + Math.random()/1000000,
+  //     })); // Move rover in the direction of rotation
+  //   }, 1000);
   
   //   return () => clearInterval(interval); // Cleanup interval on unmount
   // }, []);
+
+  useEffect(() => {
+      if(roverPositions.length>0){
+        const distance = calculateDistance(roverPosition.lat,roverPosition.lng,roverPositions[roverPositions.length-1].lat,roverPositions[roverPositions.length-1].lng)
+        console.log(distance)
+        if(distance>0.1){
+          setroverPositions(p=>[...p,roverPosition])
+        }
+      }
+      else{
+        console.log('nai')
+        setroverPositions(p=>[...p,roverPosition])
+      }
+    
+  }, [roverPosition])
+
+ 
+  
+  
 
 
   useEffect(() => {
@@ -282,9 +303,14 @@ const MapContainer = () => {
   </Marker>
   <Polyline
   positions={waypoints.map(waypoint=>[waypoint.lat,waypoint.lng])}
-  pathOptions={{color: 'blue'}}
+  pathOptions={{color: '#03ffcd'}}
+  dashArray={[3, 10]}
 />
+<Polyline
+  positions={roverPositions.map(waypoint=>[waypoint.lat,waypoint.lng])}
   
+  pathOptions={{color: 'yellow'}}
+/>
 </Container>
 <div className='fixed bottom-0 ml-[20%] w-full'>
            
