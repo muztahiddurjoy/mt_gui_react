@@ -1,9 +1,10 @@
 "use client"
 import { ModeToggle } from '@/components/mode-toggler'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useAppSelector } from '@/hooks/redux-hook';
 import { getROS } from '@/ros-functions/connect';
-import { Hammer, Loader2, Milk, QrCode } from 'lucide-react';
+import { Hammer, Keyboard, Loader2, Milk, QrCode } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import ROSLIB from 'roslib';
@@ -93,6 +94,20 @@ const TopBar = () => {
         <p className='text-xs'>ROS {isConnected ? <span className='bg-green-500 text-green-800 p-1'>Connected</span>:<span className='bg-red-300 p-1 text-red-800'>Disconnected</span>}</p>
         {!isConnected&&<Button onClick={connectRos} className='bg-white/10 hover:bg-white/30 dark:text-white' disabled={connectingRos} size="sm">{connectingRos&&<Loader2 className="animate-spin" size={10}/>}Connect</Button>}
             <ModeToggle/>
+            <Dialog>
+              <DialogTrigger className={buttonVariants({size:'sm'})}>
+                <Keyboard/>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Keyboard Shortcuts</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete your account
+                    and remove your data from our servers.
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
         </div>
     </div>
   )

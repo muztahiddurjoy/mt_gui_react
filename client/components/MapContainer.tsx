@@ -25,7 +25,7 @@ export interface WayPoint{
   lat:number;
   lng:number;
   id:number;
-  color:string;
+  type:WayPointType;
   name:string;
 }
 
@@ -34,11 +34,42 @@ export interface Coordinate{
   lng:number
 }
 
+export enum WayPointType{
+  GNSS,
+  MALLETE,
+  BOTTLE,
+  ARUCO
+}
+export const getColor = (type:WayPointType):string=>{
+  switch(type){
+    case WayPointType.ARUCO:
+      return Colors.amber
+    case WayPointType.BOTTLE:
+      return Colors.teal
+    case WayPointType.GNSS:
+      return Colors.blue
+    case WayPointType.MALLETE:
+      return Colors.orange
+  }
+}
+
+export const getInitial = (type:WayPointType):string=>{
+  switch(type){
+    case WayPointType.ARUCO:
+      return 'AR'
+    case WayPointType.BOTTLE:
+      return 'BT'
+    case WayPointType.GNSS:
+      return 'GN'
+    case WayPointType.MALLETE:
+      return 'ML'
+  }
+}
 
 const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([])
   const [selectedWaypoint, setselectedWaypoint] = useState<WayPoint|null>(null)
- const [tempColor, settempColor] = useState<string>('auto')
+  const [wptype, setwptype] = useState<WayPointType>(WayPointType.GNSS)
  const [mapActive, setmapActive] = useState<boolean>(false)
  const [roverPosition, setroverPosition] = useState<Coordinate>({lat:23.7683770084366, lng:90.45138097558959})
  const [roverRotation, setroverRotation] = useState(Math.PI)
@@ -76,7 +107,7 @@ const MapContainer = () => {
     if(mapActive){
       useMapEvents({
         click(e) {
-          setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length,color:tempColor=="auto"?Object.values(Colors)[Math.floor(Math.random() * Object.values(Colors).length)]:tempColor,name:`WP${waypoints.length+1}`}])
+          setwaypoints([...waypoints,{lat:e.latlng.lat,lng:e.latlng.lng,id:waypoints.length,type:wptype,name:`${getInitial(wptype)}${waypoints.filter((v)=>v.type==wptype).length+1}`}])
         },
       });
     }
@@ -84,11 +115,7 @@ const MapContainer = () => {
   };
 
   useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'M' || event.key === 'm') {
-        setmapActive(prevState => !prevState);
-      }
-    };
+   
     getROS().then(ros=>{
      ros.on('connection',()=>{
         setisRosConnected(true)
@@ -99,14 +126,12 @@ const MapContainer = () => {
       })
     }
     )
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-      if(ros){
-        ros.close()
-      }
-    };
+  return ()=>{
+    if(ros){
+      ros.close()
+    }
+  }
+   
   }, []);
 
   // useEffect(() => {
@@ -177,6 +202,8 @@ const MapContainer = () => {
   //   }
   // }, [tempColor])
 
+ 
+
   
 
   
@@ -204,8 +231,8 @@ const MapContainer = () => {
         html: `<div class="flex flex-col items-center">
         ${renderToString(
           <div className='relative'>
-            <div className={`h-[40px] w-[2px] ${waypoint.color}`}></div>
-            <div className={`h-[20px] absolute top-0 left-0 w-[40px] ${waypoint.color} text-xs flex items-center justify-center text-white`}>{waypoint.name}</div>
+            <div className={`h-[40px] w-[2px] ${getColor(waypoint.type)}`}></div>
+            <div className={`h-[20px] absolute top-0 left-0 w-[40px] ${getColor(waypoint.type)} text-xs flex items-center justify-center text-white`}>{waypoint.name}</div>
           </div>
         )}
        
@@ -219,15 +246,21 @@ const MapContainer = () => {
         return <>
          <Circle
           center={[waypoint.lat, waypoint.lng]}
-          radius={1.5} // 3 meters
+          radius={
+            waypoint.type === WayPointType.GNSS
+              ? 2
+              : waypoint.type === WayPointType.ARUCO
+              ? 20
+              : 10
+          } // 3 meters
           pathOptions={{
-            color: waypoint.color,    // Border color matches waypoint
-            fillColor: 'blue',// Fill color matches waypoint
+            color: getColor(waypoint.type),    // Border color matches waypoint
+            fillColor: waypoint.type == WayPointType.ARUCO? 'white': waypoint.type==WayPointType.BOTTLE ? 'teal' : waypoint.type == WayPointType.GNSS ? 'blue':'orange' ,// Fill color matches waypoint
             fillOpacity: 0.2,         // Semi-transparent fill
             weight: 1                 // Border thickness
           }}
         />
-        <Marker key={index} icon={waypointIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
+        <Marker key={waypoint.id} icon={waypointIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
             setselectedWaypoint(waypoint)
           }}}>
           </Marker>
@@ -243,7 +276,7 @@ const MapContainer = () => {
 </Container>
 <div className='fixed bottom-0 ml-[20%] w-full'>
            
-  <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} settempColor={settempColor} tempColor={tempColor}/>
+  <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} setwpType={setwptype} wpType={wptype}/>
 </div>
 
 <WaypointContainer selectedWaypoints={selectedWaypoints} setSelectedWaypoints={setselectedWaypoints} setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
