@@ -7,6 +7,7 @@ import { WayPoint } from '../MapContainer'
 
 interface OrientationContainerProps{
     waypoints:WayPoint[]
+    rover:{lat:number,lng:number}
 }
 
 const OrientationContainer = (props:OrientationContainerProps) => {

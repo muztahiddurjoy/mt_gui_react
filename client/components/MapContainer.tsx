@@ -222,7 +222,7 @@ const MapContainer = () => {
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[87vh] left-[50%] font-bold absolute z-50 bg-sky-500/50">S</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] left-[20%] font-bold absolute z-50 bg-purple-500/50">W</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] right-[15%] font-bold absolute z-50 bg-red-500/50">E</div>
-      <OrientationContainer waypoints={waypoints}/>
+      <OrientationContainer rover={roverPosition} waypoints={waypoints}/>
         <Container  center={[roverPosition.lat, roverPosition.lng]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
