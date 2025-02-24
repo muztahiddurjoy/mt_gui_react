@@ -14,8 +14,8 @@ const OrientationContainer = (props:OrientationContainerProps) => {
   return (
     <div className='h-[93vh] fixed bottom-0 top-0 left-0 w-[20%] grid grid-rows-3 mt-[7vh]'>
         <DistanceCalculator {...props}/>
-        {/* <CompassContainer/> */}
         <AngleContainer/>
+        {/* <CompassContainer/> */}
     </div>
   )
 }

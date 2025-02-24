@@ -57,14 +57,15 @@ const AngleContainer = () => {
   
   return (
     <>
-    <div className='flex items-center justify-center relative'>
+    <div className='flex items-center justify-center relative h-[30vh]'>
         <div className="h-[90%] w-[1px] bg-red-500 absolute top-2 left-[50%]">y</div>
         <div className='w-[90%] h-[1px] bg-green-500 absolute top-[50%] left-4'>x</div>
-        <div className='w-[90%] h-[10px] bg-purple-500 absolute top-[50%] left-4' 
+        <img src="/bar.png" className='w-[90%] h-[50px] absolute top-[50%] left-4' 
         style={{
           transform: `rotateX(${angle.pitch}deg) rotateY(${angle.roll}deg)`
         }}
-        ></div>
+        />
+        {/* <img src="/compass.png" className='w-[90%] absolute top-0 left-0 right-0 bottom-0 z-50'/> */}
     </div>
     <p className='text-xs ml-2'>Roll:{angle.roll.toFixed(0)} Pitch:{angle.pitch.toFixed(0)} Yaw:{angle.yaw.toFixed(0)}</p>
     </>

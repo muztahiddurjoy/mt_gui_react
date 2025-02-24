@@ -11,7 +11,7 @@ interface DistanceCalculatorProps{
 
 const DistanceCalculator = (props:DistanceCalculatorProps) => {
   return (
-    <Card className='p-2'>
+    <Card className='p-2 h-[30vh] overflow-y-scroll'>
         <p className='text-sm'>Steps</p>
         <div className='flex items-center flex-wrap gap-1 mt-2'>
         {props.waypoints.length>0&&<div className='flex items-center gap-2'>

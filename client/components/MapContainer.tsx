@@ -60,7 +60,7 @@ export const getInitial = (type:WayPointType):string=>{
     case WayPointType.BOTTLE:
       return 'BT'
     case WayPointType.GNSS:
-      return 'GN'
+      return 'GNSS'
     case WayPointType.MALLETE:
       return 'ML'
   }
