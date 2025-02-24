@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Card } from '../ui/card'
-import { WayPoint } from '../MapContainer'
+import { getInitial, WayPoint, WayPointType } from '../MapContainer'
 import { Button } from '../ui/button'
 import { Trash2 } from 'lucide-react'
 import AddLatLonWaypoint from './add-latlon-waypoint/add-latlon-waypoint'
@@ -26,8 +26,8 @@ const WaypointContainer = (props:WaypointContainerProps) => {
     id:props.waypoints.length,
     lat:0,
     lng:0,
-    color:Colors.blue,
-    name:`WP${props.waypoints.length+1}`
+   type:WayPointType.GNSS,
+    name:`${getInitial(WayPointType.GNSS)}${props.waypoints.filter((v)=>v.type==WayPointType.GNSS).length+1}`
   })
 
 

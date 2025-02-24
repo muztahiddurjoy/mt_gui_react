@@ -1,5 +1,5 @@
 "use client"
-import { Circle, MapContainer as Container, Marker, Popup, TileLayer, useMap,useMapEvents } from 'react-leaflet'
+import { Circle, MapContainer as Container, Marker, Polyline, Popup, TileLayer, useMap,useMapEvents } from 'react-leaflet'
 
 import L from 'leaflet'
 import 'leaflet-rotatedmarker'
@@ -115,7 +115,7 @@ const MapContainer = () => {
   };
 
   useEffect(() => {
-   
+    setwaypoints(JSON.parse(localStorage.getItem('waypoints')||'[]'))
     getROS().then(ros=>{
      ros.on('connection',()=>{
         setisRosConnected(true)
@@ -202,6 +202,14 @@ const MapContainer = () => {
   //   }
   // }, [tempColor])
 
+
+  useEffect(() => {
+    if(waypoints){
+      localStorage.setItem('waypoints',JSON.stringify(waypoints))
+    }
+  }, [waypoints])
+  
+
  
 
   
@@ -272,6 +280,10 @@ const MapContainer = () => {
       Rover is currently here
     </Popup>
   </Marker>
+  <Polyline
+  positions={waypoints.map(waypoint=>[waypoint.lat,waypoint.lng])}
+  pathOptions={{color: 'blue'}}
+/>
   
 </Container>
 <div className='fixed bottom-0 ml-[20%] w-full'>

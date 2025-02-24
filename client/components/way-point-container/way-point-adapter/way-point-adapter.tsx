@@ -1,9 +1,9 @@
-import { WayPoint } from '@/components/MapContainer'
+import { WayPoint, WayPointType } from '@/components/MapContainer'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/hooks/use-toast'
-import { ArrowDown, ArrowUp, Copy } from 'lucide-react'
+import { ArrowDown, ArrowUp, Copy, Hammer, MapPin, Milk } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 interface WaypointAdapterProps{
@@ -79,7 +79,7 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
       <div className='flex items-center gap-2 mt-1 justify-between p-2'>
       <div className="flex items-center gap-2">
               <Checkbox id={`wp-${props.waypoint.id}`} onCheckedChange={addWaypointToSelected} checked={pointSelected}/>
-              <div onClick={()=> setshowLatlon(p=>!p)} className={`h-[12px] w-[12px] ${props.waypoint.color}`}></div>
+              {props.waypoint.type==WayPointType.GNSS?<MapPin size={15} className='text-blue-500'/>:props.waypoint.type==WayPointType.BOTTLE?<Milk className='stroke-teal-700 fill-teal-500' size={15}/>:props.waypoint.type==WayPointType.ARUCO?<img src="/marker/aruco.png" className='h-[20px]'/>:<Hammer className='fill-orange-500 stroke-orange-500' size={15}/>}
               <label className='text-xs' htmlFor={`wp-${props.waypoint.id}`}>{props.waypoint.name}</label>
       </div>
       <div className='flex items-center gap-1'>
@@ -92,7 +92,7 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
         <div className='w-full px-1'>
           <p className='text-xs'>Lat {props.waypoint.lat}</p>
           <p className='text-xs'>Lon {props.waypoint.lng}</p>
-          <Button size="sm" className='w-full mt-1' onClick={copyLatLon}><Copy/> Copy</Button>
+          <Button size="sm" className='w-full my-1' onClick={copyLatLon}><Copy/> Copy</Button>
         </div>
       }
     </Card>
