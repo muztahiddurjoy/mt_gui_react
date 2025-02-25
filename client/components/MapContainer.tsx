@@ -74,15 +74,13 @@ const MapContainer = () => {
   const [selectedWaypoint, setselectedWaypoint] = useState<WayPoint|null>(null)
   const [wptype, setwptype] = useState<WayPointType>(WayPointType.GNSS)
  const [mapActive, setmapActive] = useState<boolean>(false)
- const [roverPosition, setroverPosition] = useState<Coordinate>({lat:0.00, lng:0.00})
+ const [roverPosition, setroverPosition] = useState<Coordinate>({lat:23.772505, lng:90.4227142})
  const [roverRotation, setroverRotation] = useState(Math.PI)
  const [roverPositions, setroverPositions] = useState<Coordinate[]>([])
  const [ros, setros] = useState<Ros | null>(null)
  const [isRosConnected, setisRosConnected] = useState<boolean>(false)
 
  const roverMarker = useRef(null)
- const mapRef = useRef(null)
- 
 
   useEffect(() => {
     if (roverMarker.current) {
@@ -250,16 +248,14 @@ const MapContainer = () => {
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[87vh] left-[50%] font-bold absolute z-50 bg-sky-500/50">S</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] left-[20%] font-bold absolute z-50 bg-purple-500/50">W</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] right-[15%] font-bold absolute z-50 bg-red-500/50">E</div>
-      <OrientationContainer key={99990} rover={roverPosition} waypoints={waypoints}/>
-        <Container key={990} center={[roverPosition.lat, roverPosition.lng]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+      <OrientationContainer rover={roverPosition} waypoints={waypoints}/>
+        <Container center={[roverPosition.lat, roverPosition.lng]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
-    attribution='&copy; <a href="#">Google</a>'
     // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    // url='http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png'
-    url='http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-
+    url="http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google</a>'
   />
   
   <MapClickHandler/>
@@ -315,8 +311,8 @@ const MapContainer = () => {
   pathOptions={{color: '#03ffcd'}}
   dashArray={[3, 10]}
 />
+<MapController roverPos={roverPosition}/>
 
-<MapController key={69} roverPos={roverPosition}/>
 <Polyline
   positions={roverPositions.map(waypoint=>[waypoint.lat,waypoint.lng])}
   

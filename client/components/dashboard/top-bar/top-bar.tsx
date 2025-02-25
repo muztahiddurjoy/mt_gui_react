@@ -29,9 +29,10 @@ const TopBar = () => {
         const lightTopic = new ROSLIB.Topic({
           ros:ros,
           name:'/light_status',
-          messageType:'std_msgs/String'
+          messageType:'std_msgs/msg/String'
         })
         lightTopic.subscribe((msg:any)=>{
+          console.log('light',msg)
           const status = String(msg.data)
           if(status.toLocaleLowerCase()==='red'){
             setlightStatus('red')
@@ -39,7 +40,7 @@ const TopBar = () => {
             setlightStatus('green')
           }else if(status.toLocaleLowerCase()==='blue'){
             setlightStatus('blue')
-            setmalette(true)
+           // setmalette(true)
           }
         })
       }
@@ -75,7 +76,7 @@ const TopBar = () => {
             
             <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="red"?'bg-red-500':'bg-gray-500'}`}></div>
             <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="blue"?'bg-blue-500':'bg-gray-500'}`}></div>
-            <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="green"?'bg-green-500 animate-pulse':'bg-gray-500'}`}></div>
+            <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="green"?'bg-green-500 blink':'bg-gray-500'}`}></div>
           </div>
           <div className='flex items-center gap-2 ml-10'>
             <Image src="/marker/aruco.png" height={20} width={20} alt='Aruco' className={aruco?"opacity-100":"opacity-25"} /> {aruco&&<span className='text-xs'>Reached</span>}
