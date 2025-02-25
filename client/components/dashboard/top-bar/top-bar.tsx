@@ -75,7 +75,7 @@ const TopBar = () => {
             
             <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="red"?'bg-red-500':'bg-gray-500'}`}></div>
             <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="blue"?'bg-blue-500':'bg-gray-500'}`}></div>
-            <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="green"?'bg-green-500':'bg-gray-500'}`}></div>
+            <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="green"?'bg-green-500 animate-pulse':'bg-gray-500'}`}></div>
           </div>
           <div className='flex items-center gap-2 ml-10'>
             <Image src="/marker/aruco.png" height={20} width={20} alt='Aruco' className={aruco?"opacity-100":"opacity-25"} /> {aruco&&<span className='text-xs'>Reached</span>}
