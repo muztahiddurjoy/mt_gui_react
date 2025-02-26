@@ -253,8 +253,8 @@ const MapContainer = () => {
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
-    // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    url="http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png"
+     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+ //   url="http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google</a>'
   />
   
@@ -289,7 +289,7 @@ const MapContainer = () => {
           } // 3 meters
           pathOptions={{
             color: getColor(waypoint.type),    // Border color matches waypoint
-            fillColor: waypoint.type == WayPointType.ARUCO? 'white': waypoint.type==WayPointType.BOTTLE ? 'teal' : waypoint.type == WayPointType.GNSS ? 'blue':'orange' ,// Fill color matches waypoint
+            fillColor: waypoint.type == WayPointType.ARUCO? 'amber': waypoint.type==WayPointType.BOTTLE ? 'teal' : waypoint.type == WayPointType.GNSS ? 'blue':'orange' ,// Fill color matches waypoint
             fillOpacity: 0.2,         // Semi-transparent fill
             weight: 1                 // Border thickness
           }}

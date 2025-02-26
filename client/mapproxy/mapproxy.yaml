@@ -41,7 +41,7 @@ caches:
 sources:
   gm:
     type: tile
-    url: http://mt0.google.com/vt/lyrs=s@0&hl=en&x=%(x)s&y=%(y)s&z=%(z)s
+    url: https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
     grid: gm_grid
 
 grids:

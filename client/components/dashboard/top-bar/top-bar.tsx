@@ -69,7 +69,7 @@ const TopBar = () => {
     <div className='fixed top-0 left-0 right-0 h-[7vh] bg-primary/50 flex items-center justify-between z-50'>
         <div className="h-full flex items-center justify-center">
         <div className="flex h-full bg-white">
-            <img src="/mt.avif" className='w-[100px]'/>
+            <img src="/mt.avif" className='w-[70px]'/>
         </div>
             <div className='flex items-center gap-2 ml-3'>
             <p className="text-sm">Status</p>
