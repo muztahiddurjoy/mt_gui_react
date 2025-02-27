@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import UvGraph from '@/components/science/uv-graph';
+import NPKGraph from '@/components/science/npk-graph';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ScienceGraphs = () => {
@@ -39,6 +40,7 @@ const ScienceGraphs = () => {
   return (
     <div className='grid grid-cols-2 pt-20 px-10'>
     <UvGraph/>
+    <NPKGraph/>
     </div>
   )
 }
