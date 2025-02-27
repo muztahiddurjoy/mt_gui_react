@@ -5,6 +5,7 @@ import { Doughnut } from "react-chartjs-2";
 import UvGraph from '@/components/science/uv-graph';
 import NPKGraph from '@/components/science/npk-graph';
 import OthersGraphs from '@/components/science/others';
+import ColorSensorGraphs from '@/components/science/color-sensor';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ScienceGraphs = () => {
@@ -44,6 +45,7 @@ const ScienceGraphs = () => {
     <NPKGraph/>
     
         <OthersGraphs/>
+        <ColorSensorGraphs/>
     
     </div>
   )

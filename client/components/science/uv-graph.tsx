@@ -10,11 +10,18 @@ const UvGraph = () => {
         labels: ['1s','2s','3s','4s','5s','6s','7s','8s','9s','10s','11s','12s'],
         datasets: [
             {
-                label: 'Average UV Index',
+                label: 'UV Sensor 1',
                 data: [2, 3, 5, 7, 9, 11, 12, 11, 8, 6, 4, 2],
                 fill: false,
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgba(255, 99, 132, 0.2)',
+            },
+            {
+                label: 'UV Sensor 2',
+                data: [1, 2, 4, 6, 8, 10, 11, 10, 7, 5, 3, 1],
+                fill: false,
+                backgroundColor: 'rgb(54, 162, 235)',
+                borderColor: 'rgba(54, 162, 235, 0.2)',
             },
         ],
     };
