@@ -4,7 +4,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useAppSelector } from '@/hooks/redux-hook';
 import { getROS } from '@/ros-functions/connect';
-import { Hammer, Keyboard, Loader2, Milk, QrCode } from 'lucide-react';
+import { Circle, Hammer, Keyboard, Loader2, Milk, QrCode } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import ROSLIB from 'roslib';
@@ -19,6 +19,7 @@ const TopBar = () => {
   const [malette, setmalette] = useState<boolean>(false)
   const [bottle, setbottle] = useState<boolean>(false)
   const [aruco, setaruco] = useState<boolean>(false)
+  const [rtk, setrtk] = useState<boolean>(false)
   const [lightStatus, setlightStatus] = useState('red')
 
   const connectRos = ()=>{
@@ -36,11 +37,24 @@ const TopBar = () => {
           const status = String(msg.data)
           if(status.toLocaleLowerCase()==='red'){
             setlightStatus('red')
+            // setaruco(false)
           }else if(status.toLocaleLowerCase()==='green'){
             setlightStatus('green')
+            // setaruco(true)
           }else if(status.toLocaleLowerCase()==='blue'){
             setlightStatus('blue')
            // setmalette(true)
+          }
+        })
+        const rtkTopic = new ROSLIB.Topic({
+          ros:ros,
+          name:'/rtk',
+          messageType:'std_msgs/Bool'
+        })
+        rtkTopic.subscribe((msg:any)=>{
+          console.log('rtk',msg)
+          if(msg.data){
+            setrtk(msg.data)
           }
         })
       }
@@ -94,6 +108,10 @@ const TopBar = () => {
             <Button className='bg-white/10 hover:bg-white/30 dark:text-white' size="sm">Autonomous</Button>
         </div>
         <div className="flex items-center gap-3">
+        {rtk&&<div className="flex items-center bg-white/20 p-2">
+          <Circle className='fill-green-500 stroke-green-500' size={18}/>
+          <p className='text-xs ml-2 font-bold'>RTK Enabled</p>
+        </div>}
         <p className='text-xs'>ROS {isConnected ? <span className='bg-green-500 text-green-800 p-1'>Connected</span>:<span className='bg-red-300 p-1 text-red-800'>Disconnected</span>}</p>
         {!isConnected&&<Button onClick={connectRos} className='bg-white/10 hover:bg-white/30 dark:text-white' disabled={connectingRos} size="sm">{connectingRos&&<Loader2 className="animate-spin" size={10}/>}Connect</Button>}
             <ModeToggle/>

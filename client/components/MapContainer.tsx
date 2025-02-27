@@ -84,7 +84,7 @@ const MapContainer = () => {
 
   useEffect(() => {
     if (roverMarker.current) {
-      // console.log('Setting rotation angle:', roverRotation);
+      console.log('Setting rotation angle:', roverRotation);
       (roverMarker.current as any).setRotationAngle(roverRotation);
       (roverMarker.current as any).setRotationOrigin('center');
     }
@@ -93,6 +93,14 @@ const MapContainer = () => {
 
 
  const [selectedWaypoints, setselectedWaypoints] = useState<WayPoint[]>([])
+  // const roverIcon = new L.Icon({
+  //   iconUrl: '/rover.png',
+  //   className:'transition-transform duration-100 ease-in-out',
+  //   iconSize: [50, 50],
+  //   iconAnchor: [25, 25],
+  //   popupAnchor: [1, -34],
+  //   // shadowSize: [41, 41]
+  // });
   const roverIcon = new L.Icon({
     iconUrl: '/marker/rover-marker.png',
     className:'transition-transform duration-100 ease-in-out',
@@ -255,7 +263,7 @@ const MapContainer = () => {
   maxNativeZoom={19}
      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
  //   url="http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Google</a>'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Open Street Map</a> Contributors'
   />
   
   <MapClickHandler/>
@@ -284,7 +292,7 @@ const MapContainer = () => {
             waypoint.type === WayPointType.GNSS
               ? 2
               : waypoint.type === WayPointType.ARUCO
-              ? 20
+              ? 5
               : 10
           } // 3 meters
           pathOptions={{
