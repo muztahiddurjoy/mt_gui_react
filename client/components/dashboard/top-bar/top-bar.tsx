@@ -80,7 +80,7 @@ const TopBar = () => {
   
   
   return (
-    <div className='fixed top-0 left-0 right-0 h-[7vh] bg-primary/50 flex items-center justify-between z-50'>
+    <div className='fixed top-0 left-0 right-0 h-[7vh] bg-primary/50 backdrop-blur-md flex items-center justify-between z-50'>
         <div className="h-full flex items-center justify-center">
         <div className="flex h-full bg-white">
             <img src="/mt.avif" className='w-[70px]'/>

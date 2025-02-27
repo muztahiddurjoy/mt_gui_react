@@ -39,26 +39,26 @@ const NPKGraph = () => {
                 title: {
                     display: true,
                     text: 'Time (seconds)',
-                    color: 'blue'
+                    color: 'cyan'
                 },
                 ticks: {
-                    color: 'blue'
+                    color: 'cyan'
                 },
                 grid: {
-                    color: 'rgba(0, 0, 255, 0.2)'
+                    color: 'rgba(0, 255, 255, 0.2)'
                 }
             },
             y: {
                 title: {
                     display: true,
                     text: 'Concentration (mg/L)',
-                    color: 'blue'
+                    color: 'cyan'
                 },
                 ticks: {
-                    color: 'blue'
+                    color: 'cyan'
                 },
                 grid: {
-                    color: 'rgba(0, 0, 255, 0.2)'
+                    color: 'rgba(0, 255, 255, 0.2)'
                 }
             }
         }

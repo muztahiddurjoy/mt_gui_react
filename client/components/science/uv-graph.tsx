@@ -23,18 +23,18 @@ const UvGraph = () => {
         scales: {
             x: {
                 ticks: {
-                    color: 'blue' // Change this to your desired color
+                    color: 'cyan' // Change this to your desired color
                 },
                 grid: {
-                    color: 'rgba(0, 0, 255, 0.2)' // Change this to your desired color
+                    color: 'rgba(0, 255, 255, 0.2)' // Change this to your desired color
                 }
             },
             y: {
                 ticks: {
-                    color: 'blue' // Change this to your desired color
+                    color: 'cyan' // Change this to your desired color
                 },
                 grid: {
-                    color: 'rgba(0, 0, 255, 0.2)' // Change this to your desired color
+                    color: 'rgba(0, 255, 255, 0.2)' // Change this to your desired color
                 }
             }
         }

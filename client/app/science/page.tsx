@@ -4,6 +4,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import UvGraph from '@/components/science/uv-graph';
 import NPKGraph from '@/components/science/npk-graph';
+import OthersGraphs from '@/components/science/others';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ScienceGraphs = () => {
@@ -38,9 +39,12 @@ const ScienceGraphs = () => {
     };
     
   return (
-    <div className='grid grid-cols-2 pt-20 px-10'>
+    <div className='grid grid-cols-2 pt-20 px-10 gap-10 pb-20'>
     <UvGraph/>
     <NPKGraph/>
+    
+        <OthersGraphs/>
+    
     </div>
   )
 }
