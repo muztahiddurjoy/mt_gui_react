@@ -1,99 +1,144 @@
 "use client"
 import { ArcElement, Legend, Tooltip } from 'chart.js';
 import ChartJS from 'chart.js/auto';
-import React from 'react'
-import { Line } from 'react-chartjs-2'
+import React, { useState, useEffect } from 'react';
+import { Line } from 'react-chartjs-2';
 import { Button } from '../ui/button';
 import { PlayCircle } from 'lucide-react';
-ChartJS.register(ArcElement, Tooltip, Legend);  
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const OthersGraphs = () => {
-  const data = {
-    labels: ['1s','2s','3s','4s','5s','6s','7s','8s','9s','10s','11s','12s'],
+  // State to hold the sensor data
+  const [sensorData, setSensorData] = useState({
+    labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`), // Initial labels: 1s to 12s
     datasets: [
       {
-        label: 'Intensity Of Light (lux)',
-        data: [300, 320, 310, 330, 340, 350, 360, 370, 380, 390, 400, 410],
+        label: 'CO Concentration (ppm)',
+        data: Array(12).fill(12.5), // Initial data (midpoint of range)
         fill: false,
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgba(255, 99, 132, 0.2)',
       },
       {
-        label: 'Pressure (hPa)',
-        data: [1012, 1013, 1011, 1014, 1015, 1013, 1012, 1011, 1010, 1013, 1014, 1015],
+        label: 'Oxygen Concentration (%)',
+        data: Array(12).fill(19), // Initial data (midpoint of range)
         fill: false,
         backgroundColor: 'rgb(54, 162, 235)',
         borderColor: 'rgba(54, 162, 235, 0.2)',
       },
       {
-        label: 'Humidity (%)',
-        data: [45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56],
-        fill: false,
-        backgroundColor: 'rgb(75, 192, 192)',
-        borderColor: 'rgba(75, 192, 192, 0.2)',
-      },
-      {
-        label: 'Oxygen Concentration (%)',
-        data: [21, 21.1, 21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22, 22.1],
+        label: 'UV Intensity (mW/cm²)',
+        data: Array(12).fill(2.5), // Initial data (midpoint of range)
         fill: false,
         backgroundColor: 'rgb(153, 102, 255)',
         borderColor: 'rgba(153, 102, 255, 0.2)',
       },
       {
         label: 'Temperature (°C)',
-        data: [22, 22.5, 23, 23.5, 24, 24.5, 25, 25.5, 26, 26.5, 27, 27.5],
+        data: Array(12).fill(20), // Initial data (midpoint of range)
         fill: false,
         backgroundColor: 'rgb(255, 159, 64)',
         borderColor: 'rgba(255, 159, 64, 0.2)',
       },
       {
-        label: 'Carbon Monoxide (ppm)',
-        data: [0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6],
-        fill: false,
-        backgroundColor: 'rgb(255, 206, 86)',
-        borderColor: 'rgba(255, 206, 86, 0.2)',
-      },
-      {
         label: 'Altitude (m)',
-        data: [100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122],
+        data: Array(12).fill(500), // Initial data (midpoint of range)
         fill: false,
         backgroundColor: 'rgb(75, 192, 192)',
         borderColor: 'rgba(75, 192, 192, 0.2)',
       },
+      {
+        label: 'Humidity (%)',
+        data: Array(12).fill(85), // Initial data (midpoint of range)
+        fill: false,
+        backgroundColor: 'rgb(153, 102, 255)',
+        borderColor: 'rgba(153, 102, 255, 0.2)',
+      },
     ],
+  });
+
+  // Function to generate a random value within a range
+  const generateRandomValue = (min, max) => {
+    return Math.random() * (max - min) + min;
   };
+
+  // Function to update the sensor data
+  const updateSensorData = () => {
+    setSensorData((prevData) => {
+      const newDataCO = [...prevData.datasets[0].data.slice(1), generateRandomValue(7, 18)]; // CO Concentration
+      const newDataOxygen = [...prevData.datasets[1].data.slice(1), generateRandomValue(16, 22)]; // Oxygen Concentration
+      const newDataUV = [...prevData.datasets[2].data.slice(1), generateRandomValue(0, 5)]; // UV Intensity
+      const newDataTemp = [...prevData.datasets[3].data.slice(1), generateRandomValue(0, 40)]; // Temperature
+      const newDataAltitude = [...prevData.datasets[4].data.slice(1), generateRandomValue(150, 151)]; // Altitude
+      const newDataHumidity = [...prevData.datasets[5].data.slice(1), generateRandomValue(70, 100)]; // Humidity
+
+      return {
+        ...prevData,
+        datasets: [
+          { ...prevData.datasets[0], data: newDataCO },
+          { ...prevData.datasets[1], data: newDataOxygen },
+          { ...prevData.datasets[2], data: newDataUV },
+          { ...prevData.datasets[3], data: newDataTemp },
+          { ...prevData.datasets[4], data: newDataAltitude },
+          { ...prevData.datasets[5], data: newDataHumidity },
+        ],
+      };
+    });
+  };
+
+  // UseEffect to update the data every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateSensorData();
+    }, 1000); // Update every 1 second
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
 
   const options = {
     scales: {
       x: {
+        title: {
+          display: true,
+          text: 'Time (seconds)',
+          color: 'white',
+        },
         ticks: {
-          color: 'white' // Change this to your desired color
+          color: 'white',
         },
         grid: {
-          color: 'rgba(0, 255, 255, 0.2)' // Change this to your desired color
-        }
+          color: 'rgba(0, 255, 255, 0.2)',
+        },
       },
       y: {
+        title: {
+          display: true,
+          text: 'Value',
+          color: 'white',
+        },
         ticks: {
-          color: 'white' // Change this to your desired color
+          color: 'white',
         },
         grid: {
-          color: 'rgba(0, 255, 255, 0.2)' // Change this to your desired color
-        }
-      }
-    }
+          color: 'rgba(0, 255, 255, 0.2)',
+        },
+      },
+    },
   };
-  
+
   return (
     <div>
-         <div className="flex items-center justify-end">
-                    <Button><PlayCircle/> Record Value (12s) </Button>
-                </div>
-        <div style={{ width: '100%', height: 'auto' }} className='mt-5'>
-            <Line data={data} options={options} />
-        </div>
-        </div>
-  )
-}
+      <div className="flex items-center justify-end">
+        <Button>
+          <PlayCircle /> Record Value (12s)
+        </Button>
+      </div>
+      <div style={{ width: '100%', height: 'auto' }} className="mt-5">
+        <Line data={sensorData} options={options} />
+      </div>
+    </div>
+  );
+};
 
-export default OthersGraphs
+export default OthersGraphs;

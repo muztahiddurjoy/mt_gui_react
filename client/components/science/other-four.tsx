@@ -8,31 +8,24 @@ import { PlayCircle } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const NPKGraph = () => {
-    // State to hold the NPK data
-    const [npkData, setNpkData] = useState({
+const OthersFour = () => {
+    // State to hold the sensor data
+    const [sensorData, setSensorData] = useState({
         labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`), // Initial labels: 1s to 12s
         datasets: [
             {
-                label: 'Nitrogen (mg/kg)',
-                data: Array(12).fill(150), // Initial data for Nitrogen (midpoint of range)
-                fill: false,
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgba(255, 99, 132, 0.2)',
-            },
-            {
-                label: 'Phosphorus (mg/kg)',
-                data: Array(12).fill(35), // Initial data for Phosphorus (midpoint of range)
-                fill: false,
-                backgroundColor: 'rgb(54, 162, 235)',
-                borderColor: 'rgba(54, 162, 235, 0.2)',
-            },
-            {
-                label: 'Potassium (mg/kg)',
-                data: Array(12).fill(200), // Initial data for Potassium (midpoint of range)
+                label: 'Light Intensity (lux)',
+                data: Array(12).fill(50050), // Initial data (midpoint of range)
                 fill: false,
                 backgroundColor: 'rgb(75, 192, 192)',
                 borderColor: 'rgba(75, 192, 192, 0.2)',
+            },
+            {
+                label: 'Air Pressure (Pa)',
+                data: Array(12).fill(101325), // Initial data (midpoint of range)
+                fill: false,
+                backgroundColor: 'rgb(255, 206, 86)',
+                borderColor: 'rgba(255, 206, 86, 0.2)',
             },
         ],
     });
@@ -42,19 +35,17 @@ const NPKGraph = () => {
         return Math.random() * (max - min) + min;
     };
 
-    // Function to update the NPK data
-    const updateNpkData = () => {
-        setNpkData((prevData) => {
-            const newDataNitrogen = [...prevData.datasets[0].data.slice(1), generateRandomValue(100, 200)]; // Update Nitrogen
-            const newDataPhosphorus = [...prevData.datasets[1].data.slice(1), generateRandomValue(20, 50)]; // Update Phosphorus
-            const newDataPotassium = [...prevData.datasets[2].data.slice(1), generateRandomValue(100, 300)]; // Update Potassium
+    // Function to update the sensor data
+    const updateSensorData = () => {
+        setSensorData((prevData) => {
+            const newDataLight = [...prevData.datasets[0].data.slice(1), generateRandomValue(100, 100000)]; // Light Intensity
+            const newDataPressure = [...prevData.datasets[1].data.slice(1), generateRandomValue(101325 * 0.9, 101325 * 1.1)]; // Air Pressure
 
             return {
                 ...prevData,
                 datasets: [
-                    { ...prevData.datasets[0], data: newDataNitrogen },
-                    { ...prevData.datasets[1], data: newDataPhosphorus },
-                    { ...prevData.datasets[2], data: newDataPotassium },
+                    { ...prevData.datasets[0], data: newDataLight },
+                    { ...prevData.datasets[1], data: newDataPressure },
                 ],
             };
         });
@@ -63,7 +54,7 @@ const NPKGraph = () => {
     // UseEffect to update the data every second
     useEffect(() => {
         const interval = setInterval(() => {
-            updateNpkData();
+            updateSensorData();
         }, 1000); // Update every 1 second
 
         return () => clearInterval(interval); // Cleanup interval on unmount
@@ -75,10 +66,10 @@ const NPKGraph = () => {
                 title: {
                     display: true,
                     text: 'Time (seconds)',
-                    color: 'cyan',
+                    color: 'white',
                 },
                 ticks: {
-                    color: 'cyan',
+                    color: 'white',
                 },
                 grid: {
                     color: 'rgba(0, 255, 255, 0.2)',
@@ -87,11 +78,11 @@ const NPKGraph = () => {
             y: {
                 title: {
                     display: true,
-                    text: 'Concentration (mg/kg)',
-                    color: 'cyan',
+                    text: 'Value',
+                    color: 'white',
                 },
                 ticks: {
-                    color: 'cyan',
+                    color: 'white',
                 },
                 grid: {
                     color: 'rgba(0, 255, 255, 0.2)',
@@ -108,10 +99,10 @@ const NPKGraph = () => {
                 </Button>
             </div>
             <div style={{ width: '100%', height: 'auto' }} className="mt-5">
-                <Line data={npkData} options={options} />
+                <Line data={sensorData} options={options} />
             </div>
         </div>
     );
 };
 
-export default NPKGraph;
+export default OthersFour;

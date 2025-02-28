@@ -8,6 +8,7 @@ import OthersGraphs from '@/components/science/others';
 import ColorSensorGraphs from '@/components/science/color-sensor';
 import { Button } from '@/components/ui/button';
 import { PlayCircle } from 'lucide-react';
+import OthersFour from '@/components/science/other-four';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ScienceGraphs = () => {
@@ -49,6 +50,7 @@ const ScienceGraphs = () => {
     <NPKGraph/>
     
         <OthersGraphs/>
+        <OthersFour/>
         <ColorSensorGraphs/>
     
     </div>
