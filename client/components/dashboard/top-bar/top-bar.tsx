@@ -85,7 +85,8 @@ const TopBar = () => {
         <div className="flex h-full bg-white">
             <img src="/mt.avif" className='w-[70px]'/>
         </div>
-            <div className='flex items-center gap-2 ml-3'>
+
+            {/* <div className='flex items-center gap-2 ml-3'>
             <p className="text-sm">Status</p>
             
             <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="red"?'bg-red-500':'bg-gray-500'}`}></div>
@@ -100,12 +101,12 @@ const TopBar = () => {
           </div>
           <div className='flex items-center gap-2 ml-3'>
             <Milk className={bottle?"fill-green-500 stroke-green-500":"fill-gray-500 stroke-gray-500"}/> {bottle&&<span className='text-xs'>Reached</span>}
-          </div>
+          </div> */}
           
         </div>
      
         <div className="flex items-center">
-            <Button className='bg-white/10 hover:bg-white/30 dark:text-white' size="sm">Autonomous</Button>
+            <Button className='bg-white/10 hover:bg-white/30 dark:text-white' size="sm">Sciencebox Dashboard</Button>
         </div>
         <div className="flex items-center gap-3">
         {rtk&&<div className="flex items-center bg-white/20 p-2">

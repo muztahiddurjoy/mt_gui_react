@@ -9,6 +9,7 @@ import ColorSensorGraphs from '@/components/science/color-sensor';
 import { Button } from '@/components/ui/button';
 import { PlayCircle } from 'lucide-react';
 import OthersFour from '@/components/science/other-four';
+import CO2Graph from '@/components/science/co2-sensor';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ScienceGraphs = () => {
@@ -51,6 +52,7 @@ const ScienceGraphs = () => {
     
         <OthersGraphs/>
         <OthersFour/>
+        <CO2Graph/>
         <ColorSensorGraphs/>
     
     </div>
