@@ -102,7 +102,8 @@ const NPKGraph = () => {
 
     return (
         <div>
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between">
+                <h1 className='rounded-md bg-primary/30 text-sm text-white px-5 py-2'>NPK Graph </h1>
                 <Button>
                     <PlayCircle /> Record Value (12s)
                 </Button>
