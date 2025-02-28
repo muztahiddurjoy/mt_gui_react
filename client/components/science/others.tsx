@@ -3,6 +3,8 @@ import { ArcElement, Legend, Tooltip } from 'chart.js';
 import ChartJS from 'chart.js/auto';
 import React from 'react'
 import { Line } from 'react-chartjs-2'
+import { Button } from '../ui/button';
+import { PlayCircle } from 'lucide-react';
 ChartJS.register(ArcElement, Tooltip, Legend);  
 
 const OthersGraphs = () => {
@@ -83,9 +85,14 @@ const OthersGraphs = () => {
   };
   
   return (
-    <div style={{ width: '100%', height: 'auto' }}>
-      <Line data={data} options={options} />
-    </div>
+    <div>
+         <div className="flex items-center justify-end">
+                    <Button><PlayCircle/> Record Value (12s) </Button>
+                </div>
+        <div style={{ width: '100%', height: 'auto' }} className='mt-5'>
+            <Line data={data} options={options} />
+        </div>
+        </div>
   )
 }
 

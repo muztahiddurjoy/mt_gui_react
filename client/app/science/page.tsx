@@ -6,6 +6,8 @@ import UvGraph from '@/components/science/uv-graph';
 import NPKGraph from '@/components/science/npk-graph';
 import OthersGraphs from '@/components/science/others';
 import ColorSensorGraphs from '@/components/science/color-sensor';
+import { Button } from '@/components/ui/button';
+import { PlayCircle } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ScienceGraphs = () => {
@@ -40,13 +42,16 @@ const ScienceGraphs = () => {
     };
     
   return (
-    <div className='grid grid-cols-2 pt-20 px-10 gap-10 pb-20'>
+    <div className='pt-20 px-10'>
+       
+    <div className='grid mt-5 grid-cols-2  gap-10 pb-20'>
     <UvGraph/>
     <NPKGraph/>
     
         <OthersGraphs/>
         <ColorSensorGraphs/>
     
+    </div>
     </div>
   )
 }
