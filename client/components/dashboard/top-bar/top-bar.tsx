@@ -4,8 +4,9 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useAppSelector } from '@/hooks/redux-hook';
 import { getROS } from '@/ros-functions/connect';
-import { Circle, Hammer, Keyboard, Loader2, Milk, QrCode } from 'lucide-react';
+import { Camera, Circle, FlaskConical, Hammer, Keyboard, Loader2, Milk, Navigation, QrCode } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import ROSLIB from 'roslib';
 import { toast } from 'sonner';
@@ -86,7 +87,7 @@ const TopBar = () => {
             <img src="/mt.avif" className='w-[70px]'/>
         </div>
 
-            {/* <div className='flex items-center gap-2 ml-3'>
+            <div className='flex items-center gap-2 ml-3'>
             <p className="text-sm">Status</p>
             
             <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="red"?'bg-red-500':'bg-gray-500'}`}></div>
@@ -101,12 +102,15 @@ const TopBar = () => {
           </div>
           <div className='flex items-center gap-2 ml-3'>
             <Milk className={bottle?"fill-green-500 stroke-green-500":"fill-gray-500 stroke-gray-500"}/> {bottle&&<span className='text-xs'>Reached</span>}
-          </div> */}
+          </div>
           
         </div>
      
-        <div className="flex items-center">
-            <Button className='bg-white/10 hover:bg-white/30 dark:text-white' size="sm">Sciencebox Dashboard</Button>
+        <div className="flex items-center gap-2">
+        <Link href="/" className={buttonVariants({className:"bg-white/10 hover:bg-white/30 dark:text-white",size:"sm"})}><Navigation/> Autonomous</Link>
+        <Link href="/semi-autonomous" className={buttonVariants({className:"bg-white/10 hover:bg-white/30 dark:text-white",size:"sm"})}><Navigation/> Semi Autonomous</Link>
+        <Link href="/camera-feed" className={buttonVariants({className:"bg-white/10 hover:bg-white/30 dark:text-white",size:"sm"})}><Camera/> Camera</Link>
+          <Link href="/science" className={buttonVariants({className:"bg-white/10 hover:bg-white/30 dark:text-white",size:"sm"})}><FlaskConical/> Science</Link>
         </div>
         <div className="flex items-center gap-3">
         {rtk&&<div className="flex items-center bg-white/20 p-2">

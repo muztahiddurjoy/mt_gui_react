@@ -183,8 +183,8 @@ const MapContainer = () => {
         if(ros.isConnected){
         const angleTopic = new ROSLIB.Topic({
           ros:ros,
-          name:'/sbg/ekf_euler',
-          messageType:'sbg_driver/SbgEkfEuler'
+          name:'/witmotion_eular/yaw',
+          messageType:'/std_msgs/Float64'
         })
         const gpsTopic = new ROSLIB.Topic({
           ros:ros,
