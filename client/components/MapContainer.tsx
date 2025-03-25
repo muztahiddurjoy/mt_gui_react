@@ -285,7 +285,7 @@ const MapContainer = () => {
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });  
-        return <>
+        return <div key={waypoint.id}>
          <Circle
           center={[waypoint.lat, waypoint.lng]}
           radius={
@@ -302,11 +302,11 @@ const MapContainer = () => {
             weight: 1                 // Border thickness
           }}
         />
-        <Marker key={waypoint.id} icon={waypointIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
+        <Marker icon={waypointIcon} position={[waypoint.lat,waypoint.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
             setselectedWaypoint(waypoint)
           }}}>
           </Marker>
-          </>
+          </div>
     })
   }
   <Marker ref={roverMarker} icon={roverIcon} position={[roverPosition.lat,roverPosition.lng]} >
