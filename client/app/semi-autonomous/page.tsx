@@ -1,8 +1,11 @@
+import MapContainer from '@/components/MapContainer'
 import React from 'react'
 
 const SemiAutonomousPage = () => {
   return (
-    <div>SemiAutonomousPage</div>
+    <div>
+      <MapContainer/>
+    </div>
   )
 }
 
