@@ -3,11 +3,11 @@ import { Card } from '../ui/card'
 import CompassContainer from './compass-container/compass-container'
 import AngleContainer from './angle-container/angle-container'
 import DistanceCalculator from './distance-calculator/distance-calculator'
-import { WayPoint } from '../MapContainer'
+import { Coordinate, WayPoint } from '../MapContainer'
 
 interface OrientationContainerProps{
     waypoints:WayPoint[]
-    rover:{lat:number,lng:number}
+    rover:Coordinate
 }
 
 const OrientationContainer = (props:OrientationContainerProps) => {

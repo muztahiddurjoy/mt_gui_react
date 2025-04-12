@@ -7,22 +7,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import "leaflet/dist/leaflet.css";
 // import 'leaflet.offline';
 import 'leaflet/dist/leaflet.css';
-import TopBar from './dashboard/top-bar/top-bar';
-import { FlagIcon, FlagTriangleRight, Map } from 'lucide-react';
-import { Button } from './ui/button';
-import WaypointContainer from './way-point-container/way-point-container';
-import { toast } from 'sonner';
-import {renderToString} from 'react-dom/server'
-import { Colors } from './way-point-container/data/colors';
-import MapMenubar from './map-menubar/map-menubar';
-import OrientationContainer from './orientation-container/orientation-container';
-import { getROS } from '@/ros-functions/connect';
-import ROSLIB, { Ros } from 'roslib';
-import RoverFollower from './rover-follower'
-import { degreeToRadian, radianToDegree } from './orientation-container/angle-container/angle-container'
-import { calculateDistance } from './orientation-container/distance-calculator/functions/calculate-distance'
-import TestComponent from './dashboard/test-component'
-import MapController from './dashboard/test-component'
+import { Colors } from '../way-point-container/data/colors'
+import ROSLIB, { Ros } from 'roslib'
+import { getROS } from '@/ros-functions/connect'
+import { calculateDistance } from '../orientation-container/distance-calculator/functions/calculate-distance'
+import { toast } from 'sonner'
+import { renderToString } from 'react-dom/server'
+import MapController from '../dashboard/test-component'
+import MapMenubar from '../map-menubar/map-menubar'
+import WaypointContainer from './waypoint-container'
+import OrientationContainer from './orientation-container'
 
 export interface WayPoint{
   lat:number;
@@ -33,8 +27,8 @@ export interface WayPoint{
 }
 
 export interface Coordinate{
-  lat:number|string
-  lng:number|string
+  lat:number
+  lng:number
 }
 
 export enum WayPointType{
@@ -159,7 +153,7 @@ const MapContainer = () => {
 
   useEffect(() => {
       if(roverPositions.length>0){
-        const distance = calculateDistance(Number(roverPosition.lat),Number(roverPosition.lng),Number(roverPositions[roverPositions.length-1].lat),Number(roverPositions[roverPositions.length-1].lng))
+        const distance = calculateDistance(roverPosition.lat,roverPosition.lng,roverPositions[roverPositions.length-1].lat,roverPositions[roverPositions.length-1].lng)
         console.log(distance)
         if(distance>0.7){
           setroverPositions(p=>[...p,roverPosition])
@@ -259,7 +253,7 @@ const MapContainer = () => {
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] left-[20%] font-bold absolute z-50 bg-purple-500/50">W</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] right-[15%] font-bold absolute z-50 bg-red-500/50">E</div>
       <OrientationContainer rover={roverPosition} waypoints={waypoints}/>
-        <Container center={[Number(roverPosition.lat), Number(roverPosition.lng)]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+        <Container center={[roverPosition.lat, roverPosition.lng]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
@@ -311,7 +305,7 @@ const MapContainer = () => {
           </div>
     })
   }
-  <Marker ref={roverMarker} icon={roverIcon} position={[Number(roverPosition.lat),Number(roverPosition.lng)]} >
+  <Marker ref={roverMarker} icon={roverIcon} position={[roverPosition.lat,roverPosition.lng]} >
     <Popup>
       Rover is currently here
     </Popup>
@@ -324,7 +318,7 @@ const MapContainer = () => {
 <MapController roverPos={roverPosition}/>
 
 <Polyline
-  positions={roverPositions.map(waypoint=>[Number(waypoint.lat),Number(waypoint.lng)])}
+  positions={roverPositions.map(waypoint=>[waypoint.lat,waypoint.lng])}
   
   pathOptions={{color: 'red'}}
 />
@@ -332,8 +326,8 @@ const MapContainer = () => {
 <div className='fixed bottom-0 ml-[20%] w-full'>   
   <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} setwpType={setwptype} wpType={wptype}/>
 </div>
-
-<WaypointContainer selectedWaypoints={selectedWaypoints} setSelectedWaypoints={setselectedWaypoints} setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
+<WaypointContainer/>
+{/* <WaypointContainer selectedWaypoints={selectedWaypoints} setSelectedWaypoints={setselectedWaypoints} setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/> */}
     </div>
   )
 }
