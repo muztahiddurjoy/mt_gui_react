@@ -5,6 +5,8 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useEffect } from 'react';
 import { toast } from 'sonner'
+import { getROS } from '@/ros-functions/connect'
+import ROSLIB, { Ros } from 'roslib'
 
 
 
@@ -18,6 +20,54 @@ const WaypointContainer = () => {
         lat: 0,
         lng: 0
     })
+
+    useEffect(() => {
+      getROS().then((ros:Ros) => {
+        const waypointTopic = new ROSLIB.Topic({
+            ros: ros,
+            name: '/semi_auto_wps',
+            messageType: 'std_msgs/msg/Float32MultiArrays'
+        });
+
+        waypointTopic.subscribe((message) => {
+            console.log('Received waypoints:', message);
+        });
+      }
+      ).catch((error) => {
+        console.error('Error connecting to ROS:', error);
+        toast.error('Error connecting to ROS');
+      })
+    }, [])
+    
+
+    const sendWaypoints = () => {
+      getROS().then((ros:Ros) => {
+        var wpSend = new ROSLIB.Topic({
+            ros : ros,
+            name : '/semi_auto_wps',
+            messageType : 'std_msgs/msg/Float32MultiArray'
+          });
+        
+          var wps = new ROSLIB.Message({
+            layout: {
+                dim: [],
+                data_offset: 0
+            },
+            data: [
+                parseFloat(String(start.lat)).toFixed(6),
+                parseFloat(String(start.lng)).toFixed(6),
+                parseFloat(String(end.lat)).toFixed(6),
+                parseFloat(String(end.lng)).toFixed(6)
+            ]
+          });
+          wpSend.publish(wps);
+          toast.success('Waypoints sent successfully');
+      }).catch((error) => {
+        console.error('Error connecting to ROS:', error);
+        toast.error('Error connecting to ROS');
+      })
+    }
+    
 
     useEffect(() => {
         if (isNaN(Number(start.lat)) || Number(start.lat) < -90 || Number(start.lat) > 90) {
@@ -58,7 +108,9 @@ const WaypointContainer = () => {
             <div className="flex mt-5 justify-center">
                 <Button disabled={
                     start.lat==0 || start.lng==0 || end.lat==0 || end.lng==0
-                }>Execute</Button>
+                }
+                onClick={sendWaypoints}
+                >Execute</Button>
             </div>
             
         </div>
