@@ -1,8 +1,10 @@
+"use client"
 import React from 'react'
 import FeedContainer from './feed-container'
 
 interface CameraContainerProps{
     grid:number
+    urls:string[]
 }
 
 const generateGrid = (grid:number) => {
@@ -17,30 +19,33 @@ const generateGrid = (grid:number) => {
         case 3:
             return 'grid-cols-4'
         case 4:
-            return 'grid-cols-6'
+            return 'grid-cols-5'
         case 5:
-            return 'grid-cols-12'
+            return 'grid-cols-6'
         case 6:
-            return 'grid-cols-24'
+            return 'grid-cols-7'
         case 7:
-            return 'grid-cols-48'
+            return 'grid-cols-8'
         case 8:
-            return 'grid-cols-96'
+            return 'grid-cols-9'
         case 9:
-            return 'grid-cols-192'
+            return 'grid-cols-10'
         case 10:
-            return 'grid-cols-384'
+            return 'grid-cols-11'
         default:
             return 'grid-cols-6'
 }
 }
 
-const CameraContainer = (props:CameraContainerProps) => {
+const CameraContainer = ({
+    grid,
+    urls=[]
+}:CameraContainerProps) => {
     
   return (
-    <div className={`grid ${generateGrid(props.grid)} gap-2 mt-5`}>
-      {Array(10).fill(0).map((_,i)=>(
-        <FeedContainer key={i}/>
+    <div className={`grid ${generateGrid(grid)} gap-2 mt-5`}>
+      {urls.map((v,i)=>(
+        <FeedContainer url={v} key={i}/>
       ))}
     </div>
   )
