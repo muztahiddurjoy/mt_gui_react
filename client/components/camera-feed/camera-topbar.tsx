@@ -20,11 +20,11 @@ const CameraTopbar = (props:CameraTopbarProps) => {
         if(!address) return
         if(props.seturls){
             props.seturls((prev)=> {
-                if(prev.includes(address)){
-                    return prev
-                }else{
+                // if(prev.includes(address)){
+                //     return prev
+                // }else{
                     return [...prev, address]
-                }
+                // }
             })
         }
         setaddress('')

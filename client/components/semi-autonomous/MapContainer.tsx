@@ -26,9 +26,9 @@ export interface WayPoint{
   name:string;
 }
 
-export interface Coordinate{
-  lat:number
-  lng:number
+interface Coordinate{
+  lat:number | string 
+  lng:number | string
 }
 
 export enum WayPointType{
@@ -166,7 +166,7 @@ const MapContainer = () => {
 
   useEffect(() => {
       if(roverPositions.length>0){
-        const distance = calculateDistance(roverPosition.lat,roverPosition.lng,roverPositions[roverPositions.length-1].lat,roverPositions[roverPositions.length-1].lng)
+        const distance = calculateDistance(Number(roverPosition.lat),Number(roverPosition.lng),Number(roverPositions[roverPositions.length-1].lat),Number(roverPositions[roverPositions.length-1].lng))
         console.log(distance)
         if(distance>0.7){
           setroverPositions(p=>[...p,roverPosition])
@@ -326,7 +326,7 @@ const MapContainer = () => {
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] left-[20%] font-bold absolute z-50 bg-purple-500/50">W</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] right-[15%] font-bold absolute z-50 bg-red-500/50">E</div>
       <OrientationContainer rover={roverPosition} waypoints={waypoints}/>
-        <Container center={[roverPosition.lat, roverPosition.lng]} style={{ position:'fixed',height: '90vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+        <Container center={[Number(roverPosition.lat), Number(roverPosition.lng)]} style={{ position:'fixed',height: '90vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
@@ -353,7 +353,7 @@ const MapContainer = () => {
 
           <div>
          <Circle
-          center={[end.lat, end.lng]}
+          center={[Number(end.lat), Number(end.lng)]}
           radius={2} // 3 meters
           pathOptions={{
             color: getColor(WayPointType.GNSS),    // Border color matches waypoint
@@ -362,10 +362,10 @@ const MapContainer = () => {
             weight: 1                 // Border thickness
           }}
         />
-        <Marker icon={endIcon} position={[end.lat,end.lng]} autoPanOnFocus={true}>
+        <Marker icon={endIcon} position={[Number(end.lat),Number(end.lng)]} autoPanOnFocus={true}>
           </Marker>
           </div>
-  <Marker ref={roverMarker} icon={roverIcon} position={[roverPosition.lat,roverPosition.lng]} >
+  <Marker ref={roverMarker} icon={roverIcon} position={[Number(roverPosition.lat),Number(roverPosition.lng)]} >
     <Popup>
       Rover is currently here
     </Popup>
