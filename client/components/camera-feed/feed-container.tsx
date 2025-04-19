@@ -99,6 +99,7 @@ const FeedContainer = (props:FeedContainerProps) => {
       style={{
         transform: `rotate(${angle}deg) scale(${hflip ? -1 : 1}, ${vflip ? -1 : 1})`
       }}
+      allowFullScreen
       src={props.url}
       className={`w-full h-[210px] rounded-md ${angle==90||angle==270?"mt-[60px]":"mt-1"} `}
       />}
