@@ -1,4 +1,4 @@
-import { getColor, WayPoint } from '@/components/MapContainer'
+import { Coordinate, getColor, WayPoint } from '@/components/MapContainer'
 import { Card } from '@/components/ui/card'
 import React from 'react'
 import { calculateDistance } from './functions/calculate-distance'
@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 interface DistanceCalculatorProps{
     waypoints:WayPoint[]
-    rover:{lat:number,lng:number}
+    rover:Coordinate
 }
 
 const DistanceCalculator = (props:DistanceCalculatorProps) => {
@@ -16,7 +16,7 @@ const DistanceCalculator = (props:DistanceCalculatorProps) => {
         <div className='flex items-center flex-wrap gap-1 mt-2'>
         {props.waypoints.length>0&&<div className='flex items-center gap-2'>
         <img src="/marker/rover-marker.png" className='h-[20px] w-[20px] rotate-45'/>
-        <p className='text-xs gap-2 flex items-center'><ArrowRight size={15}/>{calculateDistance(props.rover.lat,props.rover.lng,props.waypoints[0].lat,props.waypoints[0].lng).toFixed(2)}m<ArrowRight size={15}/></p>
+        <p className='text-xs gap-2 flex items-center'><ArrowRight size={15}/>{calculateDistance(Number(props.rover.lat),Number(props.rover.lng),Number(props.waypoints[0].lat),Number(props.waypoints[0].lng)).toFixed(2)}m<ArrowRight size={15}/></p>
         </div>}
         {props.waypoints.sort((a,b)=>a.id-b.id).map((wp,i)=>{
             return <div className='flex items-center'>

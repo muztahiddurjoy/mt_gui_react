@@ -4,8 +4,11 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useAppSelector } from '@/hooks/redux-hook';
 import { getROS } from '@/ros-functions/connect';
-import { Circle, Hammer, Keyboard, Loader2, Milk, QrCode } from 'lucide-react';
+import { Camera, Circle, FlaskConical, Hammer, Keyboard, Loader2, Milk, Navigation, QrCode } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import ROSLIB from 'roslib';
 import { toast } from 'sonner';
@@ -21,6 +24,7 @@ const TopBar = () => {
   const [aruco, setaruco] = useState<boolean>(false)
   const [rtk, setrtk] = useState<boolean>(false)
   const [lightStatus, setlightStatus] = useState('red')
+  const [activePath, setactivePath] = useState<string>('/')
 
   const connectRos = ()=>{
     setconnectingRos(true)
@@ -77,6 +81,15 @@ const TopBar = () => {
   useEffect(() => {
     connectRos()
   }, [])
+
+  const path = usePathname()
+  useEffect(() => {
+  setactivePath(path)
+  console.log("PATH",path)
+  },[path])
+
+  // Use isActive in Link components with className like:
+  // className={`${buttonVariants({className:"bg-white/10 hover:bg-white/30 dark:text-white",size:"sm"})} ${isActive('/path') ? 'bg-white/30' : ''}`}
   
   
   return (
@@ -86,7 +99,7 @@ const TopBar = () => {
             <img src="/mt.avif" className='w-[100px]'/>
         </div>
 
-            {/* <div className='flex items-center gap-2 ml-3'>
+            <div className='flex items-center gap-2 ml-3'>
             <p className="text-sm">Status</p>
             
             <div className={`h-[20px] w-[20px] rounded-full ${lightStatus=="red"?'bg-red-500':'bg-gray-500'}`}></div>
@@ -101,12 +114,15 @@ const TopBar = () => {
           </div>
           <div className='flex items-center gap-2 ml-3'>
             <Milk className={bottle?"fill-green-500 stroke-green-500":"fill-gray-500 stroke-gray-500"}/> {bottle&&<span className='text-xs'>Reached</span>}
-          </div> */}
+          </div>
           
         </div>
      
-        <div className="flex items-center">
-            <Button className='bg-white/10 hover:bg-white/30 dark:text-white' size="sm">Sciencebox Dashboard</Button>
+        <div className="flex items-center gap-2">
+        <Link href="/" className={buttonVariants({size:"sm",variant:activePath==="/"?"default":"menu"})}><Navigation/> Autonomous</Link>
+        <Link href="/semi-autonomous" className={buttonVariants({size:"sm",variant:activePath==="/semi-autonomous"?"default":"menu"})}><Navigation/> Semi Autonomous</Link>
+        <Link href="/camera-feed" className={buttonVariants({size:"sm",variant:activePath==="/camera-feed"?"default":"menu"})}><Camera/> Camera</Link>
+          <Link href="/science" className={buttonVariants({size:"sm",variant:activePath==="/science"?"default":"menu"})}><FlaskConical/> Science</Link>
         </div>
         <div className="flex items-center gap-3">
         {rtk&&<div className="flex items-center bg-white/20 p-2">
