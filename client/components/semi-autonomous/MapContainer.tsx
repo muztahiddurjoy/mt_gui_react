@@ -248,8 +248,8 @@ const MapContainer = () => {
           console.log('Received path:', msg);
           localStorage.setItem('path',JSON.stringify(msg))
           const poses = msg.poses.map((pose, index) => ({
-            lat: pose.pose.position.x,
-            lng: pose.pose.position.y,
+            lat: pose.pose.position.y,
+            lng: pose.pose.position.x,
             id: index,
             type: WayPointType.GNSS,
             name: `GNSS${index + 1}`,
@@ -394,7 +394,7 @@ const MapContainer = () => {
 
   <div>
          <Circle
-          center={[start.lat, start.lng]}
+          center={[Number(start.lat), Number(start.lng)]}
           radius={2} // 3 meters
           pathOptions={{
             color: getColor(WayPointType.GNSS),    // Border color matches waypoint
@@ -423,29 +423,18 @@ const MapContainer = () => {
           </div>
           {
   waypoints.map((waypoint, index) => {
-    const icon = L.divIcon({
-      html: `<div style="background-color: ${getColor(waypoint.type)}; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 50%;">
-        ${waypoint.name}
-      </div>`,
-      className: '',
-      iconSize: [40, 40],
-      iconAnchor: [20, 20]
-    });
-
+    console.log("DHON",[waypoint.lat,waypoint.lng])
     return (
       <Marker 
         key={`${waypoint.id}-${index}`}
-        position={[waypoint.lat, waypoint.lng]}
-        icon={icon}
+        position={[waypoint.lat,waypoint.lng]}
+        icon={roverIcon}
         eventHandlers={{
           click: () => setselectedWaypoint(waypoint)
         }}
       >
         <Popup>
-          {`Waypoint ${index+1}`}<br/>
-          {`Lat: ${waypoint.lat}`}<br/>
-          {`Lng: ${waypoint.lng}`}<br/>
-          {`Name: ${waypoint.name}`}
+          Amar dhon onek boro
         </Popup>
       </Marker>
     );
