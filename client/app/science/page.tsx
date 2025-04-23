@@ -46,7 +46,7 @@ const ScienceGraphs = () => {
   return (
     <div className='pt-20 px-10'>
        
-    <div className='grid mt-5 grid-cols-2  gap-10 pb-20'>
+    <div className='grid mt-5 grid-cols-3  gap-10 pb-20'>
     <UvGraph/>
     <NPKGraph/>
     
