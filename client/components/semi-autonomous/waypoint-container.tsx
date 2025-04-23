@@ -12,21 +12,27 @@ import ROSLIB, { Ros } from 'roslib'
 
 const WaypointContainer = () => {
     const [start, setstart] = useState<Coordinate>({
-        lat: 0,
-        lng: 0
+        lat: "",
+        lng: ""
     })
 
     const [end, setend] = useState<Coordinate>({
-        lat: 0,
-        lng: 0
+        lat: "",
+        lng: ""
     })
 
     useEffect(() => {
+      const start = localStorage.getItem("start") ?? "{}";
+      const end = localStorage.getItem("end") ?? "{}";
+      setstart(JSON.parse(start));
+      setend(JSON.parse(end));
+
+      // Subscribe to the ROS topic
       getROS().then((ros:Ros) => {
         const waypointTopic = new ROSLIB.Topic({
             ros: ros,
-            name: '/semi_auto_wps',
-            messageType: 'std_msgs/msg/Float32MultiArrays'
+            name: '/semi_auto',
+            messageType: 'std_msgs/msg/String'
         });
 
         waypointTopic.subscribe((message) => {
@@ -38,29 +44,28 @@ const WaypointContainer = () => {
         toast.error('Error connecting to ROS');
       })
     }, [])
+
+    useEffect(() => {
+      if(typeof window !="undefined"){
+        localStorage.setItem("start", JSON.stringify(start));
+        localStorage.setItem("end", JSON.stringify(end));
+      }
+    }, [start, end]);
     
 
     const sendWaypoints = () => {
       getROS().then((ros:Ros) => {
         var wpSend = new ROSLIB.Topic({
             ros : ros,
-            name : '/semi_auto_wps',
-            messageType : 'std_msgs/msg/Float32MultiArray'
+            name : '/semi_auto',
+            messageType : 'std_msgs/msg/String'
           });
         
           var wps = new ROSLIB.Message({
-            layout: {
-                dim: [],
-                data_offset: 0
-            },
-            data: [
-                parseFloat(String(start.lat)).toFixed(6),
-                parseFloat(String(start.lng)).toFixed(6),
-                parseFloat(String(end.lat)).toFixed(6),
-                parseFloat(String(end.lng)).toFixed(6)
-            ]
+            data:`${String(start.lat)},${String(start.lng)},${String(end.lat)},${String(end.lng)}`
           });
           wpSend.publish(wps);
+          console.log(wps)
           toast.success('Waypoints sent successfully');
       }).catch((error) => {
         console.error('Error connecting to ROS:', error);

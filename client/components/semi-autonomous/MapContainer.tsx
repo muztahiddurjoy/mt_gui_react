@@ -17,6 +17,7 @@ import MapController from '../dashboard/test-component'
 import MapMenubar from '../map-menubar/map-menubar'
 import WaypointContainer from './waypoint-container'
 import OrientationContainer from './orientation-container'
+import { Path } from './path.model'
 
 export interface WayPoint{
   lat:number;
@@ -134,6 +135,16 @@ const MapContainer = () => {
 
   useEffect(() => {
     setwaypoints(JSON.parse(localStorage.getItem('waypoints')||'[]'))
+    // setwaypoints(JSON.parse(localStorage.getItem('path')||'[]'))
+    const path = localStorage.getItem('path')
+    const wpPaths:WayPoint[] = Array.isArray(path)?path.map((pose, index) => ({
+      lat: pose.pose.position.x,
+      lng: pose.pose.position.y,
+      id: index,
+      type: WayPointType.GNSS,
+      name: `GNSS${index + 1}`,
+    })):[]
+    setwaypoints(wpPaths)
     getROS().then(ros=>{
      ros.on('connection',()=>{
         setisRosConnected(true)
@@ -201,24 +212,51 @@ const MapContainer = () => {
 
         const semiAutoTopic = new ROSLIB.Topic({
           ros:ros,
-          name:'/semi_auto_wps',
-          messageType:'std_msgs/Float32MultiArray'
+          name:'/semi_auto',
+          messageType:'std_msgs/msg/String'
+        })
+
+
+        const pathTopic = new ROSLIB.Topic({
+          ros:ros,
+          name:'/cord_path',
+          messageType:'nav_msgs/Path'
         })
 
         semiAutoTopic.subscribe((msg:any)=>{
-          if(msg.data.length!=4){
+          if(!msg.data){
+            toast.error('Invalid waypoints received')
+            return
+          }
+          const waypoints = msg.data.split(',')
+          if(waypoints.length!=4){
             toast.error('Invalid waypoints received')
             return
           }
           setstart({
-            lat:msg.data[0],
-            lng:msg.data[1]
+            lat:waypoints[0],
+            lng:waypoints[1]
           })
           setend({
-            lat:msg.data[2],
-            lng:msg.data[3]
+            lat:waypoints[2],
+            lng:waypoints[3]
           })
           console.log('Received waypoints:', msg);
+        })
+
+        pathTopic.subscribe((msg:Path)=>{
+          console.log('Received path:', msg);
+          localStorage.setItem('path',JSON.stringify(msg))
+          const poses = msg.poses.map((pose, index) => ({
+            lat: pose.pose.position.x,
+            lng: pose.pose.position.y,
+            id: index,
+            type: WayPointType.GNSS,
+            name: `GNSS${index + 1}`,
+          }));
+          console.log('poses',poses)
+          setwaypoints(poses);
+          
         })
 
         
@@ -246,6 +284,12 @@ const MapContainer = () => {
       })
       
     }, [])
+
+    useEffect(() => {
+      console.log('WAYPOINTS',waypoints)
+    }, [waypoints])
+    
+
   
 
   // useEffect(() => {
@@ -287,7 +331,7 @@ const MapContainer = () => {
     ${renderToString(
       <div className='relative'>
         <div className={`h-[40px] w-[2px] ${getColor(WayPointType.GNSS)}`}></div>
-        <div className={`h-[20px] absolute top-0 left-0 w-[40px] ${getColor(WayPointType.GNSS)} text-xs flex items-center justify-center text-white`}>Start</div>
+        <div className={`h-[20px] absolute top-0 left-0 w-[40px] ${getColor(WayPointType.GNSS)} text-xs flex items-center justify-center text-white`}>START</div>
       </div>
     )}
    
@@ -317,6 +361,15 @@ const MapContainer = () => {
   });  
   
 
+  useEffect(() => {
+    // Fix for default marker icons not showing
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: '/marker-icon-2x.png',
+      iconUrl: '/marker-icon.png',
+      shadowUrl: '/marker-shadow.png',
+    });
+  }, []);
   
   
   return (
@@ -336,6 +389,9 @@ const MapContainer = () => {
   />
   
   <MapClickHandler/>
+
+
+
   <div>
          <Circle
           center={[start.lat, start.lng]}
@@ -347,7 +403,7 @@ const MapContainer = () => {
             weight: 1                 // Border thickness
           }}
         />
-        <Marker icon={startIcon} position={[start.lat,start.lng]} autoPanOnFocus={true}>
+        <Marker icon={startIcon} position={[Number(start.lat),Number(start.lng)]} autoPanOnFocus={true}>
           </Marker>
           </div>
 
@@ -365,6 +421,52 @@ const MapContainer = () => {
         <Marker icon={endIcon} position={[Number(end.lat),Number(end.lng)]} autoPanOnFocus={true}>
           </Marker>
           </div>
+          {
+  waypoints.map((waypoint, index) => {
+    const icon = L.divIcon({
+      html: `<div style="background-color: ${getColor(waypoint.type)}; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 50%;">
+        ${waypoint.name}
+      </div>`,
+      className: '',
+      iconSize: [40, 40],
+      iconAnchor: [20, 20]
+    });
+
+    return (
+      <Marker 
+        key={`${waypoint.id}-${index}`}
+        position={[waypoint.lat, waypoint.lng]}
+        icon={icon}
+        eventHandlers={{
+          click: () => setselectedWaypoint(waypoint)
+        }}
+      >
+        <Popup>
+          {`Waypoint ${index+1}`}<br/>
+          {`Lat: ${waypoint.lat}`}<br/>
+          {`Lng: ${waypoint.lng}`}<br/>
+          {`Name: ${waypoint.name}`}
+        </Popup>
+      </Marker>
+    );
+  })
+}
+  {
+    waypoints.map((waypoint,index)=>{
+      return <Marker key={index} position={[Number(waypoint.lat),Number(waypoint.lng)]} autoPanOnFocus={true}>
+        <Popup>
+          {`Waypoint ${index+1}`}
+          <br/>
+          {`Lat: ${waypoint.lat}`}
+          <br/>
+          {`Lng: ${waypoint.lng}`}
+          <br/>
+          {`Name: ${waypoint.name}`}
+          <br/>
+        </Popup>
+          </Marker>
+    })
+  }
   <Marker ref={roverMarker} icon={roverIcon} position={[Number(roverPosition.lat),Number(roverPosition.lng)]} >
     <Popup>
       Rover is currently here
