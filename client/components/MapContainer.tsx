@@ -189,7 +189,7 @@ const MapContainer = () => {
         const gpsTopic = new ROSLIB.Topic({
           ros:ros,
           name:'/sbg/gps_pos',
-          messageType:'sbg_driver/SbgGpsPos'
+          messageType:'sbg_driver/msg/SbgGpsPos'
         })
 
         angleTopic.subscribe((msg:any)=>{
@@ -264,7 +264,7 @@ const MapContainer = () => {
   maxZoom={25}
   maxNativeZoom={19}
      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
- //   url="http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png"
+  //  url="http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Open Street Map</a> Contributors'
   />
   

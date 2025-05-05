@@ -8,11 +8,11 @@ import { PlayCircle } from 'lucide-react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface UvGraphProps {
+interface HumidityGraphProps {
   data: string; // Single UV reading as string (e.g., "2.5")
 }
 
-const UvGraph = ({ data }: UvGraphProps) => {
+const HumidityGraph = ({ data }: HumidityGraphProps) => {
   // State to store the last 12 readings
   const [readings, setReadings] = useState<number[]>(Array(12).fill(0));
   
@@ -35,7 +35,7 @@ const UvGraph = ({ data }: UvGraphProps) => {
     labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
     datasets: [
       {
-        label: 'UV Power (mW/cm²)',
+        label: 'Humidity (%)',
         data: readings,
         fill: false,
         backgroundColor: 'rgb(54, 162, 235)',
@@ -61,7 +61,7 @@ const UvGraph = ({ data }: UvGraphProps) => {
       },
       y: {
         min: 0,
-        max: 30,
+        max: 100,
         ticks: {
           color: 'cyan',
           stepSize: 1
@@ -94,7 +94,7 @@ const UvGraph = ({ data }: UvGraphProps) => {
         {/* <Button size="sm" className="gap-2">
           
         </Button> */}
-        <span className='text-xs'>Last Value: {readings[readings.length-1]}</span>
+        <span className='text-xs'>Last Value: {readings[readings.length-1]}%</span>
       </div>
       <div style={{ height: '300px' }}>
         <Line data={chartData} options={options} />
@@ -103,4 +103,4 @@ const UvGraph = ({ data }: UvGraphProps) => {
   );
 };
 
-export default UvGraph;
+export default HumidityGraph;
