@@ -34,7 +34,7 @@ const CameraFeedPage = () => {
   return (
     <div className="pt-14 px-5">
     <CameraTopbar urls={urls} seturls={seturls} grid={grid} setgrid={setgrid}/>
-    <CameraContainer urls={urls} grid={grid}/>
+    <CameraContainer seturls={seturls} urls={urls} grid={grid}/>
     </div>
   )
 }

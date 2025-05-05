@@ -11,6 +11,7 @@ import {
 import { Button } from "../ui/button";
 export interface FeedContainerProps {
   url:string
+  setUrl:React.Dispatch<React.SetStateAction<string[]>>
 }
 const FeedContainer = (props:FeedContainerProps) => {
   const [status, setStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
@@ -32,8 +33,9 @@ const FeedContainer = (props:FeedContainerProps) => {
         console.log(res.data) 
       }
       )
-      .catch(() => {
+      .catch((err) => {
         setStatus('error');
+        console.log(err)
       }
       );
   }
@@ -48,7 +50,7 @@ const FeedContainer = (props:FeedContainerProps) => {
  
 
   return (
-    <div className={`bg-primary/20 rounded-md p-1 mt-5 relative overflow-hidden ${angle==270||angle==90?"h-[350px]":"h-[250px]"}`}>
+    <div className={`bg-primary/20 rounded-md p-1 mt-5 relative overflow-hidden ${angle==270||angle==90?"h-[500px]":"h-[400px]"}`}>
     
     
       <div className="flex h-[27px] gap-2">
@@ -84,6 +86,7 @@ const FeedContainer = (props:FeedContainerProps) => {
       >
         VFlip
       </Button>
+      <Button size="sm" variant="destructive" className="h-[27px]" onClick={()=> props.setUrl((p)=> p.filter((v)=>v!=props.url))}>Delete</Button>
       </div>
 
       {status=="connecting"?
@@ -101,7 +104,7 @@ const FeedContainer = (props:FeedContainerProps) => {
       }}
       allowFullScreen
       src={props.url}
-      className={`w-full h-[210px] rounded-md ${angle==90||angle==270?"mt-[60px]":"mt-1"} `}
+      className={`w-full h-full rounded-md ${angle==90||angle==270?"mt-[0px]":"mt-1"} `}
       />}
     </div>
   );
