@@ -5,6 +5,7 @@ import FeedContainer from './feed-container'
 interface CameraContainerProps{
     grid:number
     urls:string[]
+    seturls:React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const generateGrid = (grid:number) => {
@@ -39,13 +40,14 @@ const generateGrid = (grid:number) => {
 
 const CameraContainer = ({
     grid,
-    urls=[]
+    urls=[],
+    seturls
 }:CameraContainerProps) => {
     
   return (
     <div className={`grid ${generateGrid(grid)} gap-2 mt-5`}>
       {urls.map((v,i)=>(
-        <FeedContainer url={v} key={i}/>
+        <FeedContainer setUrl={seturls} url={v} key={i}/>
       ))}
     </div>
   )
