@@ -40,7 +40,6 @@ const MainDashboard = ({children}:React.PropsWithChildren) => {
     <div className='h-[100vh]'>
      <TopBar/>
       {children}
-      
     </div>
     
   )

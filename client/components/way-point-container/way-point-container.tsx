@@ -30,9 +30,14 @@ const WaypointContainer = (props:WaypointContainerProps) => {
     name:`${getInitial(WayPointType.GNSS)}${props.waypoints.filter((v)=>v.type==WayPointType.GNSS).length+1}`
   })
 
+  const [showDeleteDialog, setshowDeleteDialog] = useState<boolean>(false)
+
 
   const deleteAllWaypoints = () => {
-    props.setWaypoints([])
+    props.setWaypoints(prev => prev.filter(wp => !props.selectedWaypoints.includes(wp)))
+    props.setSelectedWaypoints([])
+    props.setSelectedWaypoint(null)
+    setshowDeleteDialog(false)
   }
 
 
@@ -50,13 +55,10 @@ const WaypointContainer = (props:WaypointContainerProps) => {
             if(e){
               props.setSelectedWaypoints(props.waypoints)
             }
-            else{
-              props.setSelectedWaypoints([])
-            }
           }} />
           <label htmlFor='checkAll' className='text-xs'>All Waypoint</label>
           </div>
-          <Dialog>
+          <Dialog open={showDeleteDialog} onOpenChange={setshowDeleteDialog}>
             <DialogTrigger asChild>
               <Button className='w-[10px] h-[25px]' disabled={props.selectedWaypoints.length==0} variant="destructive"><Trash2 size={10}/></Button>
             </DialogTrigger>
@@ -64,7 +66,7 @@ const WaypointContainer = (props:WaypointContainerProps) => {
               <DialogHeader>
                 <DialogTitle>Are you absolutely sure?</DialogTitle>
                 <DialogDescription>
-                  Are you sure that you want to delete all of the waypoints?
+                  Are you sure that you want to delete all selected waypoints?
                   <div className="flex justify-end mt-3">
                     <Button size="sm" variant="destructive" onClick={deleteAllWaypoints}>Yes</Button>
                   </div>

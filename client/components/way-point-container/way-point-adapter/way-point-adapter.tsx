@@ -1,4 +1,4 @@
-import { WayPoint, WayPointType } from '@/components/MapContainer'
+import { getColor, getInitial, WayPoint, WayPointType } from '@/components/MapContainer'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -14,6 +14,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from '@/components/ui/input'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Colors } from '../data/colors'
 interface WaypointAdapterProps{
     index:number
     waypoint:WayPoint
@@ -28,6 +30,15 @@ interface WaypointAdapterProps{
 const WaypointAdapter = (props:WaypointAdapterProps) => {
   const [pointSelected, setpointSelected] = useState<boolean>(false)
   const [showLatlon, setshowLatlon] = useState<boolean>(false)
+  const [deleteOpen, setdeleteOpen] = useState<boolean>(false)
+  const [showEdit, setshowEdit] = useState<boolean>(false)
+  const [templatlng, settemplatlng] = useState<{lat:number,lng:number}>({lat:props.waypoint.lat,lng:props.waypoint.lng})
+  const [tempType, settempType] = useState<WayPointType>(props.waypoint.type)
+
+
+
+
+
   const addWaypointToSelected = () => {
     if(props.selectedWaypoints.find(wp=>wp.id===props.waypoint.id)){
       props.setSelectedWaypoints(props.selectedWaypoints.filter(wp=>wp.id!==props.waypoint.id))
@@ -81,6 +92,16 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
       setpointSelected(false)
     }
   }, [props.selectedWaypoints])
+
+
+
+  const deleteWaypoint = () => {
+    props.setWaypoints(p=>p.filter(wp=>wp.id!==props.waypoint.id))
+    props.setSelectedWaypoints(p=>p.filter(wp=>wp.id!==props.waypoint.id))
+    setdeleteOpen(false)
+  }
+
+
   
   return (  
     <Card>
@@ -126,22 +147,29 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
                       <div>
                         <label className='text-xs font-semibold'>Label</label>
                         <br/>
-                        {/* <DropdownMenu>
+                        <DropdownMenu>
                                     <DropdownMenuTrigger>
-                                      <div className={`h-[30px] mt-1 w-[30px] rounded-sm ${props.selectedWaypoint.color}`}></div>
+                                      <div className={`h-[30px] mt-1 w-[30px] rounded-sm ${getColor(tempType)} flex items-center justify-center text-white`}>{getInitial(tempType)}</div>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent  onChange={(e)=>console.log(e)}>
                                       <DropdownMenuLabel className='text-xs font-semibold'>Waypoint Tag</DropdownMenuLabel>
                                       <DropdownMenuSeparator />
-                                      <DropdownMenuRadioGroup onValueChange={(e)=> props.setSelectedWaypoint(p=>({...p,color:e}) as any)} className="grid grid-cols-4 gap-1">
+                                      <DropdownMenuRadioGroup onValueChange={(e)=> props.setSelectedWaypoint(p=>({...p,color:e}) as any)}>
                                       {
-                                        Object.entries(Colors).map(([key,value])=>(
-                                          <DropdownMenuRadioItem value={value} key={key} className={`h-[20px] rounded-sm w-[20px] ${value}`}></DropdownMenuRadioItem>
-                                        ))
+                                        Object.keys(WayPointType).map((value, key) => { 
+                                          return (
+                                            <DropdownMenuRadioItem value={value} key={key} className={`${value}`}>
+                                              {value}
+                                            </DropdownMenuRadioItem>
+                                          )
+                                        }
+                                      )
                                       }
+                                          
+                                      
                                       </DropdownMenuRadioGroup>
                                     </DropdownMenuContent>
-                                  </DropdownMenu> */}
+                                  </DropdownMenu>
                       </div>
                         <div>
                             <label className='text-xs font-semibold'>Latitude</label>
@@ -164,7 +192,23 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
           </DialogContent>
         </Dialog>
         
-        <Button variant="destructive" className='w-[10px] h-[20px]' onClick={bringUp} size="sm"><Trash2 size={8}/></Button>
+        <Button variant="destructive"  className='w-[10px] h-[20px]' onClick={()=> setdeleteOpen(true)} size="sm"><Trash2 size={8}/></Button>
+
+
+
+        <Dialog open={deleteOpen} onOpenChange={setdeleteOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                Are you sure that you want to delete this waypoint?
+                <div className="flex justify-end mt-3">
+                  <Button size="sm" variant="destructive" onClick={deleteWaypoint}>Yes</Button>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
       </div>
       

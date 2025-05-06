@@ -296,7 +296,6 @@ const MapContainer = () => {
 
 <Polyline
   positions={roverPositions.map(waypoint=>[Number(waypoint.lat),Number(waypoint.lng)])}
-  
   pathOptions={{color: 'red'}}
 />
 </Container>
