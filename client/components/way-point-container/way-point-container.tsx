@@ -40,7 +40,7 @@ const WaypointContainer = (props:WaypointContainerProps) => {
   
   return (
     <div className='mt-[7vh] grid grid-rows-3 fixed top-0 right-0 w-[15%] h-[100vh] gap-3 p-1'>
-      <ScrollArea className='h-[100vh]'>
+      <ScrollArea className='h-[100vh] pb-[7vh]'>
       {props.selectedWaypoint&&<SelectedWaypoint selectedWaypoint={props.selectedWaypoint} setSelectedWaypoint={props.setSelectedWaypoint} setWaypoints={props.setWaypoints} waypoints={props.waypoints}/>}
       <AddLatLonWaypoint setWaypoints={props.setWaypoints} waypoints={props.waypoints} waypoint={waypoint} setWaypoint={setwaypoint}/>
       <Card className='p-2'>

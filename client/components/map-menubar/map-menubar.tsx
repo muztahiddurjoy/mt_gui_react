@@ -67,26 +67,6 @@ const MapMenubar = (props:MapMenubarProps) => {
             <Button size="icon" onClick={()=> changeMode(WayPointType.BOTTLE)} variant={props.wpType==WayPointType.BOTTLE&&props.mapActive?"default":"outline"}><Milk/></Button>
             <Button size="icon" onClick={()=> changeMode(WayPointType.GNSS)} variant={props.wpType==WayPointType.GNSS&&props.mapActive?"default":"outline"}><MapPin/></Button>
             <Button size="icon" onClick={()=> changeMode(WayPointType.MALLETE)} variant={props.wpType==WayPointType.MALLETE&&props.mapActive?"default":"outline"}><Hammer/></Button>
-           
-
-            
-            {/* <DropdownMenu>
-            <DropdownMenuTrigger className='border border-primary'>
-              <div className={`h-[30px] mt-1 w-[30px] rounded-sm ${getColor(props.wpType)}`}></div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent  onChange={(e)=>console.log(e)}>
-              <DropdownMenuLabel className='text-xs font-semibold'>Waypoint Tag</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup onValueChange={(e)=> props.setwpType(e)} className="grid grid-cols-4 gap-1">
-              <DropdownMenuRadioItem value="auto"  className={`h-[20px] rounded-xs w-[30px]`}>Auto</DropdownMenuRadioItem>
-              {
-                Object.entries(Colors).map(([key,value])=>(
-                  <DropdownMenuRadioItem value={value} key={key} className={`h-[20px] rounded-sm w-[20px] ${value}`} onClick={()=>props.settempColor(value)}></DropdownMenuRadioItem>
-                ))
-              }
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu> */}
         </div>
         <div>
             <Button>Execute</Button>

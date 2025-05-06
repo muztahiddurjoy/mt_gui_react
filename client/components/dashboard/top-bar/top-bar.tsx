@@ -131,7 +131,6 @@ const TopBar = () => {
         </div>}
         <p className='text-xs'>ROS {isConnected ? <span className='bg-green-500 text-green-800 p-1'>Connected</span>:<span className='bg-red-300 p-1 text-red-800'>Disconnected</span>}</p>
         {!isConnected&&<Button onClick={connectRos} className='bg-white/10 hover:bg-white/30 dark:text-white' disabled={connectingRos} size="sm">{connectingRos&&<Loader2 className="animate-spin" size={10}/>}Connect</Button>}
-            <ModeToggle/>
             <Dialog>
               <DialogTrigger className={buttonVariants({size:'sm'})}>
                 <Keyboard/>
