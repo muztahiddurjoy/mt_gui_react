@@ -51,7 +51,7 @@ const LightHumidityGraph = ({ lightData, humidityData }: LightHumidityGraphProps
         yAxisID: 'y',
       },
       {
-        label: 'MQ2 (V)',
+        label: 'Alcohol (ppm)',
         data: mq2Readings,
         fill: false,
         backgroundColor: 'rgb(54, 162, 235)', // Blue
@@ -114,7 +114,7 @@ const LightHumidityGraph = ({ lightData, humidityData }: LightHumidityGraphProps
         },
         title: {
           display: true,
-          text: 'MQ2 (V)',
+          text: 'Alcohol (ppm)',
           color: 'rgb(54, 162, 235)'
         }
       },
@@ -139,9 +139,9 @@ const LightHumidityGraph = ({ lightData, humidityData }: LightHumidityGraphProps
               label += ': ';
             }
             if (context.parsed.y !== null) {
-              label += context.dataset.label === 'MQ2 ' 
-                ? `${context.parsed.y}V` 
-                : `${context.parsed.y}V`;
+              label += context.dataset.label === 'Alchohol (ppm)' 
+                ? `${context.parsed.y}ppm` 
+                : `${context.parsed.y}Lux`;
             }
             return label;
           }

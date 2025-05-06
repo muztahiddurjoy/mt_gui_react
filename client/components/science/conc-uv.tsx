@@ -51,7 +51,7 @@ const ConcUV = ({ uvData, concData }: DualGraphProps) => {
         yAxisID: 'y',
       },
       {
-        label: 'CONC (ppm)',
+        label: 'CO (ppm)',
         data: concReadings,
         fill: false,
         backgroundColor: 'rgb(75, 192, 192)',
@@ -114,7 +114,7 @@ const ConcUV = ({ uvData, concData }: DualGraphProps) => {
         },
         title: {
           display: true,
-          text: 'CONC (ppm)',
+          text: 'CO (ppm)',
           color: 'rgb(75, 192, 192)'
         }
       },

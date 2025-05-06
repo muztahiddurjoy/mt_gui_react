@@ -145,17 +145,6 @@ const MapContainer = () => {
    
   }, []);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setroverRotation((prevState) => (prevState + 0.1) % (2 * Math.PI)); // Increment rotation and keep it within 0-2π
-  //     setroverPosition((prevState) => ({
-  //       lat: prevState.lat + Math.random()/1000000,
-  //       lng: prevState.lng + Math.random()/1000000,
-  //     })); // Move rover in the direction of rotation
-  //   }, 100);
-  
-  //   return () => clearInterval(interval); // Cleanup interval on unmount
-  // }, []);
 
   useEffect(() => {
       if(roverPositions.length>0){
@@ -215,25 +204,7 @@ const MapContainer = () => {
       })
       
     }, [])
-  
 
-  // useEffect(() => {
-  //   if(tempColor=='auto'){
-  //     if(waypoints.length>0){
-  //     const colors = Object.values(Colors)
-  //     const lastColor = waypoints[waypoints.length-1].color
-  //     const index = colors.findIndex(color=>color===lastColor)
-  //     if(index==colors.length-1){
-  //       settempColor(colors[0])
-  //     }
-  //     else{
-  //       settempColor(colors[index+1])
-  //     }
-  //   }else{
-  //     settempColor(Colors.green)
-  //   }
-  //   }
-  // }, [tempColor])
 
 
   useEffect(() => {
