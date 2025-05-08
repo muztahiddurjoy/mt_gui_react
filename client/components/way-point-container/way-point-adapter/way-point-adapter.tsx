@@ -35,6 +35,7 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
   const [showEdit, setshowEdit] = useState<boolean>(false)
   const [templatlng, settemplatlng] = useState<{lat:number,lng:number}>({lat:props.waypoint.lat,lng:props.waypoint.lng})
   const [tempType, settempType] = useState<WayPointType>(props.waypoint.type)
+  const [tempName, settempName] = useState<string>(props.waypoint.name)
 
 
 
@@ -90,7 +91,7 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
       if(wp.id===props.waypoint.id){
         return {
           ...wp,
-          name:getInitial(tempType)+props.index,
+          name:tempName,
           lat:templatlng.lat,
           lng:templatlng.lng,
           type:tempType
@@ -99,6 +100,7 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
       return wp
     }
     ))
+    setshowEdit(false)
   }
 
 
@@ -134,10 +136,11 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
       <div className="flex items-center gap-1">
         <Button variant="outline" className='w-[10px] h-[20px]' onClick={bringDown} size="sm"><ArrowDown size={10}/></Button>
         <Button variant="outline" className='w-[10px] h-[20px]' onClick={bringUp} size="sm"><ArrowUp size={10}/></Button>
+        
       </div>
       <div className="flex items-center gap-1">
-        <Dialog>
-          <DialogTrigger className={buttonVariants({size:'sm',variant:'outline',className:'w-[10px] h-[20px]'})}><Edit2 size={8}/></DialogTrigger>
+      <Button onClick={()=> setshowEdit(true)} className={buttonVariants({size:'sm',variant:'outline',className:'w-[10px] h-[20px]'})}><Edit2 size={8}/></Button>
+        <Dialog open={showEdit} onOpenChange={setshowEdit}>
           <DialogContent>
             <DialogHeader>
             <DialogTitle className='text-primary'>Edit Waypoint</DialogTitle>
@@ -162,6 +165,8 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
                             Copy
                         </Button>
                     </div>
+                    <label>Name</label>
+                    <Input type='text' value={tempName} onChange={e=> settempName(e.target.value)} placeholder='Name'/>
                     <div className="flex items-center gap-2">
                       <div>
                         <label className='text-xs font-semibold'>Label</label>
@@ -206,7 +211,7 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
                     </div>
                     
                    <div className="flex justify-end mt-3">
-                    <Button onClick={editWaypoint} disabled={templatlng.lat==0 && templatlng.lng ==0}>Save</Button>
+                    <Button onClick={editWaypoint} disabled={templatlng.lat==0 && templatlng.lng ==0 || !tempName}>Save</Button>
                    </div>
                     {/* <Button onClick={editWaypoint} disabled={Number.isNaN(props.selectedWaypoint.lat) || Number.isNaN(props.selectedWaypoint.lng)} className='text-xs mt-1 w-full text-white' size='sm'>Save</Button> */}
                 </DialogDescription>

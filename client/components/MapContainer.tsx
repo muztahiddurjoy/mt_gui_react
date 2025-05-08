@@ -234,7 +234,7 @@ const MapContainer = () => {
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
-     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+     url="http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&s=Ga"
   //  url="http://localhost:8080/wmts/gm_layer/gm_grid/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Open Street Map</a> Contributors'
   />

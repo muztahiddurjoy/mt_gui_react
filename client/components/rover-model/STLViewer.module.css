@@ -1,0 +1,49 @@
+.model-viewer-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .canvas-container {
+    flex: 1;
+    position: relative;
+  }
+  
+  .loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    z-index: 10;
+  }
+  
+  .controls-panel {
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+  
+  .control-group {
+    margin: 10px 0;
+  }
+  
+  .control-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .rotation-slider {
+    flex: 1;
+  }
+  
+  .error-message {
+    padding: 2rem;
+    color: red;
+    background: #ffecec;
+    border: 1px solid red;
+    margin: 1rem;
+  }

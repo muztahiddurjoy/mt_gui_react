@@ -1,5 +1,5 @@
 "use client"
-import { Circle, MapContainer as Container, Marker, Polyline, Popup, TileLayer, useMap,useMapEvents } from 'react-leaflet'
+import { Circle, MapContainer as Container, Marker, Polyline, Popup, Rectangle, TileLayer, useMap,useMapEvents } from 'react-leaflet'
 
 import L from 'leaflet'
 import 'leaflet-rotatedmarker'
@@ -111,6 +111,16 @@ const MapContainer = () => {
   // });
   const roverIcon = new L.Icon({
     iconUrl: '/marker/rover-marker.png',
+    className:'transition-transform duration-100 ease-in-out',
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [1, -34],
+    // shadowSize: [41, 41]
+  });
+
+
+  const retrieveIcon = new L.Icon({
+    iconUrl: '/marker/retrieve.png',
     className:'transition-transform duration-100 ease-in-out',
     iconSize: [35, 35],
     iconAnchor: [17, 35],
@@ -360,6 +370,7 @@ const MapContainer = () => {
     shadowSize: [41, 41]
   });  
   
+  
 
   useEffect(() => {
     // Fix for default marker icons not showing
@@ -370,7 +381,25 @@ const MapContainer = () => {
       shadowUrl: '/marker-shadow.png',
     });
   }, []);
-  
+
+
+  const waypointIcon = L.divIcon({
+          html: `<div class="flex flex-col items-center">
+          ${renderToString(
+            <div className='relative'>
+              {/* <div className={`h-[40px] w-[2px] ${getColor(WayPointType.GNSS)}`}></div>
+              <div className={`h-[20px] absolute top-0 left-0 w-[40px] ${getColor(WayPointType.GNSS)} text-xs flex items-center justify-center text-white`}>DHON</div> */}
+            </div>
+          )}
+         
+          </div>`,
+          className: `w-20 h-20 `,
+          iconSize: [40, 40],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        });  
+          
   
   return (
     <div className='relative'>
@@ -461,11 +490,29 @@ const MapContainer = () => {
       Rover is currently here
     </Popup>
   </Marker>
-  <Polyline
-  positions={waypoints.map(waypoint=>[waypoint.lat,waypoint.lng])}
-  pathOptions={{color: '#03ffcd'}}
-  dashArray={[3, 10]}
-/>
+  {startIcon&&<div>
+           <Rectangle
+            bounds={[
+              [51.49, -0.08],
+              [51.5, -0.06],
+            ]}
+            // radius={
+            //   20
+            // } // 3 meters
+            pathOptions={{
+              color: getColor(WayPointType.GNSS),    // Border color matches waypoint
+              fillColor: 'orange' ,// Fill color matches waypoint
+              fillOpacity: 0.2,         // Semi-transparent fill
+              weight: 1                 // Border thickness
+            }}
+          />
+          <Marker icon={waypointIcon} position={[start.lat,start.lng]} autoPanOnFocus={true} eventHandlers={{click:()=>{
+              // setselectedWaypoint(waypoint)
+            }}}>
+            </Marker>
+            </div>}
+  
+  
 <MapController roverPos={roverPosition}/>
 
 <Polyline
