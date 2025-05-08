@@ -41,7 +41,7 @@ caches:
 sources:
   gm:
     type: tile
-    url: https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+    url: https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png
     grid: gm_grid
 
 grids:
@@ -50,3 +50,4 @@ grids:
     origin: ul
 
 globals:
+  log_level: DEBUG

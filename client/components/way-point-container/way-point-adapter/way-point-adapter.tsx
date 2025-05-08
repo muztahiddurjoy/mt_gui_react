@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Colors } from '../data/colors'
+import { getWaypointType } from '@/functions/getWaypointType'
 interface WaypointAdapterProps{
     index:number
     waypoint:WayPoint
@@ -80,6 +81,24 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
       temp[index+1].id = tempIndex
       props.setWaypoints(temp)
     }
+  }
+
+
+
+  const editWaypoint = () => {
+    props.setWaypoints(p=>p.map(wp=>{
+      if(wp.id===props.waypoint.id){
+        return {
+          ...wp,
+          name:getInitial(tempType)+props.index,
+          lat:templatlng.lat,
+          lng:templatlng.lng,
+          type:tempType
+        }
+      }
+      return wp
+    }
+    ))
   }
 
 
@@ -149,16 +168,17 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
                         <br/>
                         <DropdownMenu>
                                     <DropdownMenuTrigger>
-                                      <div className={`h-[30px] mt-1 w-[30px] rounded-sm ${getColor(tempType)} flex items-center justify-center text-white`}>{getInitial(tempType)}</div>
+                                      <div className={`h-[30px] mt-1 w-[50px] rounded-sm ${getColor(tempType)} flex items-center justify-center text-white`}>{getInitial(tempType)}</div>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent  onChange={(e)=>console.log(e)}>
+                                    <DropdownMenuContent>
                                       <DropdownMenuLabel className='text-xs font-semibold'>Waypoint Tag</DropdownMenuLabel>
                                       <DropdownMenuSeparator />
-                                      <DropdownMenuRadioGroup onValueChange={(e)=> props.setSelectedWaypoint(p=>({...p,color:e}) as any)}>
+                                      <DropdownMenuRadioGroup onValueChange={e=> console.log(typeof e)}>
                                       {
                                         Object.keys(WayPointType).map((value, key) => { 
                                           return (
-                                            <DropdownMenuRadioItem value={value} key={key} className={`${value}`}>
+                                            Number.isNaN(parseInt(value))&&
+                                            <DropdownMenuRadioItem value={value} key={key} onClick={()=> settempType(getWaypointType(value))} className={`${value}`}>
                                               {value}
                                             </DropdownMenuRadioItem>
                                           )
@@ -173,19 +193,21 @@ const WaypointAdapter = (props:WaypointAdapterProps) => {
                       </div>
                         <div>
                             <label className='text-xs font-semibold'>Latitude</label>
-                            <Input type='text' className='w-full mt-1 p-1 border border-gray-300' value={props.selectedWaypoint?.lat} onChange={e=>{
-                                props.setWaypoints(p=> p.map(wp=>wp.id===props.selectedWaypoint?.id?{...wp,lat:parseFloat(e.target.value)}:wp))
+                            <Input type='text' className='w-full mt-1 p-1 border border-gray-300' value={templatlng.lat} onChange={e=>{
+                                settemplatlng(p=>({...p,lat:parseFloat(e.target.value)}))
                             }}/>
                         </div>
                         <div>
                             <label className='text-xs mt-1 font-semibold'>Longitude</label>
-                            <Input type='text' className='w-full mt-1 p-1 border border-gray-300' value={props.selectedWaypoint?.lng} onChange={e=>{
-                                props.setWaypoints(p=> p.map(wp=>wp.id===props.selectedWaypoint?.id?{...wp,lng:parseFloat(e.target.value)}:wp))
+                            <Input type='text' className='w-full mt-1 p-1 border border-gray-300' value={templatlng.lng} onChange={e=>{
+                                settemplatlng(p=>({...p,lng:parseFloat(e.target.value)}))
                             }}/>
                         </div>
                     </div>
                     
-                   
+                   <div className="flex justify-end mt-3">
+                    <Button onClick={editWaypoint} disabled={templatlng.lat==0 && templatlng.lng ==0}>Save</Button>
+                   </div>
                     {/* <Button onClick={editWaypoint} disabled={Number.isNaN(props.selectedWaypoint.lat) || Number.isNaN(props.selectedWaypoint.lng)} className='text-xs mt-1 w-full text-white' size='sm'>Save</Button> */}
                 </DialogDescription>
             </DialogHeader>
