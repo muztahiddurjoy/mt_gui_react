@@ -23,6 +23,7 @@ import { degreeToRadian, radianToDegree } from './orientation-container/angle-co
 import { calculateDistance } from './orientation-container/distance-calculator/functions/calculate-distance'
 import TestComponent from './dashboard/test-component'
 import MapController from './dashboard/test-component'
+import { topics } from '@/topics'
 
 export interface WayPoint{
   lat:number;
@@ -172,13 +173,13 @@ const MapContainer = () => {
         if(ros.isConnected){
         const angleTopic = new ROSLIB.Topic({
           ros:ros,
-          name:'/witmotion_eular/yaw',
-          messageType:'/std_msgs/Float64'
+          name:topics['yaw'].name,
+          messageType:topics['yaw'].messageType
         })
         const gpsTopic = new ROSLIB.Topic({
           ros:ros,
-          name:'/sbg/gps_pos',
-          messageType:'sbg_driver/msg/SbgGpsPos'
+          name:topics['gps'].name,
+          messageType:topics['gps'].messageType
         })
 
         angleTopic.subscribe((msg:any)=>{
@@ -289,7 +290,7 @@ const MapContainer = () => {
   </Marker>
   <Polyline
   positions={waypoints.map(waypoint=>[waypoint.lat,waypoint.lng])}
-  pathOptions={{color: '#03ffcd'}}
+  pathOptions={{color: '#00249c'}}
   dashArray={[3, 10]}
 />
 <MapController roverPos={roverPosition}/>
