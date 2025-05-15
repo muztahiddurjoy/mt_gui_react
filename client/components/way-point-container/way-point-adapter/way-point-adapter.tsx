@@ -1,4 +1,4 @@
-import { getColor, getInitial, WayPoint, WayPointType } from '@/components/MapContainer'
+
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -17,6 +17,10 @@ import { Input } from '@/components/ui/input'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Colors } from '../data/colors'
 import { getWaypointType } from '@/functions/getWaypointType'
+import { WayPoint } from '@/types/Waypoint'
+import { WayPointType } from '@/types/WaypointType'
+import { getColor } from '@/functions/getColor'
+import { getInitial } from '@/functions/getInitials'
 interface WaypointAdapterProps{
     index:number
     waypoint:WayPoint

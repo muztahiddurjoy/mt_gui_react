@@ -1,4 +1,4 @@
-import { WayPointType } from "@/components/MapContainer"
+import { WayPointType } from "@/types/WaypointType"
 
 export const getWaypointType = (waypoint: string): WayPointType => {
     switch (waypoint) {

@@ -1,8 +1,11 @@
-import { Coordinate, getColor, WayPoint } from '@/components/MapContainer'
+
 import { Card } from '@/components/ui/card'
 import React from 'react'
 import { calculateDistance } from './functions/calculate-distance'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { WayPoint } from '@/types/Waypoint'
+import { getColor } from '@/functions/getColor'
+import { Coordinate } from '@/types/Coordinate'
 
 interface DistanceCalculatorProps{
     waypoints:WayPoint[]

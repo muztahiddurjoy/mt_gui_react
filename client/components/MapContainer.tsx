@@ -24,51 +24,18 @@ import { calculateDistance } from './orientation-container/distance-calculator/f
 import TestComponent from './dashboard/test-component'
 import MapController from './dashboard/test-component'
 import { topics } from '@/topics'
+import { WayPointType } from '@/types/WaypointType'
+import { WayPoint } from '@/types/Waypoint'
+import { Coordinate } from '@/types/Coordinate'
+import { getInitial } from '@/functions/getInitials'
+import { getColor } from '@/functions/getColor'
+import RoverMarker from './autonomous/markers/rover-marker'
 
-export interface WayPoint{
-  lat:number;
-  lng:number;
-  id:number;
-  type:WayPointType;
-  name:string;
-}
 
-export interface Coordinate{
-  lat:number|string
-  lng:number|string
-}
 
-export enum WayPointType{
-  GNSS,
-  MALLETE,
-  BOTTLE,
-  ARUCO
-}
-export const getColor = (type:WayPointType):string=>{
-  switch(type){
-    case WayPointType.ARUCO:
-      return Colors.amber
-    case WayPointType.BOTTLE:
-      return Colors.teal
-    case WayPointType.GNSS:
-      return Colors.blue
-    case WayPointType.MALLETE:
-      return Colors.orange
-  }
-}
 
-export const getInitial = (type:WayPointType):string=>{
-  switch(type){
-    case WayPointType.ARUCO:
-      return 'AR'
-    case WayPointType.BOTTLE:
-      return 'BT'
-    case WayPointType.GNSS:
-      return 'GNSS'
-    case WayPointType.MALLETE:
-      return 'ML'
-  }
-}
+
+
 
 const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([])
@@ -81,37 +48,11 @@ const MapContainer = () => {
  const [ros, setros] = useState<Ros | null>(null)
  const [isRosConnected, setisRosConnected] = useState<boolean>(false)
 
- const roverMarker = useRef(null)
-
-  useEffect(() => {
-    if (roverMarker.current) {
-      console.log('Setting rotation angle:', roverRotation);
-      (roverMarker.current as any).setRotationAngle(roverRotation);
-      (roverMarker.current as any).setRotationOrigin('center');
-    }
-  }, [roverRotation]);
+ 
 
 
 
  const [selectedWaypoints, setselectedWaypoints] = useState<WayPoint[]>([])
-  // const roverIcon = new L.Icon({
-  //   iconUrl: '/rover.png',
-  //   className:'transition-transform duration-100 ease-in-out',
-  //   iconSize: [50, 50],
-  //   iconAnchor: [25, 25],
-  //   popupAnchor: [1, -34],
-  //   // shadowSize: [41, 41]
-  // });
-  const roverIcon = new L.Icon({
-    iconUrl: '/marker/rover-marker.png',
-    className:'transition-transform duration-100 ease-in-out',
-    iconSize: [35, 35],
-    iconAnchor: [17, 35],
-    popupAnchor: [1, -34],
-    // shadowSize: [41, 41]
-  });
-
-  
 
   
 
@@ -227,11 +168,11 @@ const MapContainer = () => {
   return (
     <div className='relative'>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[7vh] left-[50%] font-bold absolute z-50 bg-orange-500/50" onClick={clearRoverWaypoints}>N</div>
-      <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[87vh] left-[50%] font-bold absolute z-50 bg-sky-500/50">S</div>
+      <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[93vh] left-[50%] font-bold absolute z-50 bg-sky-500/50">S</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] left-[20%] font-bold absolute z-50 bg-purple-500/50">W</div>
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] right-[15%] font-bold absolute z-50 bg-red-500/50">E</div>
       <OrientationContainer rover={roverPosition} waypoints={waypoints}/>
-        <Container center={[Number(roverPosition.lat), Number(roverPosition.lng)]} style={{ position:'fixed',height: '86vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
+        <Container center={[Number(roverPosition.lat), Number(roverPosition.lng)]} style={{ position:'fixed',height: '93vh',width:'65%',marginLeft:'20%',marginTop:'7vh' }} zoom={100} scrollWheelZoom={true}>
   <TileLayer
   maxZoom={25}
   maxNativeZoom={19}
@@ -283,11 +224,7 @@ const MapContainer = () => {
           </div>
     })
   }
-  <Marker ref={roverMarker} icon={roverIcon} position={[Number(roverPosition.lat),Number(roverPosition.lng)]} >
-    <Popup>
-      Rover is currently here
-    </Popup>
-  </Marker>
+  <RoverMarker roverPosition={roverPosition} roverRotation={roverRotation}/>
   <Polyline
   positions={waypoints.map(waypoint=>[waypoint.lat,waypoint.lng])}
   pathOptions={{color: '#00249c'}}
@@ -300,9 +237,9 @@ const MapContainer = () => {
   pathOptions={{color: 'red'}}
 />
 </Container>
-<div className='fixed bottom-0 ml-[20%] w-full'>   
+{/* <div className='fixed bottom-0 ml-[20%] w-full'>   
   <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} setwpType={setwptype} wpType={wptype}/>
-</div>
+</div> */}
 
 <WaypointContainer selectedWaypoints={selectedWaypoints} setSelectedWaypoints={setselectedWaypoints} setSelectedWaypoint={setselectedWaypoint} setWaypoints={setwaypoints} selectedWaypoint={selectedWaypoint} waypoints={waypoints}/>
     </div>

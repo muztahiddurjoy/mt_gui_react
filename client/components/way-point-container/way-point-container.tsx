@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Card } from '../ui/card'
-import { getInitial, WayPoint, WayPointType } from '../MapContainer'
 import { Button } from '../ui/button'
 import { Trash2 } from 'lucide-react'
 import AddLatLonWaypoint from './add-latlon-waypoint/add-latlon-waypoint'
@@ -10,6 +9,9 @@ import WaypointAdapter from './way-point-adapter/way-point-adapter'
 import { Checkbox } from '../ui/checkbox'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { ScrollArea } from '../ui/scroll-area'
+import { WayPoint } from '@/types/Waypoint'
+import { WayPointType } from '@/types/WaypointType'
+import { getInitial } from '@/functions/getInitials'
 
 interface WaypointContainerProps{
   waypoints:WayPoint[]

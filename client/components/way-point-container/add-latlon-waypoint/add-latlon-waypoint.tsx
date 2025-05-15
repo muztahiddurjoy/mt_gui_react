@@ -1,4 +1,4 @@
-import { getColor, getInitial, WayPoint, WayPointType } from '@/components/MapContainer'
+
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -7,6 +7,10 @@ import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { Colors } from '../data/colors'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { WayPointType } from '@/types/WaypointType'
+import { WayPoint } from '@/types/Waypoint'
+import { getInitial } from '@/functions/getInitials'
+import { getColor } from '@/functions/getColor'
 
 export interface AddLatLonWaypointProps {
   waypoint: WayPoint,
