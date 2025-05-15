@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const WaypointMarker = () => {
-  return (
-    <div>WaypointMarker</div>
-  )
-}
+  return <div>WaypointMarker</div>;
+};
 
-export default WaypointMarker
+export default WaypointMarker;

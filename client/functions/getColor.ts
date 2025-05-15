@@ -1,16 +1,15 @@
-import { Colors } from "@/components/way-point-container/data/colors"
-import { WayPointType } from "@/types/WaypointType"
+import { Colors } from "@/components/way-point-container/data/colors";
+import { WayPointType } from "@/types/WaypointType";
 
-
-export const getColor = (type:WayPointType):string=>{
-  switch(type){
+export const getColor = (type: WayPointType): string => {
+  switch (type) {
     case WayPointType.ARUCO:
-      return Colors.amber
+      return Colors.amber;
     case WayPointType.BOTTLE:
-      return Colors.teal
+      return Colors.teal;
     case WayPointType.GNSS:
-      return Colors.blue
+      return Colors.blue;
     case WayPointType.MALLETE:
-      return Colors.orange
+      return Colors.orange;
   }
-}
+};

@@ -1,14 +1,14 @@
-import { WayPointType } from "@/types/WaypointType"
+import { WayPointType } from "@/types/WaypointType";
 
-export const getInitial = (type:WayPointType):string=>{
-  switch(type){
+export const getInitial = (type: WayPointType): string => {
+  switch (type) {
     case WayPointType.ARUCO:
-      return 'AR'
+      return "AR";
     case WayPointType.BOTTLE:
-      return 'BT'
+      return "BT";
     case WayPointType.GNSS:
-      return 'GNSS'
+      return "GNSS";
     case WayPointType.MALLETE:
-      return 'ML'
+      return "ML";
   }
-}
+};

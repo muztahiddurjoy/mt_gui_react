@@ -1,16 +1,16 @@
-import { WayPointType } from "@/types/WaypointType"
+import { WayPointType } from "@/types/WaypointType";
 
 export const getWaypointType = (waypoint: string): WayPointType => {
-    switch (waypoint) {
-        case "GNSS":
-            return WayPointType.GNSS
-        case "ARUCO":
-            return WayPointType.ARUCO
-        case "MALLETE":
-            return WayPointType.MALLETE
-        case "BOTTLE":
-            return WayPointType.BOTTLE
-        default:
-            return WayPointType.GNSS
-    }
-}
+  switch (waypoint) {
+    case "GNSS":
+      return WayPointType.GNSS;
+    case "ARUCO":
+      return WayPointType.ARUCO;
+    case "MALLETE":
+      return WayPointType.MALLETE;
+    case "BOTTLE":
+      return WayPointType.BOTTLE;
+    default:
+      return WayPointType.GNSS;
+  }
+};

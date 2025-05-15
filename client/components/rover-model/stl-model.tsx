@@ -1,87 +1,95 @@
-'use client'
+"use client";
 
-import { useRef, useEffect, Suspense, useState } from 'react'
-import { useFrame, useLoader } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
-import * as THREE from 'three'
-import { STLLoader } from 'three-stl-loader'
-import { ModelRotation, STLViewerProps } from '@/types/model-viewer'
-import { Canvas } from '@react-three/fiber'
+import { useRef, useEffect, Suspense, useState } from "react";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import * as THREE from "three";
+import { STLLoader } from "three-stl-loader";
+import { ModelRotation, STLViewerProps } from "@/types/model-viewer";
+import { Canvas } from "@react-three/fiber";
 
 // Extend Three.js with the STLLoader
-THREE.STLLoader = STLLoader
+THREE.STLLoader = STLLoader;
 
 interface STLModelProps {
-  stlPath: string
-  rotation: ModelRotation
-  scale: number
-  color: string
-  onLoad?: () => void
-  onError?: (error: Error) => void
+  stlPath: string;
+  rotation: ModelRotation;
+  scale: number;
+  color: string;
+  onLoad?: () => void;
+  onError?: (error: Error) => void;
 }
 
-function STLModel({ stlPath, rotation, scale, color, onLoad, onError }: STLModelProps) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  
+function STLModel({
+  stlPath,
+  rotation,
+  scale,
+  color,
+  onLoad,
+  onError,
+}: STLModelProps) {
+  const meshRef = useRef<THREE.Mesh>(null);
+
   try {
-    const geometry = useLoader(THREE.STLLoader, stlPath) as THREE.BufferGeometry
+    const geometry = useLoader(
+      THREE.STLLoader,
+      stlPath,
+    ) as THREE.BufferGeometry;
 
     useEffect(() => {
       try {
-        geometry.computeVertexNormals()
-        geometry.center()
-        geometry.scale(scale, scale, scale)
-        onLoad?.()
+        geometry.computeVertexNormals();
+        geometry.center();
+        geometry.scale(scale, scale, scale);
+        onLoad?.();
       } catch (err) {
-        onError?.(err as Error)
+        onError?.(err as Error);
       }
-    }, [geometry, scale, onLoad, onError])
+    }, [geometry, scale, onLoad, onError]);
 
     useFrame(() => {
       if (meshRef.current) {
-        meshRef.current.rotation.set(rotation.x, rotation.y, rotation.z)
+        meshRef.current.rotation.set(rotation.x, rotation.y, rotation.z);
       }
-    })
+    });
 
     return (
       <mesh ref={meshRef} geometry={geometry}>
         <meshStandardMaterial color={color} />
       </mesh>
-    )
+    );
   } catch (error) {
     useEffect(() => {
-      onError?.(error as Error)
-    }, [])
-    return null
+      onError?.(error as Error);
+    }, []);
+    return null;
   }
 }
 
 export default function STLViewer({
-  stlPath = '/models/mt10.stl',
+  stlPath = "/models/mt10.stl",
   initialRotation = { x: 0, y: 0, z: 0 },
   scale = 1,
-  color = 'lightgray',
-  onRotationChange
+  color = "lightgray",
+  onRotationChange,
 }: STLViewerProps) {
-  const [rotation, setRotation] = useState<ModelRotation>(initialRotation)
-  const [error, setError] = useState<Error | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [rotation, setRotation] = useState<ModelRotation>(initialRotation);
+  const [error, setError] = useState<Error | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleRotationChange = (axis: keyof ModelRotation, value: number) => {
     const newRotation = {
       ...rotation,
-      [axis]: THREE.MathUtils.degToRad(value)
-    }
-    setRotation(newRotation)
-    onRotationChange?.(newRotation)
-  }
+      [axis]: THREE.MathUtils.degToRad(value),
+    };
+    setRotation(newRotation);
+    onRotationChange?.(newRotation);
+  };
 
   if (error) {
     return (
-      <div className="error-message">
-        Error loading model: {error.message}
-      </div>
-    )
+      <div className="error-message">Error loading model: {error.message}</div>
+    );
   }
 
   return (
@@ -104,7 +112,7 @@ export default function STLViewer({
           <OrbitControls makeDefault />
         </Canvas>
       </div>
-      
+
       <div className="controls-panel">
         <h3>Orientation Controls</h3>
         <OrientationControl
@@ -127,17 +135,22 @@ export default function STLViewer({
         />
       </div>
     </div>
-  )
+  );
 }
 
 interface OrientationControlProps {
-  label: string
-  axis: keyof ModelRotation
-  value: number
-  onChange: (axis: keyof ModelRotation, value: number) => void
+  label: string;
+  axis: keyof ModelRotation;
+  value: number;
+  onChange: (axis: keyof ModelRotation, value: number) => void;
 }
 
-function OrientationControl({ label, axis, value, onChange }: OrientationControlProps) {
+function OrientationControl({
+  label,
+  axis,
+  value,
+  onChange,
+}: OrientationControlProps) {
   return (
     <div className="control-group">
       <label>
@@ -153,5 +166,5 @@ function OrientationControl({ label, axis, value, onChange }: OrientationControl
         {value.toFixed(1)}°
       </label>
     </div>
-  )
+  );
 }

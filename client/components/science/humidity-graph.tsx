@@ -1,10 +1,10 @@
-"use client"
-import { ArcElement, Legend, Tooltip } from 'chart.js';
-import ChartJS from 'chart.js/auto';
-import React, { useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
-import { Button } from '../ui/button';
-import { PlayCircle } from 'lucide-react';
+"use client";
+import { ArcElement, Legend, Tooltip } from "chart.js";
+import ChartJS from "chart.js/auto";
+import React, { useState, useEffect } from "react";
+import { Line } from "react-chartjs-2";
+import { Button } from "../ui/button";
+import { PlayCircle } from "lucide-react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,13 +15,13 @@ interface HumidityGraphProps {
 const HumidityGraph = ({ data }: HumidityGraphProps) => {
   // State to store the last 12 readings
   const [readings, setReadings] = useState<number[]>(Array(12).fill(0));
-  
+
   // Update readings when new data comes in
   useEffect(() => {
     if (data) {
       const newValue = parseFloat(data);
       if (!isNaN(newValue)) {
-        setReadings(prev => {
+        setReadings((prev) => {
           // Keep only the last 11 readings and add the new one
           const updated = [...prev.slice(1), newValue];
           return updated;
@@ -35,15 +35,15 @@ const HumidityGraph = ({ data }: HumidityGraphProps) => {
     labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
     datasets: [
       {
-        label: 'Humidity (%)',
+        label: "Humidity (%)",
         data: readings,
         fill: false,
-        backgroundColor: 'rgb(54, 162, 235)',
-        borderColor: 'rgba(54, 162, 235, 0.8)',
+        backgroundColor: "rgb(54, 162, 235)",
+        borderColor: "rgba(54, 162, 235, 0.8)",
         tension: 0.4,
         pointRadius: 3,
-        pointBackgroundColor: 'rgb(54, 162, 235)'
-      }
+        pointBackgroundColor: "rgb(54, 162, 235)",
+      },
     ],
   };
 
@@ -53,39 +53,39 @@ const HumidityGraph = ({ data }: HumidityGraphProps) => {
     scales: {
       x: {
         ticks: {
-          color: 'cyan',
+          color: "cyan",
         },
         grid: {
-          color: 'rgba(0, 255, 255, 0.2)',
+          color: "rgba(0, 255, 255, 0.2)",
         },
       },
       y: {
         min: 0,
         max: 100,
         ticks: {
-          color: 'cyan',
-          stepSize: 1
+          color: "cyan",
+          stepSize: 1,
         },
         grid: {
-          color: 'rgba(0, 255, 255, 0.2)',
+          color: "rgba(0, 255, 255, 0.2)",
         },
       },
     },
     plugins: {
       legend: {
         labels: {
-          color: 'cyan',
+          color: "cyan",
           font: {
-            size: 12
-          }
-        }
+            size: 12,
+          },
+        },
       },
       tooltip: {
         enabled: true,
-        mode: 'index',
-        intersect: false
-      }
-    }
+        mode: "index",
+        intersect: false,
+      },
+    },
   };
 
   return (
@@ -94,9 +94,11 @@ const HumidityGraph = ({ data }: HumidityGraphProps) => {
         {/* <Button size="sm" className="gap-2">
           
         </Button> */}
-        <span className='text-xs'>Last Value: {readings[readings.length-1]}%</span>
+        <span className="text-xs">
+          Last Value: {readings[readings.length - 1]}%
+        </span>
       </div>
-      <div style={{ height: '300px' }}>
+      <div style={{ height: "300px" }}>
         <Line data={chartData} options={options} />
       </div>
     </div>

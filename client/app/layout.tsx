@@ -1,6 +1,5 @@
-
 import type { Metadata } from "next";
-import { Geist, Geist_Mono,Source_Code_Pro } from "next/font/google";
+import { Geist, Geist_Mono, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import MainDashboard from "@/components/dashboard/main-dashboard";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -36,23 +35,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${sourceCode.className} antialiased`}
-      >
+      <body className={`${sourceCode.className} antialiased`}>
         <ReduxWrapper>
-        <ThemeProvider
+          <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
-        <MainDashboard>
-          {children}
-          <Toaster/>
-        </MainDashboard>
-        
-        </ThemeProvider>
-       </ReduxWrapper>
+            <MainDashboard>
+              {children}
+              <Toaster />
+            </MainDashboard>
+          </ThemeProvider>
+        </ReduxWrapper>
       </body>
     </html>
   );
