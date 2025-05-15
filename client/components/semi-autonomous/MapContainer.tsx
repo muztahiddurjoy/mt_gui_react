@@ -359,7 +359,7 @@ const MapContainer = () => {
         <TileLayer
           maxZoom={25}
           maxNativeZoom={19}
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="http://localhost:8080/tiles/google_maps/webmercator/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Open Street Map</a> Contributors'
         />
         

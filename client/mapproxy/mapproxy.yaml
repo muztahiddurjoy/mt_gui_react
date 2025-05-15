@@ -1,24 +1,10 @@
-# -------------------------------
-# MapProxy example configuration.
-# -------------------------------
-#
-# This is a minimal MapProxy configuration.
-# See full_example.yaml and the documentation for more options.
-#
-
-# Starts the following services:
-# Demo:
-#     http://localhost:8080/demo
-# WMS:
-#     capabilities: http://localhost:8080/service?REQUEST=GetCapabilities
-# WMTS:
-#     capabilities: http://localhost:8080/wmts/1.0.0/WMTSCapabilities.xml
-#     first tile: http://localhost:8080/wmts/gm_layer/gm_grid/0/0/0.png
-
-
 services:
   demo:
+  tms:
+    use_grid_names: true
+    origin: 'nw'
   kml:
+    use_grid_names: true
   wmts:
   wms:
     md:
@@ -26,28 +12,21 @@ services:
       abstract: This is a minimal MapProxy example.
 
 layers:
-  - name: gm_layer
-    title: Test of using GM tiles
-    sources: [gm_cache]
+  - name: google_maps  # Changed from "osm" to "google_maps"
+    title: Google Maps
+    sources: [google_cache]  # Must match cache name below
 
 caches:
-  gm_cache:
-    grids: [gm_grid]
-    sources: [gm]
-    cache:
-      type: file
-      directory_layout: tms
+  google_cache:  # Must match layer source
+    grids: [webmercator]
+    sources: [google_tiles]
 
 sources:
-  gm:
+  google_tiles:
     type: tile
-    url: https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png
-    grid: gm_grid
+    url: http://mt0.google.com/vt/lyrs=y&x=%(x)s&y=%(y)s&z=%(z)s
+    grid: webmercator
 
 grids:
-  gm_grid:
-    base: GLOBAL_MERCATOR
-    origin: ul
-
-globals:
-  log_level: DEBUG
+  webmercator:
+    base: GLOBAL_WEBMERCATOR
