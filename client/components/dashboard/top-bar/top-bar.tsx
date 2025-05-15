@@ -33,9 +33,6 @@ import { toast } from "sonner";
 const TopBar = () => {
   const [isConnected, setisConnected] = useState(false);
   const [connectingRos, setconnectingRos] = useState<boolean>(false);
-  const [malette, setmalette] = useState<boolean>(false);
-  const [bottle, setbottle] = useState<boolean>(false);
-  const [aruco, setaruco] = useState<boolean>(false);
   const [rtk, setrtk] = useState<boolean>(false);
   const [lightStatus, setlightStatus] = useState("red");
   const [activePath, setactivePath] = useState<string>("/");
@@ -125,36 +122,7 @@ const TopBar = () => {
             className={`h-[20px] w-[20px] rounded-full ${lightStatus == "green" ? "bg-green-500 blink" : "bg-gray-500"}`}
           ></div>
         </div>
-        <div className="flex items-center gap-2 ml-10">
-          <Image
-            src="/marker/aruco.png"
-            height={20}
-            width={20}
-            alt="Aruco"
-            className={aruco ? "opacity-100" : "opacity-25"}
-          />{" "}
-          {aruco && <span className="text-xs">Reached</span>}
-        </div>
-        <div className="flex items-center gap-2 ml-3">
-          <Hammer
-            className={
-              malette
-                ? "fill-orange-500 stroke-orange-500"
-                : "fill-gray-500 stroke-gray-500"
-            }
-          />{" "}
-          {malette && <span className="text-xs">Reached</span>}
-        </div>
-        <div className="flex items-center gap-2 ml-3">
-          <Milk
-            className={
-              bottle
-                ? "fill-green-500 stroke-green-500"
-                : "fill-gray-500 stroke-gray-500"
-            }
-          />{" "}
-          {bottle && <span className="text-xs">Reached</span>}
-        </div>
+        
       </div>
 
       <div className="flex items-center gap-2">
