@@ -17,7 +17,7 @@ Next.js-based GUI for MT10 Hypersonic vehicle with ROS 2 Humble integration.
 
 ```bash
 git clone https://github.com/muztahiddurjoy/mt_gui_react
-cd mt_gui_react/client
+cd mt_gui_react
 npm install
 ```
 
@@ -61,7 +61,7 @@ mapproxy-util serve-develop ./mapproxy.yaml
 ## 🌐 ROS 2 Configuration
 
 ### Topic Configuration
-Modify `/client/topics/index.ts` to update ROS 2 topics:
+Modify `/topics/index.ts` to update ROS 2 topics:
 ```typescript
 export interface Topic {
   name: string;
@@ -84,7 +84,7 @@ export const topics: Record<string, Topic> = {
 
 ### Common Issues
 - **Connection failures**: Verify rosbridge is running (`ros2 topic list`)
-- **Topic errors**: Check topic names/types in `/client/topics/index.ts`
+- **Topic errors**: Check topic names/types in `/topics/index.ts`
 - **Map issues**: Ensure MapProxy is running (`npm run map`)
 - **Dependency problems**: 
   ```bash
