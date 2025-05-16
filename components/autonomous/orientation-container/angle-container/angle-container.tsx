@@ -1,26 +1,16 @@
 "use client";
 import { getROS } from "@/ros-functions/connect";
+import { topics } from "@/topics";
+import { Angle } from "@/types/Angle";
 import React, { useEffect, useState } from "react";
 import ROSLIB from "roslib";
 import { toast } from "sonner";
 
-export interface Angle {
-  roll: number;
-  pitch: number;
-  yaw: number;
-}
 
-export const radianToDegree = (radian: number): number => {
-  let degree = radian * (180 / Math.PI);
-  if (degree < 0) {
-    degree += 360;
-  }
-  return degree % 360;
-};
 
-export const degreeToRadian = (degree: number): number => {
-  return degree * (Math.PI / 180);
-};
+
+
+
 
 const AngleContainer = () => {
   const [angle, setangle] = useState<Angle>({
@@ -32,20 +22,45 @@ const AngleContainer = () => {
   useEffect(() => {
     getROS().then((ros) => {
       if (ros.isConnected) {
-        const angleTopic = new ROSLIB.Topic({
+        const yawTopic = new ROSLIB.Topic({
           ros: ros,
-          name: "/sbg/ekf_euler",
-          messageType: "sbg_driver/SbgEkfEuler",
+          name: topics["yaw"].name,
+          messageType: topics["yaw"].messageType,
         });
-        angleTopic.subscribe((msg: any) => {
-          // console.log(msg)
-          setangle({
-            pitch: radianToDegree(msg.angle.x),
-            roll: radianToDegree(msg.angle.y),
-            yaw: radianToDegree(msg.angle.z),
-          });
+
+        const rollTopic = new ROSLIB.Topic({
+          ros: ros,
+          name: topics["roll"].name,
+          messageType: topics["roll"].messageType,
         });
-        console.log("subscribed to", angleTopic.name);
+
+        const pitchTopic = new ROSLIB.Topic({
+          ros: ros,
+          name: topics["pitch"].name,
+          messageType: topics["pitch"].messageType,
+        });
+
+        yawTopic.subscribe((msg: any) => {
+          setangle((p) => ({
+            ...p,
+            yaw: msg.data,
+          }));
+        });
+        rollTopic.subscribe((msg: any) => {
+          setangle((p) => ({
+            ...p,
+            roll: msg.data,
+          }));
+        });
+        pitchTopic.subscribe((msg: any) => {
+          setangle((p) => ({
+            ...p,
+            pitch: msg.data,
+        }));
+      });
+        console.log("subscribed to", yawTopic.name);
+        console.log("subscribed to", rollTopic.name);
+        console.log("subscribed to", pitchTopic.name);
       } else {
         toast.error("Cannot subscribe to angle topic. ROS not connected");
       }

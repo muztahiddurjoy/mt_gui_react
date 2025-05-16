@@ -17,7 +17,7 @@ import "leaflet/dist/leaflet.css";
 import { Colors } from "../way-point-container/data/colors";
 import ROSLIB, { Ros } from "roslib";
 import { getROS } from "@/ros-functions/connect";
-import { calculateDistance } from "../orientation-container/distance-calculator/functions/calculate-distance";
+import { calculateDistance } from "../autonomous/orientation-container/distance-calculator/functions/calculate-distance";
 import { toast } from "sonner";
 import { renderToString } from "react-dom/server";
 import MapController from "../dashboard/test-component";

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
-import { Coordinate } from "../MapContainer";
+import { Coordinate } from "../autonomous/MapContainer";
 import { getROS } from "@/ros-functions/connect";
 import ROSLIB from "roslib";
 

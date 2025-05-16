@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "../ui/card";
-import AngleContainer from "../orientation-container/angle-container/angle-container";
-import CompassContainer from "../orientation-container/compass-container/compass-container";
+import AngleContainer from "../autonomous/orientation-container/angle-container/angle-container";
+import CompassContainer from "../autonomous/orientation-container/compass-container/compass-container";
 import { Coordinate } from "@/types/Coordinate";
 import { WayPoint } from "@/types/Waypoint";
 

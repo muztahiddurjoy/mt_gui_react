@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "../ui/card";
+import { Card } from "../../ui/card";
 import CompassContainer from "./compass-container/compass-container";
 import AngleContainer from "./angle-container/angle-container";
 import DistanceCalculator from "./distance-calculator/distance-calculator";

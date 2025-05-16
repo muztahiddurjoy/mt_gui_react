@@ -16,32 +16,28 @@ import React, { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 // import 'leaflet.offline';
 import "leaflet/dist/leaflet.css";
-import TopBar from "./dashboard/top-bar/top-bar";
+import TopBar from "../dashboard/top-bar/top-bar";
 import { FlagIcon, FlagTriangleRight, Map } from "lucide-react";
-import { Button } from "./ui/button";
-import WaypointContainer from "./way-point-container/way-point-container";
+import { Button } from "../ui/button";
+import WaypointContainer from "../way-point-container/way-point-container";
 import { toast } from "sonner";
 import { renderToString } from "react-dom/server";
-import { Colors } from "./way-point-container/data/colors";
-import MapMenubar from "./map-menubar/map-menubar";
+import { Colors } from "../way-point-container/data/colors";
+import MapMenubar from "../map-menubar/map-menubar";
 import OrientationContainer from "./orientation-container/orientation-container";
 import { getROS } from "@/ros-functions/connect";
 import ROSLIB, { Ros } from "roslib";
-import RoverFollower from "./rover-follower";
-import {
-  degreeToRadian,
-  radianToDegree,
-} from "./orientation-container/angle-container/angle-container";
+import RoverFollower from "../rover-follower";
 import { calculateDistance } from "./orientation-container/distance-calculator/functions/calculate-distance";
-import TestComponent from "./dashboard/test-component";
-import MapController from "./dashboard/test-component";
+import TestComponent from "../dashboard/test-component";
+import MapController from "../dashboard/test-component";
 import { topics } from "@/topics";
 import { WayPointType } from "@/types/WaypointType";
 import { WayPoint } from "@/types/Waypoint";
 import { Coordinate } from "@/types/Coordinate";
 import { getInitial } from "@/functions/getInitials";
 import { getColor } from "@/functions/getColor";
-import RoverMarker from "./autonomous/markers/rover-marker";
+import RoverMarker from "./markers/rover-marker";
 
 const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([]);
@@ -284,8 +280,8 @@ const MapContainer = () => {
         />
       </Container>
       {/* <div className='fixed bottom-0 ml-[20%] w-full'>   
-  <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} setwpType={setwptype} wpType={wptype}/>
-</div> */}
+        <MapMenubar mapActive={mapActive} setMapActive={setmapActive} setWaypoint={setwaypoints} wayPoints={waypoints} setwpType={setwptype} wpType={wptype}/>
+      </div> */}
 
       <WaypointContainer
         selectedWaypoints={selectedWaypoints}

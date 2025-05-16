@@ -1,4 +1,4 @@
-import { WayPoint } from "@/components/MapContainer";
+import { WayPoint } from "@/components/autonomous/MapContainer";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {

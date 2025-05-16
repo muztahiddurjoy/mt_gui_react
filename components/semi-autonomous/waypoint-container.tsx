@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Coordinate } from "../MapContainer";
+import { Coordinate } from "../autonomous/MapContainer";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useEffect } from "react";

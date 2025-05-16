@@ -12,4 +12,12 @@ export const topics: Record<string, Topic> = {
     name: "/witmotion_eular/yaw",
     messageType: "/std_msgs/Float64",
   },
+  roll: {
+    name: "/witmotion_eular/yaw",
+    messageType: "/std_msgs/Float64",
+  },
+  pitch: {
+    name: "/witmotion_eular/yaw",
+    messageType: "/std_msgs/Float64",
+  },
 };

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Colors } from "../way-point-container/data/colors";
-import { getColor, WayPoint, WayPointType } from "../MapContainer";
+import { getColor, WayPoint, WayPointType } from "../autonomous/MapContainer";
 import RoverFollower from "../rover-follower";
 
 interface MapMenubarProps {
