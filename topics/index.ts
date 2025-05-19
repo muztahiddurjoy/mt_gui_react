@@ -13,11 +13,26 @@ export const topics: Record<string, Topic> = {
     messageType: "/std_msgs/Float64",
   },
   roll: {
-    name: "/witmotion_eular/yaw",
+    name: "/witmotion_eular/roll",
     messageType: "/std_msgs/Float64",
   },
   pitch: {
-    name: "/witmotion_eular/yaw",
+    name: "/witmotion_eular/pitch",
     messageType: "/std_msgs/Float64",
   },
+  science: {
+    name: "/sensors",
+    messageType: "std_msgs/String",
+  },
+  autonomous_light: {
+    name: "/light_status",
+    messageType: "std_msgs/msg/String",
+  },
 };
+
+
+
+// temperature (celcius)
+// mosture (%)
+// pH (0-14)
+// conductivity (  )

@@ -69,7 +69,7 @@ const AngleContainer = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center relative h-[30vh]">
+      <div className="flex items-center justify-center relative h-[170px]">
         <div className="h-[90%] w-[1px] bg-red-500 absolute top-2 left-[50%]">
           y
         </div>

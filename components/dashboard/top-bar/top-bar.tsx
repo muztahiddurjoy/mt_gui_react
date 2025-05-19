@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useAppSelector } from "@/hooks/redux-hook";
 import { getROS } from "@/ros-functions/connect";
+import { topics } from "@/topics";
 import {
   Camera,
   Circle,
@@ -45,8 +46,8 @@ const TopBar = () => {
           setisConnected(true);
           const lightTopic = new ROSLIB.Topic({
             ros: ros,
-            name: "/light_status",
-            messageType: "std_msgs/msg/String",
+            name: topics["autonomous_light"].name,
+            messageType: topics["autonomous_light"].messageType,
           });
           lightTopic.subscribe((msg: any) => {
             console.log("light", msg);
@@ -103,10 +104,10 @@ const TopBar = () => {
   // className={`${buttonVariants({className:"bg-white/10 hover:bg-white/30 dark:text-white",size:"sm"})} ${isActive('/path') ? 'bg-white/30' : ''}`}
 
   return (
-    <div className="fixed top-0 left-0 right-0 h-[7vh] bg-primary/50 backdrop-blur-md flex items-center justify-between z-50">
+    <div className="fixed top-0 left-0 right-0 h-[8vh] bg-primary/50 backdrop-blur-md flex items-center justify-between z-50">
       <div className="h-full flex items-center justify-center">
-        <div className="flex h-full bg-white">
-          <img src="/mt.avif" className="w-[100px]" />
+        <div className="py-2">
+          <img src="/logo.png" className="w-[70px]" />
         </div>
 
         <div className="flex items-center gap-2 ml-3">

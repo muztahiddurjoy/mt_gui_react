@@ -17,6 +17,8 @@ import PressureAlt from "@/components/science/pressure-alt";
 import ConcUV from "@/components/science/conc-uv";
 import LightHumidityGraph from "@/components/science/light-gas";
 import HumidityGraph from "@/components/science/humidity-graph";
+import SoilSensorGraph from "@/components/science/soil-temp-and-conductivity";
+import { topics } from "@/topics";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ScienceGraphs = () => {
@@ -32,8 +34,8 @@ const ScienceGraphs = () => {
     getROS().then((ros) => {
       const sensorTopic = new ROSLIB.Topic({
         ros: ros,
-        name: "/sensors",
-        messageType: "std_msgs/String",
+        name: topics["science"].name,
+        messageType: topics["science"].messageType,
       });
 
       sensorTopic.subscribe((message: any) => {
@@ -85,6 +87,8 @@ const ScienceGraphs = () => {
         {/* <OthersFour/> */}
         {/* <UvGraph data={values[values.length-2]}/>
         <ConcGraph data={values[values.length-1]}/> */}
+        <NPKGraph/>
+        <SoilSensorGraph/>
         <HumidityGraph data={values[0]} />
         <ConcUV
           concData={values[values.length - 1]}
@@ -98,6 +102,8 @@ const ScienceGraphs = () => {
         {/* <ColorSensorGraphs/> */}
       </div>
     </div>
+
+    
   );
 };
 
