@@ -57,7 +57,7 @@ const LightHumidityGraph = ({
       },
       {
         label: "Alcohol (ppm)",
-        data: mq2Readings,
+        data: mq2Readings.map((v) => v * 100), // Convert to ppm
         fill: false,
         backgroundColor: "rgb(54, 162, 235)", // Blue
         borderColor: "rgba(54, 162, 235, 0.8)",
@@ -90,7 +90,7 @@ const LightHumidityGraph = ({
         display: true,
         position: "left",
         min: 0,
-        max: 10, // Adjust based on expected lux range
+        max: 150, // Adjust based on expected lux range
         ticks: {
           color: "rgb(255, 205, 86)",
           stepSize: 1,
@@ -161,7 +161,7 @@ const LightHumidityGraph = ({
       <div className="flex items-center justify-end mb-2">
         <span className="text-xs">
           Last Values: Light {lightReadings[lightReadings.length - 1]} Lux | MQ2{" "}
-          {mq2Readings[mq2Readings.length - 1]}V
+          {Number(mq2Readings[mq2Readings.length - 1].toFixed(2))*1000}mV
         </span>
       </div>
       <div style={{ height: "300px" }}>

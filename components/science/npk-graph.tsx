@@ -5,6 +5,9 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { Button } from "../ui/button";
 import { PlayCircle } from "lucide-react";
+import ROSLIB from "roslib";
+import { getROS } from "@/ros-functions/connect";
+import { topics } from "@/topics";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,7 +18,7 @@ const NPKGraph = () => {
     datasets: [
       {
         label: "Nitrogen (mg/kg)",
-        data: Array(12).fill(150),
+        data: Array(12).fill(0),
         fill: false,
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgba(255, 99, 132, 0.8)",
@@ -26,7 +29,7 @@ const NPKGraph = () => {
       },
       {
         label: "Phosphorus (mg/kg)",
-        data: Array(12).fill(35),
+        data: Array(12).fill(0),
         fill: false,
         backgroundColor: "rgb(54, 162, 235)",
         borderColor: "rgba(54, 162, 235, 0.8)",
@@ -37,7 +40,7 @@ const NPKGraph = () => {
       },
       {
         label: "Potassium (mg/kg)",
-        data: Array(12).fill(200),
+        data: Array(12).fill(0),
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
         borderColor: "rgba(75, 192, 192, 0.8)",
@@ -49,43 +52,104 @@ const NPKGraph = () => {
     ],
   });
 
-  const generateRandomValue = (min, max) => {
-    return Math.random() * (max - min) + min;
-  };
-
-  const updateNpkData = () => {
-    setNpkData((prevData) => ({
-      ...prevData,
-      datasets: [
-        {
-          ...prevData.datasets[0],
-          data: [
-            ...prevData.datasets[0].data.slice(1),
-            generateRandomValue(100, 200),
-          ],
-        },
-        {
-          ...prevData.datasets[1],
-          data: [
-            ...prevData.datasets[1].data.slice(1),
-            generateRandomValue(20, 50),
-          ],
-        },
-        {
-          ...prevData.datasets[2],
-          data: [
-            ...prevData.datasets[2].data.slice(1),
-            generateRandomValue(100, 300),
-          ],
-        },
-      ],
-    }));
-  };
+  // Track last valid values
+  const [lastValidValues, setLastValidValues] = useState({
+    nitrogen: 0,
+    phosphorus: 0,
+    potassium: 0,
+  });
 
   useEffect(() => {
-    const interval = setInterval(updateNpkData, 1000);
-    return () => clearInterval(interval);
+    let nitrogenTopic: ROSLIB.Topic | null = null;
+    let phosphorusTopic: ROSLIB.Topic | null = null;
+    let potassiumTopic: ROSLIB.Topic | null = null;
+
+    const connectToROS = async () => {
+      try {
+        const ros = await getROS();
+
+        // Nitrogen subscriber
+        nitrogenTopic = new ROSLIB.Topic({
+          ros: ros,
+          name: topics.soil_nitrogen.name,
+          messageType: topics.soil_nitrogen.messageType,
+        });
+
+        nitrogenTopic.subscribe((message: any) => {
+          const value = message.data;
+          if (value !== -1) {
+            setLastValidValues(prev => ({ ...prev, nitrogen: value }));
+            updateNpkData('nitrogen', value);
+          } else {
+            updateNpkData('nitrogen', lastValidValues.nitrogen);
+          }
+        });
+
+        // Phosphorus subscriber
+        phosphorusTopic = new ROSLIB.Topic({
+          ros: ros,
+          name: topics.soil_phosphorus.name,
+          messageType: topics.soil_phosphorus.messageType,
+        });
+
+        phosphorusTopic.subscribe((message: any) => {
+          const value = message.data;
+          if (value !== -1) {
+            setLastValidValues(prev => ({ ...prev, phosphorus: value }));
+            updateNpkData('phosphorus', value);
+          } else {
+            updateNpkData('phosphorus', lastValidValues.phosphorus);
+          }
+        });
+
+        // Potassium subscriber
+        potassiumTopic = new ROSLIB.Topic({
+          ros: ros,
+          name: topics.soil_potassium.name,
+          messageType: topics.soil_potassium.messageType,
+        });
+
+        potassiumTopic.subscribe((message: any) => {
+          const value = message.data;
+          if (value !== -1) {
+            setLastValidValues(prev => ({ ...prev, potassium: value }));
+            updateNpkData('potassium', value);
+          } else {
+            updateNpkData('potassium', lastValidValues.potassium);
+          }
+        });
+
+      } catch (error) {
+        console.error("Error connecting to ROS:", error);
+      }
+    };
+
+    connectToROS();
+
+    return () => {
+      if (nitrogenTopic) nitrogenTopic.unsubscribe();
+      if (phosphorusTopic) phosphorusTopic.unsubscribe();
+      if (potassiumTopic) potassiumTopic.unsubscribe();
+    };
   }, []);
+
+  const updateNpkData = (type: 'nitrogen' | 'phosphorus' | 'potassium', newValue: number) => {
+    setNpkData((prevData) => {
+      const datasetIndex = type === 'nitrogen' ? 0 : type === 'phosphorus' ? 1 : 2;
+      const newData = [...prevData.datasets[datasetIndex].data.slice(1), newValue];
+      
+      const newDatasets = [...prevData.datasets];
+      newDatasets[datasetIndex] = {
+        ...newDatasets[datasetIndex],
+        data: newData
+      };
+
+      return {
+        ...prevData,
+        datasets: newDatasets
+      };
+    });
+  };
 
   const options = {
     responsive: true,
@@ -129,10 +193,10 @@ const NPKGraph = () => {
           },
         },
         min: 0,
-        max: 350,
+        max: 50,
         ticks: {
           color: "cyan",
-          stepSize: 50,
+          stepSize: 0.1,
         },
         grid: {
           color: "rgba(0, 255, 255, 0.1)",
@@ -143,20 +207,13 @@ const NPKGraph = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="rounded-md bg-primary/30 text-sm text-white px-4 py-2">
-          NPK Graph
-        </h1>
-        <Button className="flex items-center gap-2">
-          <PlayCircle size={16} /> Record Value (12s)
-        </Button>
-      </div>
+      
       <div className="flex-1 min-h-[300px]">
         <Line 
           data={npkData} 
           options={options}
-          height={null} // Let the container determine height
-          width={null}  // Let the container determine width
+          height={null}
+          width={null}
         />
       </div>
     </div>

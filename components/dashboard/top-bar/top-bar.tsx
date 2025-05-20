@@ -143,7 +143,7 @@ const TopBar = () => {
             variant: activePath === "/semi-autonomous" ? "default" : "menu",
           })}
         >
-          <Navigation /> Semi Autonomous
+          <Navigation /> Semi Auto
         </Link>
         <Link
           href="/camera-feed"
@@ -163,6 +163,15 @@ const TopBar = () => {
         >
           <FlaskConical /> Science
         </Link>
+        <Link
+          href="/autonomous-alt"
+          className={buttonVariants({
+            size: "sm",
+            variant: activePath === "/autonomous-alt" ? "default" : "menu",
+          })}
+        >
+          <Navigation /> Autonomous (V2)
+        </Link>
       </div>
       <div className="flex items-center gap-3">
         {rtk && (
@@ -171,7 +180,7 @@ const TopBar = () => {
             <p className="text-xs ml-2 font-bold">RTK Enabled</p>
           </div>
         )}
-        <p className="text-xs">
+        <p className="text-xs mr-2">
           ROS{" "}
           {isConnected ? (
             <span className="bg-green-500 text-green-800 p-1">Connected</span>
@@ -190,7 +199,7 @@ const TopBar = () => {
             Connect
           </Button>
         )}
-        <Dialog>
+        {/* <Dialog>
           <DialogTrigger className={buttonVariants({ size: "sm" })}>
             <Keyboard />
           </DialogTrigger>
@@ -203,7 +212,7 @@ const TopBar = () => {
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
     </div>
   );
