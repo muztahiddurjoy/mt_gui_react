@@ -110,5 +110,11 @@ export const topics: Record<string, Topic> = {
     name: "/soil_potassium",
     messageType: "std_msgs/Float64",
   },
+
+  //Science Centrefuge
+  centrefuge:{
+    name: "/centrefuge",
+    messageType: "std_msgs/Float64",
+  }
   
 };

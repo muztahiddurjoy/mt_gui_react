@@ -19,6 +19,7 @@
   import HumidityGraph from "@/components/science/humidity-graph";
   import SoilSensorGraph from "@/components/science/soil-temp-and-conductivity";
   import { topics } from "@/topics";
+import ColorSensor from "@/components/science/centrefude/color-sensor";
 
   ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -89,6 +90,15 @@
             humidityData={sensorData.humidity} 
             lightData={sensorData.light} 
           />
+        </div>
+        <h1 className="text-2xl">Centrefuge</h1>
+        <div className="grid grid-cols-6 gap-2 mt-5">
+          <ColorSensor blue={100} green={200} red={10} name="Sensor 1"/>
+          <ColorSensor blue={100} green={100} red={10} name="Sensor 2"/>
+          <ColorSensor blue={100} green={200} red={10} name="Sensor 3"/>
+          <ColorSensor blue={100} green={100} red={10} name="Sensor 4"/>
+          <ColorSensor blue={100} green={200} red={70} name="Sensor 5"/>
+          <ColorSensor blue={100} green={200} red={100} name="Sensor 6"/>
         </div>
       </div>
     );
