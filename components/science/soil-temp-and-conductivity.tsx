@@ -122,8 +122,8 @@ const SoilSensorGraph = () => {
         // Soil Conductivity subscriber
         conductivityTopic = new ROSLIB.Topic({
           ros: ros,
-          name: topics.soil_conductivity.name,
-          messageType: topics.soil_conductivity.messageType,
+          name: topics.soil_ec.name,
+          messageType: topics.soil_ec.messageType,
         });
 
         conductivityTopic.subscribe((message: any) => {
@@ -142,7 +142,6 @@ const SoilSensorGraph = () => {
           name: topics.soil_ph.name,
           messageType: topics.soil_ph.messageType,
         });
-        console.log("phTopic", phTopic);
 
         phTopic.subscribe((message: any) => {
           const value = message.data;
@@ -346,14 +345,7 @@ const SoilSensorGraph = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="rounded-md bg-primary/30 text-sm text-white px-4 py-2">
-          Soil Sensors
-        </h1>
-        <Button className="flex items-center gap-2">
-          <PlayCircle size={16} /> Record Value (12s)
-        </Button>
-      </div>
+      
       <div className="flex-1 min-h-[300px]">
         <Line 
           data={sensorData} 
