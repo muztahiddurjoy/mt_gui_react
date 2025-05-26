@@ -25,25 +25,15 @@ import MapMenubar from "../map-menubar/map-menubar";
 import WaypointContainer from "./waypoint-container";
 import OrientationContainer from "./orientation-container";
 import { Path } from "./path.model";
+import { WayPoint } from "@/types/Waypoint";
+import { WayPointType } from "@/types/WaypointType";
+import { getInitial } from "@/functions/getInitials";
+import { getColor } from "@/functions/getColor";
 
-export interface WayPoint {
+
+export interface Coordinate {
   lat: number;
   lng: number;
-  id: number;
-  type: WayPointType;
-  name: string;
-}
-
-interface Coordinate {
-  lat: number | string;
-  lng: number | string;
-}
-
-export enum WayPointType {
-  GNSS,
-  MALLETE,
-  BOTTLE,
-  ARUCO,
 }
 
 // Utility function to convert meters to degrees
@@ -53,31 +43,6 @@ const metersToDegrees = (meters: number, latitude: number) => {
   return { lat, lng };
 };
 
-export const getColor = (type: WayPointType): string => {
-  switch (type) {
-    case WayPointType.ARUCO:
-      return Colors.amber;
-    case WayPointType.BOTTLE:
-      return Colors.teal;
-    case WayPointType.GNSS:
-      return Colors.blue;
-    case WayPointType.MALLETE:
-      return Colors.orange;
-  }
-};
-
-export const getInitial = (type: WayPointType): string => {
-  switch (type) {
-    case WayPointType.ARUCO:
-      return "AR";
-    case WayPointType.BOTTLE:
-      return "BT";
-    case WayPointType.GNSS:
-      return "GNSS";
-    case WayPointType.MALLETE:
-      return "ML";
-  }
-};
 
 const MapContainer = () => {
   const [waypoints, setwaypoints] = useState<WayPoint[]>([]);
@@ -92,13 +57,15 @@ const MapContainer = () => {
   });
   const [roverRotation, setroverRotation] = useState(Math.PI);
   const [roverPositions, setroverPositions] = useState<Coordinate[]>([]);
+  const [deliveryCoord, setdeliveryCoord] = useState<Coordinate|null>(null)
+  const [deliveryBound, setdeliveryBound] = useState<number>(20)
   const [ros, setros] = useState<Ros | null>(null);
   const [isRosConnected, setisRosConnected] = useState<boolean>(false);
 
   const roverMarker = useRef(null);
 
   // Calculate 20m rectangle bounds
-  const rectangleSize = 20; // meters
+  const rectangleSize = deliveryBound; // meters
   const sizeInDegrees = metersToDegrees(
     rectangleSize,
     Number(roverPosition.lat),
@@ -108,14 +75,14 @@ const MapContainer = () => {
     position: Coordinate,
     offsetLat: number,
     offsetLng: number,
-    size: number,
+    size: number
   ) => {
     const sizeInDegrees = metersToDegrees(size, position.lat);
-    const offsetInDegrees = metersToDegrees(rectangleSize, position.lat);
-
+    const offsetInDegrees = metersToDegrees(size, position.lat); // Use the same size for offset
+  
     return [
       [
-        roverpo.lat + offsetInDegrees.lat * offsetLat - sizeInDegrees.lat,
+        position.lat + offsetInDegrees.lat * offsetLat - sizeInDegrees.lat,
         position.lng + offsetInDegrees.lng * offsetLng - sizeInDegrees.lng,
       ],
       [
@@ -415,7 +382,7 @@ const MapContainer = () => {
       <div className="w-[40px] h-[40px] flex items-center justify-center text-2xl top-[45vh] right-[15%] font-bold absolute z-50 bg-red-500/50">
         E
       </div>
-      <OrientationContainer rover={roverPosition} waypoints={waypoints} />
+      <OrientationContainer deliveryBound={deliveryBound} deliveryCoord={deliveryCoord} setDeliverCoord={setdeliveryCoord} setDeliveryBound={setdeliveryBound}/>
       <Container
         center={[Number(roverPosition.lat), Number(roverPosition.lng)]}
         style={{
@@ -437,16 +404,51 @@ const MapContainer = () => {
 
         <MapClickHandler />
 
+{deliveryCoord&&<>
         {/* 20m Rectangle around rover */}
         <Rectangle
-          bounds={rectangleBounds}
-          pathOptions={{
-            color: getColor(WayPointType.GNSS),
-            fillColor: "orange",
-            fillOpacity: 0.2,
-            weight: 1,
-          }}
-        />
+    bounds={getRectangleBounds(deliveryCoord, 1, 1, deliveryBound)}
+    pathOptions={{
+      color: "purple",
+      fillColor: "purple",
+      fillOpacity: 0.2,
+      weight: 1,
+    }}
+  />
+  
+  {/* Top-right rectangle */}
+  <Rectangle
+    bounds={getRectangleBounds(deliveryCoord, 1, -1, deliveryBound)}
+    pathOptions={{
+      color: "blue",
+      fillColor: "blue",
+      fillOpacity: 0.2,
+      weight: 1,
+    }}
+  />
+  
+  {/* Bottom-left rectangle */}
+  <Rectangle
+    bounds={getRectangleBounds(deliveryCoord, -1, 1, deliveryBound)}
+    pathOptions={{
+      color: "red",
+      fillColor: "red",
+      fillOpacity: 0.2,
+      weight: 1,
+    }}
+  />
+  
+  {/* Bottom-right rectangle */}
+  <Rectangle
+    bounds={getRectangleBounds(deliveryCoord, -1, -1, deliveryBound)}
+    pathOptions={{
+      color: "green",
+      fillColor: "green",
+      fillOpacity: 0.2,
+      weight: 1,
+    }}
+  />
+  </>}
 
         <div>
           <Circle
