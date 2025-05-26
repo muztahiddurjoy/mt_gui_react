@@ -1,26 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Source_Code_Pro } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import MainDashboard from "@/components/dashboard/main-dashboard";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { Provider } from "react-redux";
-import { store } from "@/redux /store";
 import ReduxWrapper from "@/redux /redux-wrapper/redux-wrapper";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const sourceCode = Source_Code_Pro({
+const sourceCode = localFont({
+  src: [
+    {
+      path: "../public/fonts/SourceCodePro-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/SourceCodePro-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    // Add other weights/styles as needed
+  ],
   variable: "--font-source-code",
-  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
