@@ -407,7 +407,7 @@ const MapContainer = () => {
 {deliveryCoord&&<>
         {/* 20m Rectangle around rover */}
         <Rectangle
-    bounds={getRectangleBounds(deliveryCoord, 1, 1, deliveryBound)}
+    bounds={getRectangleBounds(deliveryCoord, 1, 1, deliveryBound/2)}
     pathOptions={{
       color: "purple",
       fillColor: "purple",
@@ -418,7 +418,7 @@ const MapContainer = () => {
   
   {/* Top-right rectangle */}
   <Rectangle
-    bounds={getRectangleBounds(deliveryCoord, 1, -1, deliveryBound)}
+    bounds={getRectangleBounds(deliveryCoord, 1, -1, deliveryBound/2)}
     pathOptions={{
       color: "blue",
       fillColor: "blue",
@@ -429,7 +429,7 @@ const MapContainer = () => {
   
   {/* Bottom-left rectangle */}
   <Rectangle
-    bounds={getRectangleBounds(deliveryCoord, -1, 1, deliveryBound)}
+    bounds={getRectangleBounds(deliveryCoord, -1, 1, deliveryBound/2)}
     pathOptions={{
       color: "red",
       fillColor: "red",
@@ -440,7 +440,7 @@ const MapContainer = () => {
   
   {/* Bottom-right rectangle */}
   <Rectangle
-    bounds={getRectangleBounds(deliveryCoord, -1, -1, deliveryBound)}
+    bounds={getRectangleBounds(deliveryCoord, -1, -1, deliveryBound/2)}
     pathOptions={{
       color: "green",
       fillColor: "green",

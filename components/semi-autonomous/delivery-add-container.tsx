@@ -39,7 +39,15 @@ const DeliveryAddContainer = (props: DeliveryMission) => {
       <CardHeader className="space-y-4">
         <CardTitle className="text-sm">Delivery Mission</CardTitle>
         <div className="space-y-2">
-          <label className='text-xs'>Bound: {props.bound*2}m</label>
+          <label className="text-xs" htmlFor="bound">Bound (m)</label>
+          <Input
+            id="bound"
+            type="number"
+            value={props.bound}
+            onChange={(e) => props.setBound(parseInt(e.target.value) || 0)}
+            placeholder="Enter bound"
+            step="1"
+          />
           <Slider 
             defaultValue={[0]} 
             max={200} 
