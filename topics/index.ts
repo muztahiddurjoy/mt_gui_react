@@ -115,6 +115,38 @@ export const topics: Record<string, Topic> = {
   centrefuge:{
     name: "/centrefuge",
     messageType: "std_msgs/Float64",
+  },
+  color_1: {
+    name: "/color_1",
+    messageType: "std_msgs/String",
+  },
+  color_2: {
+    name: "/color_2",
+    messageType: "std_msgs/String",
+  },
+  color_3: {
+    name: "/color_3",
+    messageType: "std_msgs/String",
+  },
+  color_4: {
+    name: "/color_4",
+    messageType: "std_msgs/String",
+  },
+  color_5: {
+    name: "/color_5",
+    messageType: "std_msgs/String",
+  },
+  color_6: {
+    name: "/color_6",
+    messageType: "std_msgs/String",
+  },
+  uv_1: {
+    name: "/uv_1",
+    messageType: "std_msgs/Float64",
+  },
+  uv_2: {
+    name: "/uv_2",
+    messageType: "std_msgs/Float64",
   }
   
 };
