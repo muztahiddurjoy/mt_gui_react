@@ -345,7 +345,20 @@ const SoilSensorGraph = () => {
 
   return (
     <div className="flex flex-col h-full">
-      
+      <div className="flex items-center justify-end mb-2 gap-4">
+        <span className="text-xs text-cyan-300">
+          Temp: {lastValidValues.temperature.toFixed(1)}°C
+        </span>
+        <span className="text-xs text-blue-400">
+          Moisture: {lastValidValues.moisture.toFixed(1)}%
+        </span>
+        <span className="text-xs text-teal-300">
+          EC: {lastValidValues.conductivity.toFixed(2)}dS/m
+        </span>
+        <span className="text-xs text-purple-300">
+          pH: {lastValidValues.ph.toFixed(1)}
+        </span>
+      </div>
       <div className="flex-1 min-h-[300px]">
         <Line 
           data={sensorData} 

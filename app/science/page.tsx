@@ -35,6 +35,12 @@ import ColorSensor from "@/components/science/centrefude/color-sensor";
       concentration: 0,
       soilTemperature: 0,
       soilConductivity: 0,
+      color1: { red: 0, green: 0, blue: 0 },
+      color2: { red: 0, green: 0, blue: 0 },
+      color3: { red: 0, green: 0, blue: 0 },
+      color4: { red: 0, green: 0, blue: 0 },  
+      color5: { red: 0, green: 0, blue: 0 },
+      color6: { red: 0, green: 0, blue: 0 }
     });
 
     useEffect(() => {
@@ -66,6 +72,13 @@ import ColorSensor from "@/components/science/centrefude/color-sensor";
         createSubscriber('concentration');
         createSubscriber('soil_temperature');
         createSubscriber('soil_conductivity');
+        createSubscriber('color_1');
+        createSubscriber('color_2');
+        createSubscriber('color_3');
+        createSubscriber('color_4');
+        createSubscriber('color_5');
+        createSubscriber('color_6');
+        
       });
     }, []);
 
@@ -93,12 +106,34 @@ import ColorSensor from "@/components/science/centrefude/color-sensor";
         </div>
         <h1 className="text-2xl">Centrefuge</h1>
         <div className="grid grid-cols-6 gap-2 mt-5">
-          <ColorSensor blue={100} green={200} red={10} name="Sensor 1"/>
-          <ColorSensor blue={100} green={100} red={10} name="Sensor 2"/>
-          <ColorSensor blue={100} green={200} red={10} name="Sensor 3"/>
-          <ColorSensor blue={100} green={100} red={10} name="Sensor 4"/>
-          <ColorSensor blue={100} green={200} red={70} name="Sensor 5"/>
-          <ColorSensor blue={100} green={200} red={100} name="Sensor 6"/>
+          <ColorSensor blue={sensorData.color1.blue}
+          green={sensorData.color1.green}
+          red={sensorData.color1.red} name="Sensor 1"/>
+          <ColorSensor 
+          blue={sensorData.color2.blue}
+          green={sensorData.color2.green}
+          red={sensorData.color2.red}
+          name="Sensor 2"/>
+          <ColorSensor 
+          blue={sensorData.color3.blue}
+          green={sensorData.color3.green}
+          red={sensorData.color3.red}
+           name="Sensor 3"/>
+          <ColorSensor 
+          blue={sensorData.color4.blue}
+          green={sensorData.color4.green}
+          red={sensorData.color4.red}
+           name="Sensor 4"/>
+          <ColorSensor 
+          red={sensorData.color5.red}
+          green={sensorData.color5.green}
+          blue={sensorData.color5.blue}
+          name="Sensor 5"/>
+          <ColorSensor 
+          red={sensorData.color6.red}
+          green={sensorData.color6.green}
+          blue={sensorData.color6.blue}
+           name="Sensor 6"/>
         </div>
       </div>
     );
