@@ -147,6 +147,14 @@ export const topics: Record<string, Topic> = {
   uv_2: {
     name: "/uv_2",
     messageType: "std_msgs/Float64",
+  },
+  pump:{
+    name: "/pump",
+    messageType: "std_msgs/Bool",
+  },
+  heater:{
+    name: "/heater",
+    messageType: "std_msgs/Bool",
   }
   
 };

@@ -20,6 +20,9 @@
   import SoilSensorGraph from "@/components/science/soil-temp-and-conductivity";
   import { topics } from "@/topics";
 import ColorSensor from "@/components/science/centrefude/color-sensor";
+import UVSensor from "@/components/science/centrefude/uv-sensor";
+import PumpIndicator from "@/components/science/centrefude/pump-indicator";
+import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
 
   ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -41,6 +44,8 @@ import ColorSensor from "@/components/science/centrefude/color-sensor";
       color_4: "0,0,0",  
       color_5: "0,0,0",
       color_6: "0,0,0",
+      pump: false,
+      heater: false,
     });
 
     useEffect(() => {
@@ -78,6 +83,8 @@ import ColorSensor from "@/components/science/centrefude/color-sensor";
         createSubscriber('color_4');
         createSubscriber('color_5');
         createSubscriber('color_6');
+        createSubscriber('pump');
+        createSubscriber('heater');
         
       });
     }, []);
@@ -124,6 +131,22 @@ import ColorSensor from "@/components/science/centrefude/color-sensor";
           <ColorSensor 
           data={sensorData.color_6}
            name="Color 6"/>
+           <UVSensor
+          data={10}
+           name="UV 1"
+           />
+           <UVSensor
+          data={10}
+           name="UV 2"
+           />
+           <PumpIndicator
+           data={sensorData.pump}
+           name="Pump"
+           />
+           <HeaterIndicator
+           data={sensorData.heater}
+           name="Heater"
+           />
         </div>
       </div>
     );
