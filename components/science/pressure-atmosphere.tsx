@@ -9,30 +9,30 @@ import { topics } from "@/topics";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const HumidityGraph = () => {
-  const [readings, setReadings] = useState<number[]>(Array(12).fill(0));
+const PressureGraph = () => {
+  const [pressureReadings, setPressureReadings] = useState<number[]>(Array(12).fill(0));
   const [lastValidValue, setLastValidValue] = useState(0);
 
   useEffect(() => {
-    let humidityTopic: ROSLIB.Topic | null = null;
+    let pressureTopic: ROSLIB.Topic | null = null;
 
     const connectToROS = async () => {
       try {
         const ros = await getROS();
-        humidityTopic = new ROSLIB.Topic({
-          ros: ros,
-          name: topics.humidity.name,
-          messageType: topics.humidity.messageType,
+        pressureTopic = new ROSLIB.Topic({
+          ros,
+          name: topics.pressure.name,
+          messageType: topics.pressure.messageType,
         });
 
-        humidityTopic.subscribe((message: any) => {
-          const value = parseFloat(message.data);
-          if (!isNaN(value)) {
-            setLastValidValue(value);
-            setReadings((prev) => [...prev.slice(1), value]);
+        pressureTopic.subscribe((message: any) => {
+          const newValue = parseFloat(message.data) / 1000; // Pa to kPa
+          if (!isNaN(newValue)) {
+            setLastValidValue(newValue);
+            setPressureReadings((prev) => [...prev.slice(1), newValue]);
           } else {
-            // Use last valid value if message is invalid
-            setReadings((prev) => [...prev.slice(1), lastValidValue]);
+            // fallback to last valid value
+            setPressureReadings((prev) => [...prev.slice(1), lastValidValue]);
           }
         });
       } catch (error) {
@@ -43,7 +43,7 @@ const HumidityGraph = () => {
     connectToROS();
 
     return () => {
-      if (humidityTopic) humidityTopic.unsubscribe();
+      if (pressureTopic) pressureTopic.unsubscribe();
     };
   }, [lastValidValue]);
 
@@ -51,14 +51,14 @@ const HumidityGraph = () => {
     labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
     datasets: [
       {
-        label: "Humidity (%)",
-        data: readings,
+        label: "Pressure (kPa)",
+        data: pressureReadings,
         fill: false,
-        backgroundColor: "rgb(54, 162, 235)",
-        borderColor: "rgba(54, 162, 235, 0.8)",
+        backgroundColor: "rgb(255, 99, 132)",
+        borderColor: "rgba(255, 99, 132, 0.8)",
         tension: 0.4,
         pointRadius: 3,
-        pointBackgroundColor: "rgb(54, 162, 235)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
       },
     ],
   };
@@ -68,31 +68,23 @@ const HumidityGraph = () => {
     maintainAspectRatio: false,
     scales: {
       x: {
-        ticks: { color: "cyan" },
+        ticks: { color: "pink" },
         grid: { color: "rgba(0, 255, 255, 0.2)" },
       },
       y: {
-        min: 0,
-        max: 100,
-        ticks: { color: "cyan", stepSize: 5 },
+        min: 80,
+        max: 150,
+        ticks: { color: "rgb(255, 99, 132)", stepSize: 5 },
         grid: { color: "rgba(0, 255, 255, 0.2)" },
-        title: {
-          display: true,
-          text: "Humidity (%)",
-          color: "rgb(54, 162, 235)",
-        },
+        title: { display: true, text: "Pressure (kPa)", color: "rgb(255, 99, 132)" },
       },
     },
     plugins: {
-      legend: {
-        labels: { color: "cyan", font: { size: 12 } },
-      },
+      legend: { labels: { color: "pink", font: { size: 12 } } },
       tooltip: {
         enabled: true,
-        mode: "index",
-        intersect: false,
         callbacks: {
-          label: (context: any) => `Humidity: ${context.parsed.y}%`,
+          label: (context: any) => `Pressure: ${context.parsed.y} kPa`,
         },
       },
     },
@@ -101,9 +93,7 @@ const HumidityGraph = () => {
   return (
     <div className="h-full w-full">
       <div className="flex items-center justify-end mb-2">
-        <span className="text-xs text-cyan-300">
-          Last Value: {lastValidValue}%
-        </span>
+        <span className="text-xs">Last Value: {lastValidValue.toFixed(2)} kPa</span>
       </div>
       <div style={{ height: "300px" }}>
         <Line data={chartData} options={options} />
@@ -112,4 +102,4 @@ const HumidityGraph = () => {
   );
 };
 
-export default HumidityGraph;
+export default PressureGraph;

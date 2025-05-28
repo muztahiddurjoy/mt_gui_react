@@ -23,6 +23,16 @@ import ColorSensor from "@/components/science/centrefude/color-sensor";
 import UVSensor from "@/components/science/centrefude/uv-sensor";
 import PumpIndicator from "@/components/science/centrefude/pump-indicator";
 import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
+import OxygenGraph from "@/components/science/oxygen_graph";
+import UVGraph from "@/components/science/conc-uv";
+import GasGraph from "@/components/science/co-alcohol";
+import TemperatureGraph from "@/components/science/environment-temperature";
+import PressureGraph from "@/components/science/pressure-atmosphere";
+import AltimeterGraph from "@/components/science/altitude-atmosphere";
+import SoilTemperatureGraph from "@/components/science/soil_temperature";
+import SoilMoistureGraph from "@/components/science/soil_mosture";
+import SoilConductivityGraph from "@/components/science/soil_conductivity";
+import SoilPhGraph from "@/components/science/soil_ph";
 
   ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -31,6 +41,7 @@ import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
       humidity: 0,
       temperature: 0,
       oxygen: 0,
+      co: 0,
       light: 0,
       pressure: 0,
       altitude: 0,
@@ -89,34 +100,45 @@ import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
         createSubscriber('heater');
         createSubscriber('uv_1');
         createSubscriber('uv_2');
+        createSubscriber('co');
         
       });
     }, []);
 
+    
+
     return (
       <div className="pt-20 px-10">
         <div className="grid mt-5 grid-cols-3 gap-10 pb-20">
-          <NPKGraph />
-          <SoilSensorGraph
-            temperature={sensorData.soilTemperature} 
-            conductivity={sensorData.soilConductivity} 
-          />
-          <HumidityGraph data={sensorData.humidity} />
-          <ConcUV
-            concData={sensorData.concentration}
-            uvData={sensorData.uv}
-          />
-          <PressureAlt
-            data1={sensorData.pressure}
-            data2={sensorData.altitude}
-          />
-          <LightHumidityGraph 
-            humidityData={sensorData.humidity} 
-            lightData={sensorData.light} 
-          />
+          <OxygenGraph/>
+          <TemperatureGraph/>
+          <HumidityGraph/>
+          <UVGraph/>
+          <LightHumidityGraph/>
+          <GasGraph/>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <PressureGraph/>
+          <AltimeterGraph/>
+          <div className="col-span-2 h-[450px]">
+            <NPKGraph/>
+          </div>
+          <div className="h-[300px]">
+          <SoilTemperatureGraph/>
+          </div>
+          <div className="h-[300px]">
+          <SoilMoistureGraph/>
+          </div>
+          <div className="h-[300px]">
+          <SoilConductivityGraph/>
+          </div>
+          <div className="h-[300px]">
+          <SoilPhGraph/>
+          </div>
+
         </div>
         <h1 className="text-2xl">Centrefuge</h1>
-        <div className="grid grid-cols-6 gap-2 mt-5">
+        <div className="grid grid-cols-3 gap-2 mt-5">
           <ColorSensor 
           data={sensorData.color_1}
            name="Color 1"/>
@@ -135,7 +157,10 @@ import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
           <ColorSensor 
           data={sensorData.color_6}
            name="Color 6"/>
-           <UVSensor
+           
+        </div>
+        <div className="grid grid-cols-2 gap-3 mt-5">
+        <UVSensor
           data={sensorData.uv_1}
            name="UV 1"
            />

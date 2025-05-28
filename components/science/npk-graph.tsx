@@ -14,11 +14,11 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const NPKGraph = () => {
   // State to hold the NPK data
   const [npkData, setNpkData] = useState({
-    labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
+    labels: Array.from({ length: 24 }, (_, i) => `${i + 1}s`),
     datasets: [
       {
         label: "Nitrogen (mg/kg)",
-        data: Array(12).fill(0),
+        data: Array(24).fill(0),
         fill: false,
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgba(255, 99, 132, 0.8)",
@@ -29,7 +29,7 @@ const NPKGraph = () => {
       },
       {
         label: "Phosphorus (mg/kg)",
-        data: Array(12).fill(0),
+        data: Array(24).fill(0),
         fill: false,
         backgroundColor: "rgb(54, 162, 235)",
         borderColor: "rgba(54, 162, 235, 0.8)",
@@ -40,7 +40,7 @@ const NPKGraph = () => {
       },
       {
         label: "Potassium (mg/kg)",
-        data: Array(12).fill(0),
+        data: Array(24).fill(0),
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
         borderColor: "rgba(75, 192, 192, 0.8)",

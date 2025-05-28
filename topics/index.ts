@@ -78,7 +78,7 @@ export const topics: Record<string, Topic> = {
     name: "/concentration",
     messageType: "std_msgs/Float64",
   },
-  co_monoxide: {
+  co: {
     name: "/co",
     messageType: "std_msgs/Float64",
   },

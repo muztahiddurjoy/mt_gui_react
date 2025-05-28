@@ -9,30 +9,31 @@ import { topics } from "@/topics";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const LightHumidityGraph = () => {
-  const [lightReadings, setLightReadings] = useState<number[]>(Array(12).fill(0));
+const OxygenGraph = () => {
+  const [readings, setReadings] = useState<number[]>(Array(12).fill(0));
   const [lastValidValue, setLastValidValue] = useState(0);
 
   useEffect(() => {
-    let lightTopic: ROSLIB.Topic | null = null;
+    let oxygenTopic: ROSLIB.Topic | null = null;
 
     const connectToROS = async () => {
       try {
         const ros = await getROS();
-        lightTopic = new ROSLIB.Topic({
+        oxygenTopic = new ROSLIB.Topic({
           ros: ros,
-          name: topics.light.name,
-          messageType: topics.light.messageType,
+          name: topics.oxygen.name,
+          messageType: topics.oxygen.messageType,
         });
 
-        lightTopic.subscribe((message: any) => {
-          const newValue = parseFloat(message.data);
-          if (!isNaN(newValue)) {
-            setLastValidValue(newValue);
-            setLightReadings((prev) => [...prev.slice(1), newValue]);
+        oxygenTopic.subscribe((message: any) => {
+          const value = parseFloat(message.data);
+          if (!isNaN(value)) {
+            setLastValidValue(value);
+            setReadings((prev) => [...prev.slice(1), value]);
           } else {
-            // Fallback to last valid value
-            setLightReadings((prev) => [...prev.slice(1), lastValidValue]);
+            // Use last valid value if message is invalid
+            console.warn("Invalid oxygen value received, using last valid value:", lastValidValue);
+            setReadings((prev) => [...prev.slice(1), lastValidValue]);
           }
         });
       } catch (error) {
@@ -43,7 +44,7 @@ const LightHumidityGraph = () => {
     connectToROS();
 
     return () => {
-      if (lightTopic) lightTopic.unsubscribe();
+      if (oxygenTopic) oxygenTopic.unsubscribe();
     };
   }, [lastValidValue]);
 
@@ -51,15 +52,14 @@ const LightHumidityGraph = () => {
     labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
     datasets: [
       {
-        label: "Light (Lux)",
-        data: lightReadings,
+        label: "Oxygen (%)",
+        data: readings,
         fill: false,
-        backgroundColor: "rgb(255, 205, 86)",
-        borderColor: "rgba(255, 205, 86, 0.8)",
+        backgroundColor: "rgb(75, 192, 192)",
+        borderColor: "rgba(75, 192, 192, 0.8)",
         tension: 0.4,
         pointRadius: 3,
-        pointBackgroundColor: "rgb(255, 205, 86)",
-        yAxisID: "y",
+        pointBackgroundColor: "rgb(75, 192, 192)",
       },
     ],
   };
@@ -67,24 +67,20 @@ const LightHumidityGraph = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    interaction: { mode: "index", intersect: false },
     scales: {
       x: {
         ticks: { color: "cyan" },
         grid: { color: "rgba(0, 255, 255, 0.2)" },
       },
       y: {
-        type: "linear",
-        display: true,
-        position: "left",
         min: 0,
-        max: 150,
-        ticks: { color: "rgb(255, 205, 86)", stepSize: 1 },
+        max: 100,
+        ticks: { color: "cyan", stepSize: 5 },
         grid: { color: "rgba(0, 255, 255, 0.2)" },
         title: {
           display: true,
-          text: "Light (Lux)",
-          color: "rgb(255, 205, 86)",
+          text: "Oxygen (%)",
+          color: "rgb(75, 192, 192)",
         },
       },
     },
@@ -97,11 +93,7 @@ const LightHumidityGraph = () => {
         mode: "index",
         intersect: false,
         callbacks: {
-          label: (context: any) => {
-            const label = context.dataset.label || "";
-            const value = context.parsed.y !== null ? `${context.parsed.y} Lux` : "";
-            return `${label}: ${value}`;
-          },
+          label: (context: any) => `Oxygen: ${context.parsed.y}%`,
         },
       },
     },
@@ -110,8 +102,8 @@ const LightHumidityGraph = () => {
   return (
     <div className="h-full w-full">
       <div className="flex items-center justify-end mb-2">
-        <span className="text-xs text-yellow-400">
-          Last Value: {lastValidValue} Lux
+        <span className="text-xs text-cyan-300">
+          Last Value: {lastValidValue}%
         </span>
       </div>
       <div style={{ height: "300px" }}>
@@ -121,4 +113,4 @@ const LightHumidityGraph = () => {
   );
 };
 
-export default LightHumidityGraph;
+export default OxygenGraph;
