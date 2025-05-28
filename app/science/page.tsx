@@ -46,6 +46,8 @@ import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
       color_6: "0,0,0",
       pump: false,
       heater: false,
+      uv_1: 0,
+      uv_2: 0,
     });
 
     useEffect(() => {
@@ -85,6 +87,8 @@ import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
         createSubscriber('color_6');
         createSubscriber('pump');
         createSubscriber('heater');
+        createSubscriber('uv_1');
+        createSubscriber('uv_2');
         
       });
     }, []);
@@ -132,11 +136,11 @@ import HeaterIndicator from "@/components/science/centrefude/heater-indicator";
           data={sensorData.color_6}
            name="Color 6"/>
            <UVSensor
-          data={10}
+          data={sensorData.uv_1}
            name="UV 1"
            />
            <UVSensor
-          data={10}
+          data={sensorData.uv_2}
            name="UV 2"
            />
            <PumpIndicator
