@@ -14,7 +14,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const NPKGraph = () => {
   // State to hold the NPK data
   const [npkData, setNpkData] = useState({
-    labels: Array.from({ length: 24 }, (_, i) => `${i + 1}s`),
+    labels: Array.from({ length: 24 }, (_, i) => i==0?`0s`:`-${i}s`).reverse(),
     datasets: [
       {
         label: "Nitrogen (mg/kg)",

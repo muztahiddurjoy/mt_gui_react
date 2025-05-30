@@ -47,7 +47,7 @@ const SoilMoistureGraph = () => {
   }, [lastValidValue]);
 
   const chartData = {
-    labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
+    labels: Array.from({ length: 12 }, (_, i) => i==0?`0s`:`-${i}s`).reverse(),
     datasets: [{
       label: "Soil Moisture (%)",
       data: readings,

@@ -11,7 +11,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const SoilPhGraph = () => {
   const [readings, setReadings] = useState<number[]>(Array(12).fill(0));
-  const [lastValidValue, setLastValidValue] = useState(7);
+  const [lastValidValue, setLastValidValue] = useState(0);
 
   useEffect(() => {
     let phTopic: ROSLIB.Topic | null = null;
@@ -47,7 +47,7 @@ const SoilPhGraph = () => {
   }, [lastValidValue]);
 
   const chartData = {
-    labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
+    labels: Array.from({ length: 12 }, (_, i) => i==0?`0s`:`-${i}s`).reverse(),
     datasets: [{
       label: "Soil pH",
       data: readings,

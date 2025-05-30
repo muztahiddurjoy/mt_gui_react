@@ -71,7 +71,7 @@ const GasGraph = () => {
   }, [lastCo, lastAlcohol]);
 
   const chartData = {
-    labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
+    labels: Array.from({ length: 12 }, (_, i) => i==0?`0s`:`-${i}s`).reverse(),
     datasets: [
       {
         label: "CO (ppm)",
@@ -93,7 +93,7 @@ const GasGraph = () => {
         tension: 0.4,
         pointRadius: 3,
         pointBackgroundColor: "rgb(153, 102, 255)",
-        yAxisID: "y1",
+        yAxisID: "y",
       },
     ],
   };
@@ -112,20 +112,10 @@ const GasGraph = () => {
         display: true,
         position: "left",
         min: 0,
-        max: 30,
+        max: 120,
         ticks: { color: "rgb(75, 192, 192)", stepSize: 1 },
         grid: { color: "rgba(0, 255, 255, 0.2)" },
         title: { display: true, text: "CO (ppm)", color: "rgb(75, 192, 192)" },
-      },
-      y1: {
-        type: "linear",
-        display: true,
-        position: "right",
-        min: 0,
-        max: 100,
-        ticks: { color: "rgb(153, 102, 255)", stepSize: 10 },
-        grid: { drawOnChartArea: false },
-        title: { display: true, text: "Alcohol (ppm)", color: "rgb(153, 102, 255)" },
       },
     },
     plugins: {

@@ -23,7 +23,7 @@ const UvGraph = ({ data }: UvGraphProps) => {
       if (!isNaN(newValue)) {
         setReadings((prev) => {
           // Keep only the last 11 readings and add the new one
-          const updated = [...prev.slice(1), newValue];
+          const updated = [newValue,...prev.slice(0,11)];
           return updated;
         });
       }
@@ -32,7 +32,7 @@ const UvGraph = ({ data }: UvGraphProps) => {
 
   // Chart data configuration
   const chartData = {
-    labels: Array.from({ length: 12 }, (_, i) => `${i + 1}s`),
+    labels: Array.from({ length: 12 }, (_, i) => i==0?`0s`:`-${i}s`),
     datasets: [
       {
         label: "UV Power (mW/cm²)",
